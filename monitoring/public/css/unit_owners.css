@@ -1,0 +1,43 @@
+.unit-owner-btn {
+    cursor: pointer;
+    transition: ease 300ms;
+}
+.unit-owner-btn:hover {
+    transition: ease 300ms;
+    background-color: rgb(22, 140, 79);
+    color: white;
+}
+.sort-unit-owners {
+    cursor: pointer;
+    transition: ease 100ms;
+}
+.sort-unit-owners:hover {
+    transition: ease 100ms;
+    background-color: rgb(12, 110, 8);
+    color: white;
+}
+
+#search-unit-owner {
+    width: 30%;
+}
+@media (max-width: 768px) {
+    #search-unit-owner {
+        width: 80%;
+    }
+}
+
+#back-unit-owners {
+    cursor: pointer;
+}
+.property-units {
+    cursor: pointer;
+    transition: ease 300ms;
+}
+.property-units:hover {
+    background-color: rgb(254, 255, 211);
+    transition: ease 300ms;
+}
+.active-unit {
+    background-color: rgb(254, 255, 211);
+    transition: ease 300ms;
+}
