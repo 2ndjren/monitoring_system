@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountsController;
+use App\Http\Controllers\Auth;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\RouteController;
 use Illuminate\Support\Facades\Route;
@@ -15,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+Route::get('/login', [RouteController::class, 'Login']);
+Route::post('/signin', [Auth::class, 'Login']);
+Route::get('/logout', [Auth::class, 'Logout']);
 
 Route::get('/dashboard', [RouteController::class, 'Dashboard']);
 Route::get('/unit-owners', [RouteController::class, 'Unit_Owners']);
@@ -35,3 +37,12 @@ Route::post('/add-unit-rentals', [PropertyController::class, 'Create_Rentals']);
 Route::get('/display-current-rental/{id}', [PropertyController::class, 'Display_Current_Rental']);
 Route::get('/accounts', [RouteController::class, 'Accounts']);
 Route::get('/settings', [RouteController::class, 'Settings']);
+
+
+
+
+
+
+Route::post('/add-user', [AccountsController::class, 'Create_Account']);
+Route::get('/get-users', [AccountsController::class, 'User_Accounts']);
+Route::get('/user-account/{id}', [AccountsController::class, 'Get_User_Account']);

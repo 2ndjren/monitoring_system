@@ -18,6 +18,8 @@
                     </ul>
                 </div>
             </div>
+            <div id="accounts-container" class="row">
+            </div>
 
         </div>
     </div>
@@ -26,6 +28,8 @@
     <script>
         $(document).ready(function() {
             AccountsEvents()
+            Create_User()
+            Accounts()
         });
     </script>
 @endsection

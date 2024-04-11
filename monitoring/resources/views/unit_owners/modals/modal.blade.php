@@ -150,25 +150,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-
-<div class="toast-container position-fixed top-0 end-0 p-3">
-    <div id="toast-message" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong id="toast-text-color" class="me-auto ">
-                <i id="toast-icon-success" class="fa-solid fa-circle-check me-3  d-none"></i>
-                <i id="toast-icon-failed" class="fa-solid fa-circle-xmark me-3 d-none"></i>
-                <span id="toast-header-text"></span>
-            </strong>
-            <button type="button" id=clearModal class="btn-close" data-bs-dismiss="toast"
-                aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-
-        </div>
-    </div>
-</div>
