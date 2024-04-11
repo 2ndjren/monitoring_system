@@ -15,5 +15,6 @@ class property_units extends Model
         "unit_no",
         "project",
         "status",
+        'unit_owner_id',
     ];
 }

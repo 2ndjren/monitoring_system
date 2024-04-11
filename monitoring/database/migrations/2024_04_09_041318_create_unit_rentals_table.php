@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('unit_rentals', function (Blueprint $table) {
             $table->string('rental_id')->primary();
-            $table->string('u_no');
+            $table->string('property_unit_id');
+            $table->foreign('property_unit_id')->references('unit_no')->on('property_units')->onDelete('cascade');
             $table->string('rental');
             $table->string('markup')->nullable();
             $table->string('deposit');

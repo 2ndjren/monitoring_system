@@ -31,6 +31,7 @@
 
                     <ul class="dropdown-menu">
                         <li><a id="create-rental-details-btn" class="dropdown-item" href="#">Add Rental Data</a></li>
+                        <li><a id="create-monthly-dues-btn" class="dropdown-item" href="#">Add Monthly Dues Data</a></li>
                     </ul>
                 </div>
             </div>
@@ -64,7 +65,6 @@
             Create_Unit_Rentals()
             var owner = JSON.parse(localStorage.getItem("owner_data"));
             ViewUnitsOnly()
-            console.log(owner.name);
 
             $("input[name=owner_id]").val(owner.id);
             // $("input[name=owner_id]").val(owner.id);

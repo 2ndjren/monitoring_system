@@ -5,39 +5,26 @@ function UnitOwnersEvent() {
     });
     $("#delete-unit-owner-btn").click(function (e) {
         e.preventDefault;
+        
+        Get_Unit_Owners()
+        $("#delete-unit-owner-modal").modal("show");
+    });
+
+    $("#del_btn").click(function (e) {
+        var id = $(".todelete-owners").val();
         $.ajax({
             type: "GET",
-            url: "/unit-owners-display",
-            data: "data",
-            dataType: "json",
+            url: `/delete-unit-owner/${id}`,
             success: function (res) {
-                console.log(res);
-                var selectElement = $(".todelete-owner");
-                selectElement.empty(); // Clear existing options
-
-                // Add a default option
-                selectElement.append(
-                    "<option selected disabled>Select</option>"
-                );
-
-                $.each(res.unit_owners, function (index, unitOwner) {
-                    console.log(unitOwner);
-                    $(".todelete-owner").append(
-                        "<option value='" +
-                            unitOwner.id +
-                            "'>" +
-                            unitOwner.name +
-                            "</option>"
-                    );
-                });
+                showToast(res.message, res.status)
+                Asc()
+                Get_Unit_Owners()
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
             },
         });
-
-        $("#delete-unit-owner-modal").modal("show");
-    });
+    })
 
     $("#create-unit-owner-form").submit(function (e) {
         e.preventDefault();
@@ -55,7 +42,6 @@ function UnitOwnersEvent() {
             },
             success: function (res) {
                 $("#unit-owner span").remove();
-                console.log(res);
                 if (res.status == 200) {
                     $("button[type=submit],[type=button]").prop(
                         "disabled",
@@ -121,7 +107,6 @@ function UnitOwnersEvent() {
             data: "data",
             dataType: "json",
             success: function (res) {
-                console.log(res);
                 if (res.status == 200) {
                     localStorage.setItem(
                         "owner_data",
@@ -147,7 +132,6 @@ function Asc() {
         data: "data",
         dataType: "json",
         success: function (res) {
-            console.log(res);
             if (res.status == 200) {
                 $.each(res.asc, function (ascIndex, ascData) {
                     var list = ` <div data-id="${ascData.id}" class="col-lg-3 col-sm-12 shadow-sm mt-2  text-center pt-3 px-4 unit-owner-btn">\
@@ -175,7 +159,6 @@ function Desc() {
         data: "data",
         dataType: "json",
         success: function (res) {
-            console.log(res);
             if (res.status == 200) {
                 $.each(res.desc, function (ascIndex, ascData) {
                     var list = ` <div data-id="${ascData.id}" class="col-lg-3 col-sm-12 shadow-sm mt-2  text-center pt-3 px-4 unit-owner-btn">\
@@ -207,7 +190,6 @@ function Search() {
                 data: "data",
                 dataType: "json",
                 success: function (res) {
-                    console.log(res);
                     $("#unit-owner-list-data").empty();
                     if (res.status == 200) {
                         $.each(
@@ -245,4 +227,25 @@ function NoResults(message) {
         </div>`;
 
     $("#unit-owner-list-data").append(results);
+}
+
+function Get_Unit_Owners() {
+    $.ajax({
+        type: "GET",
+        url: "/unit-owners-display",
+        success: function (res) {
+            var selectElement = $(".todelete-owners");
+            selectElement.empty()
+
+            $.each(res.unit_owners, function (index, field) {
+                var option = $('<option>').text(field.name).val(field.id)
+                selectElement.append(option)
+            })
+
+            selectElement.val('')
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        },
+    });
 }

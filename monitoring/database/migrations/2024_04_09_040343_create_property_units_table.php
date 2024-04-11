@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('property_units', function (Blueprint $table) {
             $table->string('unit_id')->primary();
-            $table->string('unit_no');
-            $table->string('owner_id');
+            $table->string('unit_no')->index();
             $table->string('project');
             $table->string('status');
-            $table->foreign('owner_id')->references('id')->on('unit_owners');
+            $table->foreignId('unit_owner_id');
         });
     }
     /**
