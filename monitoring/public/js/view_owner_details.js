@@ -111,20 +111,6 @@ function View_Owners_Events() {
             }
         });
     })
-
-    $("#generate-report-btn").click(function (e) {
-        $.ajax({
-            type: "GET",
-            url: `/generate-report-rental-details/`,
-            success: function (res) {
-                var rental_details = res.rental_details
-                Generate_Report_Rental_Details(rental_details)
-            },
-            error: function (res) {
-                console.log(res)
-            }
-        })
-    })
 }
 
 function Display_Info() {

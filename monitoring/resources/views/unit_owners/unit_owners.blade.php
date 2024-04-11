@@ -15,6 +15,7 @@
                 <ul class="dropdown-menu">
                     <li><a id="create-unit-owner-btn" class="dropdown-item" href="#">Add Unit Owner</a></li>
                     <li><a id="delete-unit-owner-btn" class="dropdown-item" href="#">Delete Unit Owner</a></li>
+                    <li><a id="generate-report-btn" class="dropdown-item" href="#">Generate Report</a></li>
                 </ul>
             </div>
         </div>

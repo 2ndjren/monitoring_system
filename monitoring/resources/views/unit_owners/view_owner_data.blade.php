@@ -32,7 +32,6 @@
                     <ul class="dropdown-menu">
                         <li><a id="create-rental-details-btn" class="dropdown-item" href="#">Add Rental Data</a></li>
                         <li><a id="create-monthly-dues-btn" class="dropdown-item" href="#">Add Monthly Dues Data</a></li>
-                        <li><a id="generate-report-btn" class="dropdown-item" href="#">Generate Report</a></li>
                     </ul>
                 </div>
             </div>

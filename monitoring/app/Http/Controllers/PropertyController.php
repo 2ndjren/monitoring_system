@@ -245,10 +245,11 @@ class PropertyController extends Controller
         }
     }
 
-    public function Generate_Report_Rental_Details() {
-        $rental_details = unit_rentals::all();
+    public function Generate_Report() {
+        $records = unit_owners::join('property_units', 'unit_owners.id', '=', 'property_units.unit_owner_id')
+                    ->join('unit_rentals', 'property_units.unit_no', '=', 'unit_rentals.property_unit_id')->get();
 
-        if ($rental_details) { return response()->json(['status' => 200, 'rental_details' => $rental_details]); } 
+        if ($records) { return response()->json(['status' => 200, 'records' => $records]); } 
         else { return response()->json(['status' => 400,  'message' => 'No existing transaction.',]); }
     }
 }

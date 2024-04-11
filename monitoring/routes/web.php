@@ -32,6 +32,6 @@ Route::get('/edit-rental-details/{id}', [PropertyController::class, 'Edit_Rental
 Route::post('/edit-rental-details', [PropertyController::class, 'Update_Rental_Details']);
 Route::get('/delete-rental-details/{id}', [PropertyController::class, 'Delete_Rental_Details']);
 Route::get('/end-transaction-rental-details/{id}', [PropertyController::class, 'End_Transaction_Rental_Details']);
-Route::get('generate-report-rental-details', [PropertyController::class, 'Generate_Report_Rental_Details']);
+Route::get('generate-report', [PropertyController::class, 'Generate_Report']);
 Route::get('/accounts', [RouteController::class, 'Accounts']);
 Route::get('/settings', [RouteController::class, 'Settings']);

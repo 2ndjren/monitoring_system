@@ -122,6 +122,21 @@ function UnitOwnersEvent() {
             },
         });
     });
+
+    $("#generate-report-btn").click(function (e) {
+        $.ajax({
+            type: "GET",
+            url: `/generate-report`,
+            success: function (res) {
+                var records = res.records
+                console.log(records)
+                Generate_Report(records)
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        })
+    })
 }
 
 function Asc() {
@@ -248,4 +263,38 @@ function Get_Unit_Owners() {
             console.error(xhr.responseText);
         },
     });
+}
+
+function Generate_Report(records) {
+    var tbl = $('<table>').addClass('d-none')
+    tbl.attr('id', 'rental-details-tbl')
+
+    var thr = $('<tr>')
+    thr.append($('<th>').text('Unit Owner'))
+    thr.append($('<th>').text('Project'))
+    thr.append($('<th>').text('Unit No.'))
+    thr.append($('<th>').text('Rental'))
+    thr.append($('<th>').text('Markup'))
+    thr.append($('<th>').text('Deposit'))
+    thr.append($('<th>').text('Contract Period'))
+    thr.append($('<th>').text('Status'))
+    tbl.append(thr)
+
+    $.each(records, function(row, field) {
+        var tr = $('<tr>')
+        tr.append($('<td>').text(field.name))
+        tr.append($('<td>').text(field.project))
+        tr.append($('<td>').text(field.unit_no))
+        tr.append($('<td>').text(field.rental))
+        tr.append($('<td>').text(field.markup))
+        tr.append($('<td>').text(field.deposit))
+        tr.append($('<td>').text(`${field.contract_start}-${field.contract_end}`))
+        tr.append($('<td>').text(field.status))
+        tbl.append(tr)
+    })
+
+    $('#unit-owner-list-data').append(tbl)
+
+    var wb = XLSX.utils.table_to_book(document.getElementById("rental-details-tbl"));
+    XLSX.writeFile(wb, "report.xlsx");
 }
