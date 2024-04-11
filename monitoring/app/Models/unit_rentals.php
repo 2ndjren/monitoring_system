@@ -17,7 +17,6 @@ class unit_rentals extends Model
         "markup",
         "deposit",
         "contract_start",
-        "to_expired",
         "contract_end",
         "notified",
         "status",
