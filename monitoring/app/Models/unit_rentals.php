@@ -12,7 +12,7 @@ class unit_rentals extends Model
     protected $table = "unit_rentals";
     protected $fillable = [
         "rental_id",
-        "u_no",
+        "property_unit_id",
         "rental",
         "markup",
         "deposit",
