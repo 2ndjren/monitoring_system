@@ -95,6 +95,36 @@ function View_Owners_Events() {
             }
         });
     });
+
+    $(document).on("click", "#end-transaction-rental-details-btn", function (e) {
+        e.preventDefault();
+        var id = $(this).data('id')
+        $.ajax({
+            type: "GET",
+            url: `/end-transaction-rental-details/${id}`,
+            success: function (res) {
+                showToast(res.message, res.status)
+                Display_Current_Rental()
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        });
+    })
+
+    $("#generate-report-btn").click(function (e) {
+        $.ajax({
+            type: "GET",
+            url: `/generate-report-rental-details/`,
+            success: function (res) {
+                var rental_details = res.rental_details
+                Generate_Report_Rental_Details(rental_details)
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        })
+    })
 }
 
 function Display_Info() {
@@ -363,7 +393,8 @@ function Display_Current_Rental() {
                                 </p>
                                 <p class="-center">
                                     <i class="fa-solid fa-pen-to-square mr-3" id='edit-rental-details-btn' data-id='${rental_id}'></i>
-                                    <i class="fa-solid fa-trash" id='delete-rental-details-btn' data-id='${rental_id}'></i> 
+                                    <i class="fa-solid fa-trash mr-3" id='delete-rental-details-btn' data-id='${rental_id}'></i> 
+                                    <i class="fa-solid fa-thumbs-up" id='end-transaction-rental-details-btn' data-id='${rental_id}'></i>
                                 </p>
                             </div>
                             `;
@@ -429,6 +460,34 @@ function Edit_Rental_Details(id) {
 
         },
     })
+}
+
+function Generate_Report_Rental_Details(rental_details) {
+    var tbl = $('<table>').addClass('d-none')
+    tbl.attr('id', 'rental-details-tbl')
+
+    var thr = $('<tr>')
+    thr.append($('<th>').text('Rental'))
+    thr.append($('<th>').text('Markup'))
+    thr.append($('<th>').text('Deposit'))
+    thr.append($('<th>').text('Contract Period'))
+    thr.append($('<th>').text('Status'))
+    tbl.append(thr)
+
+    $.each(rental_details, function(row, field) {
+        var tr = $('<tr>')
+        tr.append($('<td>').text(field.rental))
+        tr.append($('<td>').text(field.markup))
+        tr.append($('<td>').text(field.deposit))
+        tr.append($('<td>').text(`${field.contract_start}-${field.contract_end}`))
+        tr.append($('<td>').text(field.status))
+        tbl.append(tr)
+    })
+
+    $('#transactions').append(tbl)
+
+    var wb = XLSX.utils.table_to_book(document.getElementById("rental-details-tbl"));
+    XLSX.writeFile(wb, "report.xlsx");
 }
 
 function NoResults(message) {

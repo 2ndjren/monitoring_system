@@ -93,6 +93,10 @@ class PropertyController extends Controller
         } else {
             $saved = $owner->save();
             if ($saved) {
+                $property_unit = property_units::where('unit_no', $request->u_no)
+                    ->update([
+                        'status' => 'Occupied',
+                    ]);
                 return response()->json(['status' => 200, 'message' => 'Rent inforamtion successfully created.']);
             } else {
 
@@ -217,6 +221,18 @@ class PropertyController extends Controller
         }
     }
 
+    public function End_Transaction_Rental_Details($id) {
+        $rental_details = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->update(['status' => 'Completed']);
+
+        $rental_details = unit_rentals::where('rental_id', $id)->first();
+        $unit_no = $rental_details->property_unit_id;
+
+        $property_unit = property_units::where('unit_no', $unit_no)->update(['status' => 'Available']);
+
+        if ($property_unit) { return response()->json(['status' => 200, 'message' => 'Completed Transaction']); } 
+        else { return response()->json(['status' => 400,  'message' => 'No existing transaction.',]); }
+    }
+
     public function Delete_Unit_Owner($id) {
         $owner = unit_owners::where('id', $id);
         $owner->delete();
@@ -227,5 +243,12 @@ class PropertyController extends Controller
         else {
             return response()->json(['status' => 400,  'message' => 'Please Try Again',]);
         }
+    }
+
+    public function Generate_Report_Rental_Details() {
+        $rental_details = unit_rentals::all();
+
+        if ($rental_details) { return response()->json(['status' => 200, 'rental_details' => $rental_details]); } 
+        else { return response()->json(['status' => 400,  'message' => 'No existing transaction.',]); }
     }
 }
