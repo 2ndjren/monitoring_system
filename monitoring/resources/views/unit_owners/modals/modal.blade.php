@@ -45,7 +45,8 @@
                         <label for="floatingSelect">Unit Owners</label>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-primary px-3 me-2 fw-semibold" id='del_btn'>Delete</button>
+                        <button type="button" class="btn btn-primary px-3 me-2 fw-semibold"
+                            id='del_btn'>Delete</button>
                         <button type="button" class="btn btn-warning px-3 me-2 fw-semibold">Clear</button>
                     </div>
                 </form>
@@ -149,8 +150,6 @@
         </div>
     </div>
 </div>
-
-
 
 
 {{-- Create monthly dues details Modal  --}}

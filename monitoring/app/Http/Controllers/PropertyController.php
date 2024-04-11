@@ -83,8 +83,6 @@ class PropertyController extends Controller
         $owner->deposit = $request->deposit;
         $owner->contract_start = $request->contract_start;
         $owner->contract_end = $request->contract_end;
-        $endDate = Carbon::parse($request->contract_end);
-        $owner->to_expired = $endDate->subDays(7);
         $owner->notified = "0";
         $owner->status = "Ongoing";
         $ongoing = unit_rentals::where('status', 'Ongoing')->where('property_unit_id', $request->u_no)->first();

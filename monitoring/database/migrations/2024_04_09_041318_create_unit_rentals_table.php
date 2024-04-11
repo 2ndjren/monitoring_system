@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('deposit');
             $table->date('contract_start');
             $table->date('contract_end');
-            $table->string('notified');
-            $table->date('to_expired');
+            $table->tinyInteger('notified');
             $table->string('status');
         });
     }
