@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\asso_dues;
 use App\Models\property_units;
 use App\Models\unit_owners;
 use App\Models\unit_rentals;
@@ -44,21 +45,26 @@ class PropertyController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 400, 'errors' => $validator->errors()]);
         }
+        $check = property_units::where('project', $request->project)->where('unit_no', $request->unit_no)->first();
         $owner = new property_units();
         $owner->unit_id = mt_rand(11111111, 99999999);
         $owner->unit_no = $request->unit_no;
         $owner->unit_owner_id = $request->owner_id;
         $owner->project = $request->project;
         $owner->status = $request->status;
-        $saved = $owner->save();
-        if ($saved) {
-            if ($request->status == "Available") {
-                return response()->json(['status' => 200, 'message' => 'Unit successfully added yet not occupied.']);
-            } else if ($request->status == "Occupied") {
-                return response()->json(['status' => 200, 'message' => 'Unit successfully added.']);
-            }
+        if ($check) {
+            return response()->json(['status' => 400, 'message' => 'Unit is already exist']);
         } else {
-            return response()->json(['status' => 400, 'message' => 'Something went wrong, please try again.']);
+            $saved = $owner->save();
+            if ($saved) {
+                if ($request->status == "Available") {
+                    return response()->json(['status' => 200, 'message' => 'Unit successfully added yet not occupied.']);
+                } else if ($request->status == "Occupied") {
+                    return response()->json(['status' => 200, 'message' => 'Unit successfully added.']);
+                }
+            } else {
+                return response()->json(['status' => 400, 'message' => 'Something went wrong, please try again.']);
+            }
         }
     }
 
@@ -77,7 +83,7 @@ class PropertyController extends Controller
         }
         $owner = new unit_rentals();
         $owner->rental_id = mt_rand(11111111, 99999999);
-        $owner->property_unit_id = $request->u_no;
+        $owner->property_unit_id = $request->u_id;
         $owner->rental = $request->rental;
         $owner->markup = $request->markup;
         $owner->deposit = $request->deposit;
@@ -85,10 +91,11 @@ class PropertyController extends Controller
         $owner->contract_end = $request->contract_end;
         $owner->notified = "0";
         $owner->status = "Ongoing";
-        $ongoing = unit_rentals::where('status', 'Ongoing')->where('property_unit_id', $request->u_no)->first();
+        $ongoing = unit_rentals::where('status', 'Ongoing')->where('property_unit_id', $request->u_id)->first();
         if ($ongoing) {
             return response()->json(['status' => 400, 'message' => 'Action cannot be taken, currently has ongoing transaction.']);
         } else {
+            $property_unit = property_units::where('unit_id', $request->u_id)->update(['status' => 'Occupied']);
             $saved = $owner->save();
             if ($saved) {
                 $property_unit = property_units::where('unit_no', $request->u_no)
@@ -174,8 +181,12 @@ class PropertyController extends Controller
     public function Display_Current_Rental($id)
     {
         $ongoing = unit_rentals::where('property_unit_id', $id)->where('status', 'Ongoing')->first();
+
         if ($ongoing) {
-            return response()->json(['status' => 200, 'ongoing' => $ongoing]);
+            $asso = asso_dues::where('rent_id', $ongoing->rental_id)->where('status', 'Unpaid')->first();
+            return response()->json(['status' => 200, 'ongoing' => $ongoing, 'asso' => $asso]);
+
+            // return response()->json(['status' => 200, 'ongoing' => $ongoing, 'asso' => $asso]);
         } else {
             return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
         }
@@ -194,60 +205,130 @@ class PropertyController extends Controller
     public function Update_Rental_Details(Request $request)
     {
         $ongoing = unit_rentals::where('rental_id', $request->rental_id)->where('status', 'Ongoing')
-                    ->update([
-                        'rental' => $request->rental,
-                        'markup' => $request->markup,
-                        'deposit' => $request->deposit,
-                        'contract_start' => $request->contract_start,
-                        'contract_end' => $request->contract_end,
-                    ]);
+            ->update([
+                'rental' => $request->rental,
+                'markup' => $request->markup,
+                'deposit' => $request->deposit,
+                'contract_start' => $request->contract_start,
+                'contract_end' => $request->contract_end,
+            ]);
 
         if ($ongoing) {
             return response()->json(['status' => 200, 'message' => 'Update Rental Details']);
         } else {
-            return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
+            return response()->json(['status' => 400,  'message' => 'No changes found.',]);
         }
     }
 
     public function Delete_Rental_Details($id)
     {
-        $ongoing = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->delete();
-        if ($ongoing) {
-            return response()->json(['status' => 200, 'message' => 'Deleted Rental Details']);
+        $find = unit_rentals::where('rental_id', $id)->first();
+        $update = property_units::where('unit_id', $find->property_unit_id)->update([
+            'status' => 'Available'
+        ]);
+        if ($update) {
+            $ongoing = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->delete();
+            if ($ongoing) {
+                return response()->json(['status' => 200, 'message' => 'Deleted Rental Details']);
+            } else {
+                return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
+            }
         } else {
-            return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
+            $ongoing = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->delete();
+            if ($ongoing) {
+                return response()->json(['status' => 200, 'message' => 'Deleted Rental Details']);
+            } else {
+                return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
+            }
         }
     }
 
-    public function End_Transaction_Rental_Details($id) {
-        $rental_details = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->update(['status' => 'Completed']);
+    public function End_Transaction_Rental_Details($id)
+    {
+        $rent = unit_rentals::where('rental_id', $id)->first();
+        $property_unit = property_units::where('unit_id', $rent->property_unit_id)->update(['status' => 'Available']);
+        if ($property_unit) {
 
-        $rental_details = unit_rentals::where('rental_id', $id)->first();
-        $unit_no = $rental_details->property_unit_id;
-
-        $property_unit = property_units::where('unit_no', $unit_no)->update(['status' => 'Available']);
-
-        if ($property_unit) { return response()->json(['status' => 200, 'message' => 'Completed Transaction']); } 
-        else { return response()->json(['status' => 400,  'message' => 'No existing transaction.',]); }
+            $rental_details = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->update(['status' => 'Completed']);
+            if ($rental_details) {
+                $dues = asso_dues::where('rent_id', $id)->where('status', 'Unpaid')->first();
+                if ($dues) {
+                    $update_dues = asso_dues::where('rent_id', $dues->rent_id)->update(['status' => 'Paid']);
+                    if ($update_dues) {
+                        return response()->json(['status' => 200, 'message' => 'Transaction Completed1111']);
+                    }
+                } else {
+                    return response()->json(['status' => 200, 'message' => 'Transaction Completed  123']);
+                }
+            }
+        } else {
+            return response()->json(['status' => 400, 'message' => 'Something went wrong']);
+        }
     }
 
-    public function Delete_Unit_Owner($id) {
+
+    public function Pay_Asso_Dues($id)
+    {
+        $paid = asso_dues::where('asso_id', $id)->update(['status' => 'Paid']);
+        if ($paid) {
+            return response()->json(['status' => 200,  'message' => 'Paid successfull',]);
+        } else {
+            return response()->json(['status' => 400,  'message' => 'Transaction not found',]);
+        }
+    }
+
+    public function Delete_Unit_Owner($id)
+    {
         $owner = unit_owners::where('id', $id);
         $owner->delete();
-        
+
         if ($owner) {
             return response(['status' => 200, 'message' => 'Deleted Unit Owner']);
-        }
-        else {
+        } else {
             return response()->json(['status' => 400,  'message' => 'Please Try Again',]);
         }
     }
+    public function Create_Asso_Dues(Request $request)
+    {
+        $rules = [
+            'start' => 'required',
+            'end' => 'required',
+            'total' => 'required',
+            'status' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['status' => 400, 'errors' => $validator->errors()]);
+        }
+        $ongoing = unit_rentals::where('rental_id', $request->rental_id)->where('status', 'Ongoing')->first();
+        if ($ongoing) { 
+            $dues = new asso_dues();
+            $dues->asso_id = mt_rand(111111111, 999999999);
+            $dues->rent_id = $ongoing->rental_id;
+            $dues->start = $request->start;
+            $dues->end = $request->end;
+            $dues->total = $request->total;
+            $dues->status = $request->status;
+            $saved = $dues->save();
+            if ($saved) {
+                return response()->json(['status' => 200, 'message' => 'Associated monthly dues successfully applied.']);
+            } else {
+                return response()->json(['status' => 400, 'message' => 'Please try again, something went wrong.']);
+            }
+        } else {
+            return response()->json(['status' => 400, 'message' => 'Sorry, this action cant be used because no existing transaction has been created. Thank you']);
+        }
+    }
 
-    public function Generate_Report() {
+    public function Generate_Report()
+    {
         $records = unit_owners::join('property_units', 'unit_owners.id', '=', 'property_units.unit_owner_id')
-                    ->join('unit_rentals', 'property_units.unit_no', '=', 'unit_rentals.property_unit_id')->get();
+            ->join('unit_rentals', 'property_units.unit_no', '=', 'unit_rentals.property_unit_id')->get();
 
-        if ($records) { return response()->json(['status' => 200, 'records' => $records]); } 
-        else { return response()->json(['status' => 400,  'message' => 'No existing transaction.',]); }
+        if ($records) {
+            return response()->json(['status' => 200, 'records' => $records]);
+        } else {
+            return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
+        }
     }
 }

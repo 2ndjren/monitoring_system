@@ -16,7 +16,7 @@
 
 <body>
 
-    <button onclick="notifyMe()">Notify me!</button>
+    {{-- <button onclick="notifyMe()">Notify me!</button> --}}
 
     <div id="login" class="row p-5">
         <div class="col-lg-4 col-0 p-3">

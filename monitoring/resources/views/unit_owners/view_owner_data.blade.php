@@ -31,7 +31,8 @@
 
                     <ul class="dropdown-menu">
                         <li><a id="create-rental-details-btn" class="dropdown-item" href="#">Add Rental Data</a></li>
-                        <li><a id="create-monthly-dues-btn" class="dropdown-item" href="#">Add Monthly Dues Data</a></li>
+                        <li><a id="create-monthly-dues-btn" class="dropdown-item" href="#">Add Monthly Dues Data</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -63,6 +64,7 @@
             Display_Info()
             Create_Unit()
             Create_Unit_Rentals()
+            Create_Asso_Dues()
             var owner = JSON.parse(localStorage.getItem("owner_data"));
             ViewUnitsOnly()
 

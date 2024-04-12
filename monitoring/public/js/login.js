@@ -55,7 +55,6 @@ function Login() {
                     ).prop("disabled", false);
                     window.location.href = baseUrl + "/dashboard";
                 } else if (res.status == 400) {
-                    showToast(res.message, res.status);
                     $(
                         "#login-account-form button[type=submit],[type=button]"
                     ).prop("disabled", false);

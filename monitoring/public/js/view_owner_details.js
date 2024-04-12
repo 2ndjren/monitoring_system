@@ -18,10 +18,10 @@ function View_Owners_Events() {
     $(document).on("click", ".property-units", function (e) {
         e.preventDefault();
         var id = $(this).data("id");
-        localStorage.setItem("u_no", id);
+        localStorage.setItem("u_id", id);
         var dataid = $(this).attr("id");
         Display_Current_Rental();
-        $("input[name=u_no]").val(id);
+        $("input[name=u_id]").val(id);
         $(".property-units").removeClass("active-units");
         $("#" + dataid + "").addClass("active-units");
         $("#unit-details-data").removeClass("d-none");
@@ -49,11 +49,11 @@ function View_Owners_Events() {
 
     $(document).on("click", "#edit-rental-details-btn", function (e) {
         e.preventDefault();
-        $("#edit-rental-details-modal").modal("show")
+        $("#edit-rental-details-modal").modal("show");
 
-        var id = $(this).data('id')
-        Edit_Rental_Details(id)
-    })
+        var id = $(this).data("id");
+        Edit_Rental_Details(id);
+    });
 
     $("#edit-unit-rental-form").submit(function (e) {
         e.preventDefault();
@@ -62,55 +62,90 @@ function View_Owners_Events() {
             url: "/edit-rental-details/",
             data: $(this).serialize(),
             success: function (res) {
-                showToast(res.message, res.status)
-                $(`#edit-unit-rental-form`).trigger('reset')
-                $(`#edit-rental-details-modal`).modal('hide')
-                Display_Current_Rental()
+                showToast(res.message, res.status);
+                $(`#edit-unit-rental-form`).trigger("reset");
+                $(`#edit-rental-details-modal`).modal("hide");
+                Display_Current_Rental();
             },
             error: function (res) {
-                console.log(res)
-            }
+                console.log(res);
+            },
         });
     });
 
     $(document).on("click", "#delete-rental-details-btn", function (e) {
         e.preventDefault();
-        $("#delete-rental-details-modal").modal("show")
-        $("#delete-rental-details-modal").data("id", $(this).data('id'))
-    })
+        $("#delete-rental-details-modal").modal("show");
+        $("#delete-rental-details-modal").data("id", $(this).data("id"));
+    });
 
     $("#confirm-delete-unit-rental").click(function (e) {
         e.preventDefault();
-        var id = $('#delete-rental-details-modal').data('id')
+        var id = $("#delete-rental-details-modal").data("id");
         $.ajax({
             type: "GET",
             url: `/delete-rental-details/${id}`,
             success: function (res) {
-                showToast(res.message, res.status)
-                $(`#delete-rental-details-modal`).modal('hide')
-                Display_Current_Rental()
+                showToast(res.message, res.status);
+                $(`#delete-rental-details-modal`).modal("hide");
+                ViewUnitsOnly();
+                Display_Current_Rental();
             },
             error: function (res) {
-                console.log(res)
-            }
+                console.log(res);
+            },
         });
     });
 
-    $(document).on("click", "#end-transaction-rental-details-btn", function (e) {
+    $(document).on(
+        "click",
+        "#end-transaction-rental-details-btn",
+        function (e) {
+            e.preventDefault();
+            var id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: `/end-transaction-rental-details/${id}`,
+                success: function (res) {
+                    console.log(res);
+                    if (res.status == 200) {
+                        showToast(res.message, res.status);
+                        ViewUnitsOnly();
+                        Display_Current_Rental();
+                    } else if (res.status == 400) {
+                        showToast(res.message, res.status);
+                        ViewUnitsOnly();
+                        Display_Current_Rental();
+                    }
+                },
+                error: function (res) {
+                    console.log(res);
+                },
+            });
+        }
+    );
+    $(document).on("click", "#pay-asso-dues-btn", function (e) {
         e.preventDefault();
-        var id = $(this).data('id')
+        var id = $(this).data("id");
         $.ajax({
             type: "GET",
-            url: `/end-transaction-rental-details/${id}`,
+            url: `/pay-asso-dues/${id}`,
             success: function (res) {
-                showToast(res.message, res.status)
-                Display_Current_Rental()
+                if (res.status == 200) {
+                    showToast(res.message, res.status);
+                    ViewUnitsOnly();
+                    Display_Current_Rental();
+                } else if (res.status == 400) {
+                    showToast(res.message, res.status);
+                    ViewUnitsOnly();
+                    Display_Current_Rental();
+                }
             },
             error: function (res) {
-                console.log(res)
-            }
+                console.log(res);
+            },
         });
-    })
+    });
 }
 
 function Display_Info() {
@@ -178,7 +213,9 @@ function Create_Unit() {
                     showToast(res.message, res.status);
                     ViewUnitsOnly();
                 } else if (res.status == 400) {
-                    // showToast(res.message, res.status);
+                    if (res.message) {
+                        showToast(res.message, res.status);
+                    }
                     $(
                         "#create-owner-units button[type=submit],[type=button]"
                     ).prop("disabled", false);
@@ -231,12 +268,12 @@ function Create_Unit_Rentals() {
                 $("#create-rental-details-modal span").remove();
                 if (res.status == 200) {
                     showToast(res.message, res.status);
+                    ViewUnitsOnly();
+                    Display_Current_Rental();
                     $(
                         "#create-rental-details-modal button[type=submit],[type=button]"
                     ).prop("disabled", false);
                     $("#create-unit-rental-form")[0].reset();
-                    ViewUnitsOnly();
-                    Display_Current_Rental();
                 } else if (res.status == 400) {
                     showToast(res.message, res.status);
 
@@ -285,13 +322,14 @@ function ViewUnitsOnly() {
         success: function (res) {
             if (res.status == 200) {
                 $.each(res.unit_only, function (unitIndex, unitData) {
+                    localStorage.setItem("u_id", unitData.unit_id);
                     var color = "";
                     if (unitData.status == "Available") {
                         color = "success";
                     } else {
                         color = "danger";
                     }
-                    var unit = `   <div data-id="${unitData.unit_no}" id="${unitData.unit_id}"
+                    var unit = `   <div data-id="${unitData.unit_id}" id="${unitData.unit_id}"
                         class="property-units col-sm-12 col-lg-3  border-end border-${color} shadow-sm mt-2 p-4 lh-1  border-5">\
                         <p class="text-start h5 fw-bold text-${color}">\
                             ${unitData.project}</p>\
@@ -321,32 +359,66 @@ function ViewUnitsOnly() {
 }
 
 function Display_Current_Rental() {
-    var id = localStorage.getItem("u_no");
+    var id = localStorage.getItem("u_id");
     $.ajax({
         type: "GET",
         url: "/display-current-rental/" + id,
         data: "data",
         dataType: "json",
         success: function (res) {
+            console.log(res);
             if (res.status == 200) {
                 let money = new Intl.NumberFormat("fil-PH", {
                     style: "currency",
                     currency: "PHP",
                 });
+                $("input[name=rental_id]").val("");
+                $("input[name=rental_id]").val(res.ongoing.rental_id);
 
-                var rental_id = res.ongoing.rental_id
+                var rental_id = res.ongoing.rental_id;
 
                 var rent = money.format(res.ongoing.rental);
                 var deposit = money.format(res.ongoing.deposit);
                 var markup = money.format(res.ongoing.markup);
+                var asso = "";
+                var asso_color = "";
+                var asso_id = "";
+                var options = {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                };
+                if (res.asso !== null) {
+                    var asso_total = money.format(res.asso.total);
+                    var asso_start = new Date(res.asso.start);
+                    var asso_end = new Date(res.asso.end);
+                    asso_id = res.asso.asso_id;
+                    asso_start = asso_start.toLocaleDateString(
+                        "en-US",
+                        options
+                    );
+                    asso_end = asso_end.toLocaleDateString("en-US", options);
+                    if (res.asso.status == "Unpaid") {
+                        asso = `<p>${asso_start}-${asso_end}, ${asso_total} (${res.asso.status})</p>`;
+                        asso_color = "primary";
+                    }
+                } else {
+                    asso = "---";
+                    $("#pay-asso-dues-btn").addClass("d-none");
+                    $("#asso-content-dues").empty();
+                }
 
-                var options = {year: 'numeric', month: 'long', day: 'numeric'}
+                var contract_start = new Date(res.ongoing.contract_start);
+                var contract_end = new Date(res.ongoing.contract_end);
 
-                var contract_start = new Date(res.ongoing.contract_start)
-                var contract_end = new Date(res.ongoing.contract_end)
-
-                contract_start = contract_start.toLocaleDateString("en-US", options)
-                contract_end = contract_end.toLocaleDateString("en-US", options)
+                contract_start = contract_start.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+                contract_end = contract_end.toLocaleDateString(
+                    "en-US",
+                    options
+                );
 
                 $("#current-transaction").empty();
                 var row = ` <div class="col-lg-2 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
@@ -367,13 +439,23 @@ function Display_Current_Rental() {
                                 </p>
                                 <p class="-center">${deposit}</p>
                             </div>
-                            <div class="col-lg-3 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                            <div class="col-lg-2 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
                                 <p class="fw-semibold "> <span class="me-3"><i
                                             class="fa-solid fa-calendar-days"></i></span>Contract Period
                                 </p>
                                 <p class="-center">${contract_start} - ${contract_end}</p>
                             </div>
-                            <div class="col-lg-3 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                <div class="col-lg-3 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                <p class="fw-semibold "> <span class="me-3"><i
+                                            class="fa-solid fa-calendar-days"></i></span>Asso. Dues
+                                </p>
+                                <p class="">${asso} </p>
+                                <div id="asso-content-dues">
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="col-lg-1 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
                                 <p class="fw-semibold "> <span class="me-3">
                                     <i class="fa-solid fa-gear"></i></span>Action
                                 </p>
@@ -385,6 +467,13 @@ function Display_Current_Rental() {
                             </div>
                             `;
                 $("#current-transaction").append(row);
+                if (res.asso !== null) {
+                    if (res.asso.status == "Unpaid") {
+                        $("#asso-content-dues").append(
+                            ` <button type="button" id="pay-asso-dues-btn" data-id="${asso_id}" class=" btn btn-${asso_color}">Pay Now</button>`
+                        );
+                    }
+                }
             } else if (res.status == 400) {
                 $("#current-transaction").empty();
                 var row = ` <div class="col-lg-2 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
@@ -405,13 +494,19 @@ function Display_Current_Rental() {
                                 </p>
                                 <p class="-center">---</p>
                             </div>
-                            <div class="col-lg-3 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                            <div class="col-lg-2 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
                                 <p class="fw-semibold "> <span class="me-3"><i
                                             class="fa-solid fa-calendar-days"></i></span>Contract Period
                                 </p>
                                 <p class="-center">---</p>
                             </div>
                             <div class="col-lg-3 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                <p class="fw-semibold "> <span class="me-3"><i
+                                            class="fa-solid fa-calendar-days"></i></span>Asso. Dues
+                                </p>
+                                <p class="-center">---</p>
+                            </div>
+                            <div class="col-lg-1 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
                                 <p class="fw-semibold "> <span class="me-3">
                                     <i class="fa-solid fa-gear"></i></span>Action
                                 </p>
@@ -434,45 +529,51 @@ function Edit_Rental_Details(id) {
         type: "GET",
         url: "/edit-rental-details/" + id,
         success: function (res) {
-            var modal = '#edit-rental-details-modal'
-            $(`${modal} input[name=rental_id]`).val(res.ongoing.rental_id)
-            $(`${modal} input[name=rental]`).val(res.ongoing.rental)
-            $(`${modal} input[name=markup]`).val(res.ongoing.markup)
-            $(`${modal} input[name=deposit]`).val(res.ongoing.deposit)
-            $(`${modal} input[name=contract_start]`).val(res.ongoing.contract_start)
-            $(`${modal} input[name=contract_end]`).val(res.ongoing.contract_end)
+            var modal = "#edit-rental-details-modal";
+            $(`${modal} input[name=rental_id]`).val(res.ongoing.rental_id);
+            $(`${modal} input[name=rental]`).val(res.ongoing.rental);
+            $(`${modal} input[name=markup]`).val(res.ongoing.markup);
+            $(`${modal} input[name=deposit]`).val(res.ongoing.deposit);
+            $(`${modal} input[name=contract_start]`).val(
+                res.ongoing.contract_start
+            );
+            $(`${modal} input[name=contract_end]`).val(
+                res.ongoing.contract_end
+            );
         },
-        error: function (res) {
-
-        },
-    })
+        error: function (res) {},
+    });
 }
 
 function Generate_Report_Rental_Details(rental_details) {
-    var tbl = $('<table>').addClass('d-none')
-    tbl.attr('id', 'rental-details-tbl')
+    var tbl = $("<table>").addClass("d-none");
+    tbl.attr("id", "rental-details-tbl");
 
-    var thr = $('<tr>')
-    thr.append($('<th>').text('Rental'))
-    thr.append($('<th>').text('Markup'))
-    thr.append($('<th>').text('Deposit'))
-    thr.append($('<th>').text('Contract Period'))
-    thr.append($('<th>').text('Status'))
-    tbl.append(thr)
+    var thr = $("<tr>");
+    thr.append($("<th>").text("Rental"));
+    thr.append($("<th>").text("Markup"));
+    thr.append($("<th>").text("Deposit"));
+    thr.append($("<th>").text("Contract Period"));
+    thr.append($("<th>").text("Status"));
+    tbl.append(thr);
 
-    $.each(rental_details, function(row, field) {
-        var tr = $('<tr>')
-        tr.append($('<td>').text(field.rental))
-        tr.append($('<td>').text(field.markup))
-        tr.append($('<td>').text(field.deposit))
-        tr.append($('<td>').text(`${field.contract_start}-${field.contract_end}`))
-        tr.append($('<td>').text(field.status))
-        tbl.append(tr)
-    })
+    $.each(rental_details, function (row, field) {
+        var tr = $("<tr>");
+        tr.append($("<td>").text(field.rental));
+        tr.append($("<td>").text(field.markup));
+        tr.append($("<td>").text(field.deposit));
+        tr.append(
+            $("<td>").text(`${field.contract_start}-${field.contract_end}`)
+        );
+        tr.append($("<td>").text(field.status));
+        tbl.append(tr);
+    });
 
-    $('#transactions').append(tbl)
+    $("#transactions").append(tbl);
 
-    var wb = XLSX.utils.table_to_book(document.getElementById("rental-details-tbl"));
+    var wb = XLSX.utils.table_to_book(
+        document.getElementById("rental-details-tbl")
+    );
     XLSX.writeFile(wb, "report.xlsx");
 }
 
@@ -482,4 +583,75 @@ function NoResults(message) {
             </div>`;
 
     $("#units-data-container").append(results);
+}
+
+function Create_Asso_Dues() {
+    $("#create-monthly-dues-form").submit(function (e) {
+        e.preventDefault();
+
+        $("#create-monthly-dues-modal button[type=submit],[type=button]").prop(
+            "disabled",
+            true
+        );
+        var csrfToken = $('meta[name="csrf-token"]').attr("content");
+        var formData = new FormData($(this)[0]);
+        $.ajax({
+            type: "POST",
+            url: "/add-asso-dues",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (res) {
+                $("#create-monthly-dues-modal span").remove();
+                if (res.status == 200) {
+                    showToast(res.message, res.status);
+                    $(
+                        "#create-monthly-dues-modal button[type=submit],[type=button]"
+                    ).prop("disabled", false);
+                    $("#create-monthly-dues-form")[0].reset();
+                    ViewUnitsOnly();
+                    Display_Current_Rental();
+                } else if (res.status == 400) {
+                    if (res.message) {
+                        showToast(res.message, res.status);
+                        $(
+                            "#create-monthly-dues-modal button[type=submit],[type=button]"
+                        ).prop("disabled", false);
+                    } else {
+                        $(
+                            "#create-monthly-dues-modal button[type=submit],[type=button]"
+                        ).prop("disabled", false);
+
+                        var errors = res.errors;
+                        $.each(res.errors, function (errorsIndex, error) {
+                            $(
+                                "#create-monthly-dues-modal button[type=submit],[type=button]"
+                            ).prop("disabled", false);
+                            var error =
+                                "<span class='text-danger mx-2'>" +
+                                error +
+                                "</span>";
+                            $(error).insertAfter(
+                                $(
+                                    "input[name=" +
+                                        errorsIndex +
+                                        "],select[name=" +
+                                        errorsIndex +
+                                        "]"
+                                )
+                            );
+                        });
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                $("button[type=submit],[type=button]").prop("disabled", false);
+
+                console.error(xhr.responseText);
+            },
+        });
+    });
 }

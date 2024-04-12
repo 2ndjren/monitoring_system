@@ -62,13 +62,13 @@ class Auth extends Controller
     {
         if (Session::exists('admin')) {
             Session::flush();
-            return redirect('/login');
+            return redirect('/');
         } else if (Session::exists('user')) {
             $change = users::where('user_id', Session::get('user')['user_id'])->update([
                 'status' => 'Offline'
             ]);
             Session::flush();
-            return redirect('/login');
+            return redirect('/');
         }
     }
 }

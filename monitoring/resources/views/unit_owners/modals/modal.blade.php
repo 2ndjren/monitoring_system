@@ -115,7 +115,7 @@
             <div class="modal-body">
                 <form id="create-unit-rental-form" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="u_no">
+                    <input type="hidden" name="u_id">
                     <div class="form-floating mb-3">
                         <input type="number" name="rental" class="form-control" id="floatingInput"
                             placeholder="">
@@ -164,8 +164,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
                 <form id="create-monthly-dues-form" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="rental_id">
                     <div class="form-floating mb-3">
                         <input type="date" name="start" class="form-control" id="floatingInput"
                             placeholder="">
@@ -181,6 +183,16 @@
                             placeholder="">
                         <label for="floatingInput">Total</label>
                     </div>
+                    <div class="form-floating mb-3">
+                        <select class="form-select" name="status" id="floatingSelect"
+                            aria-label="Floating label select example">
+                            <option value="">Choose</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Unpaid">Unpaid</option>
+                        </select>
+                        <label for="floatingSelect">Works with selects</label>
+                    </div>
+
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Save</button>
                         <button type="button" class="btn btn-warning px-3 me-2 fw-semibold clearModal">Clear</button>

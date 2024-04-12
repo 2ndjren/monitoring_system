@@ -1,0 +1,14 @@
+.setting-option {
+    cursor: pointer;
+    transition: ease 500ms;
+}
+.setting-option:hover {
+    color: white;
+    background-color: rgb(27, 123, 233);
+    transition: ease 500ms;
+}
+.active-setting-option {
+    color: white;
+    background-color: rgb(12, 136, 60);
+    transition: ease 500ms;
+}
