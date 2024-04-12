@@ -271,7 +271,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h5>Are you sure you want to delete this Rental Detail?</h5>
+                <span>Are you sure you want to delete this Rental Detail?</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id='confirm-delete-unit-rental'>Yes</button>

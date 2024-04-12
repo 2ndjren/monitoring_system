@@ -267,9 +267,9 @@ function Create_Unit_Rentals() {
             success: function (res) {
                 $("#create-rental-details-modal span").remove();
                 if (res.status == 200) {
-                    showToast(res.message, res.status);
-                    ViewUnitsOnly();
                     Display_Current_Rental();
+                    ViewUnitsOnly();
+                    showToast(res.message, res.status);
                     $(
                         "#create-rental-details-modal button[type=submit],[type=button]"
                     ).prop("disabled", false);

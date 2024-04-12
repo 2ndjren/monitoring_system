@@ -31,6 +31,7 @@ class Auth extends Controller
                     ]);
                     $updated = users::where('user_id', $match->user_id)->first();
                     $data = [
+                        'user_id' => $updated->user_id,
                         'fname' => $updated->fname,
                         'lname' => $updated->lname,
                         'status' => $updated->status,
@@ -38,7 +39,7 @@ class Auth extends Controller
                     Session::put('user', $data);
                     if ($updated) {
                         Session::put('user', $updated);
-                        return response()->json(['status' => 200]);
+                        return response()->json(['status' => 200, 'user_account' => $updated]);
                     } else {
                         return response()->json(['status' => 400, 'message' => 'Something went wrong']);
                     }
@@ -51,9 +52,10 @@ class Auth extends Controller
                 'fname' => 'IT',
                 'lname' => 'Admin',
                 'status' => 'Online',
+                'email' => 'admin@gmail.com',
             ];
             Session::put('admin', $data);
-            return response()->json(['status' => 200]);
+            return response()->json(['status' => 200, 'user_account' => $data]);
         } else {
             return response()->json(['status' => 400, 'message' => 'Account is not exist']);
         }

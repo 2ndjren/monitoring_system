@@ -144,6 +144,30 @@
             </section>
         </div>
 
+        <div class="modal fade" id="confirmActionModal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="unit-ownerLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel"><i
+                                class="fa-solid fa-building-un"></i>
+                            <span id="confirmActionLabel"></span>
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span id="confirmActionMessage"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-value="yes" class="confirmActionBtn btn btn-primary"
+                            id='confirm-delete-unit-rental'>Yes</button>
+                        <button type="button" data-value="no" class="confirmActionBtn btn btn-danger"
+                            data-bs-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Loader --}}
 
 
@@ -155,9 +179,6 @@
         </footer>
     </div>
     <!-- ./wrapper -->
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
@@ -166,7 +187,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
 
-    <script></script>
+    <script>
+        $(document).ready(function() {
+
+        });
+    </script>
 
 </body>
 

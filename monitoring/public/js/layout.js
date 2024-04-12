@@ -38,3 +38,14 @@ function showToast(message, status) {
     var success = new bootstrap.Toast($("#toast-message"));
     success.show();
 }
+
+function showConfirmAction(actionLabel, actionMessage) {
+    $("#confirmActionLabel").text(actionLabel); //Action Label
+    $("#confirmActionMessage").text(actionMessage); //Action Message
+    $("#confirmActionModal").modal("show"); //Modal
+}
+function hideConfirmAction() {
+    $("#confirmActionLabel").text(""); //Action Label
+    $("#confirmActionMessage").text(""); //Action Message
+    $("#confirmActionModal").modal("hide"); //Modal
+}

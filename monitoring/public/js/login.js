@@ -48,8 +48,12 @@ function Login() {
             },
             success: function (res) {
                 $("#login-account-form span").remove();
-                console.log(res);
                 if (res.status == 200) {
+                    localStorage.setItem(
+                        "user_data",
+                        JSON.stringify(res.user_account)
+                    );
+
                     $(
                         "#login-account-form button[type=submit],[type=button]"
                     ).prop("disabled", false);

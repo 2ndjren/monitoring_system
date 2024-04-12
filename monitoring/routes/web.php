@@ -51,5 +51,7 @@ Route::get('/settings', [RouteController::class, 'Settings']);
 
 
 Route::post('/add-user', [AccountsController::class, 'Create_Account']);
+Route::post('/update-user-account', [AccountsController::class, 'Update_User_Profile']);
 Route::get('/get-users', [AccountsController::class, 'User_Accounts']);
 Route::get('/user-account/{id}', [AccountsController::class, 'Get_User_Account']);
+Route::get('/edit-user-account/{id}', [AccountsController::class, 'Get_User_Data']);
