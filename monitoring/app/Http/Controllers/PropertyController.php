@@ -25,7 +25,7 @@ class PropertyController extends Controller
         $owner = new unit_owners();
         $id = mt_rand(111111111, 999999999);
         $owner->id = $id;
-        $owner->name = $request->name;
+        $owner->name = ucfirst($request->name);
         $saved = $owner->save();
         if ($saved) {
             return response()->json(['status' => 200, 'message' => 'New unit owner successfully created.']);
@@ -301,7 +301,7 @@ class PropertyController extends Controller
             return response()->json(['status' => 400, 'errors' => $validator->errors()]);
         }
         $ongoing = unit_rentals::where('rental_id', $request->rental_id)->where('status', 'Ongoing')->first();
-        if ($ongoing) { 
+        if ($ongoing) {
             $dues = new asso_dues();
             $dues->asso_id = mt_rand(111111111, 999999999);
             $dues->rent_id = $ongoing->rental_id;

@@ -1,10 +1,14 @@
 @extends('layout')
 @section('title', 'Monitoring | Accounts')
 @section('accounts')
-    <div class="container-fluid">
-        <p class="h3"><span><i class="fa-solid fa-users-gear me-4"></i></span>Accounts</p>
-        <div class="container-fluid">
-            <div class="clearfix">
+    <div class="">
+        <div class="row border-bottom">
+            <div class="col-6">
+                <p class="h3"><span class="text-primary"><i class="fa-solid fa-users-gear me-4"></i></span>Accounts</p>
+
+            </div>
+            <div class="col-6">
+
                 <div class="dropdown float-end">
                     <a class="btn dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -18,6 +22,8 @@
                     </ul>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div id="accounts-container" class="row">
             </div>
 

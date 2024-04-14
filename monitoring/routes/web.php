@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\Auth;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\RouteController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [RouteController::class, 'Login']);
 Route::post('/signin', [Auth::class, 'Login']);
 Route::get('/logout', [Auth::class, 'Logout']);
+
+
+Route::get('/dashboard/unit-owners', [DashboardController::class, 'Unit_Owners']);
+Route::get('/dashboard/projects', [DashboardController::class, 'Projects']);
+Route::get('/dashboard/units', [DashboardController::class, 'Units']);
+Route::get('/dashboard/available-units', [DashboardController::class, 'Available_Units']);
+Route::get('/dashboard/occupied-units', [DashboardController::class, 'Occupied_Units']);
+Route::get('/dashboard/unpaid-monthly-dues', [DashboardController::class, 'Montly_Dues']);
+Route::get('/dashboard/units-per-projects', [DashboardController::class, 'Projects_Per_Units']);
+Route::get('/dashboard/accounts', [DashboardController::class, 'Accounts']);
+Route::get('/dashboard/units-per-owners', [DashboardController::class, 'Units_Per_Owner']);
+
 
 Route::get('/dashboard', [RouteController::class, 'Dashboard']);
 Route::get('/unit-owners', [RouteController::class, 'Unit_Owners']);

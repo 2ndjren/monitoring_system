@@ -2,10 +2,12 @@
 @section('title', 'Monitoring | Settings')
 <link rel="stylesheet" href="{{ asset('css/setting.css') }}">
 @section('settings')
-    <div class="container-fluid">
-        <p class="h3"><span>
-                <i class="fa-solid fa-gear me-4"></i>
-            </span>Settings</p>
+    <div class="">
+        <div class="row border-bottom mb-1">
+            <p class="h3"><span>
+                    <span class="text-primary"><i class="fa-solid fa-gear "></i></span>
+                </span>Settings</p>
+        </div>
         <div class="row">
             <div class="col-3 me-3 border-end border-5 pe-5">
                 <div class="col-lg-12 col-sm-12 text-center p-3 border border-1 active-setting-option setting-option ">

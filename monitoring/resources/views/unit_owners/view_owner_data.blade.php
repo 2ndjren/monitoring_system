@@ -2,15 +2,11 @@
 @section('title', 'Monitoring | Owner | Data')
 <link rel="stylesheet" href="{{ asset('css/unit_owners.css') }}">
 @section('view_owner_data')
-    <div class="container-fluid" id="unit-owner-property-details">
+    <div class="" id="unit-owner-property-details">
         <div class="">
-            <div class="pt-4">
-                <div class="">
-                    <span id="back-unit-owners" class="fw-semibold h4">Back</span>
-                </div>
-            </div>
-            <div class="clearfix shadow-sm border-2 border-bottom  mb-3 border-warning">
-                <p class="h3 float-start"><span><i class="fa-solid fa-user me-2 pt-3 me-3"></i></span><span
+
+            <div class="clearfix  border-2 border-bottom  mb-3 ">
+                <p class="h3 float-start"><span class="text-primary"><i class="fa-solid fa-user me-2 me-3"></i></span><span
                         id="owner-name"></span>
                     Properties</p>
                 <div id="units-menu-btn" class="dropdown float-end">

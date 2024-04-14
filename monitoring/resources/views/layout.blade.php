@@ -24,6 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="{{ asset('js/layout.js') }}"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
     <style>
         body {

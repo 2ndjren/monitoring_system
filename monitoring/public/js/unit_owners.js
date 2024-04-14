@@ -5,8 +5,8 @@ function UnitOwnersEvent() {
     });
     $("#delete-unit-owner-btn").click(function (e) {
         e.preventDefault;
-        
-        Get_Unit_Owners()
+
+        Get_Unit_Owners();
         $("#delete-unit-owner-modal").modal("show");
     });
 
@@ -16,15 +16,15 @@ function UnitOwnersEvent() {
             type: "GET",
             url: `/delete-unit-owner/${id}`,
             success: function (res) {
-                showToast(res.message, res.status)
-                Asc()
-                Get_Unit_Owners()
+                showToast(res.message, res.status);
+                Asc();
+                Get_Unit_Owners();
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
             },
         });
-    })
+    });
 
     $("#create-unit-owner-form").submit(function (e) {
         e.preventDefault();
@@ -128,15 +128,15 @@ function UnitOwnersEvent() {
             type: "GET",
             url: `/generate-report`,
             success: function (res) {
-                var records = res.records
-                console.log(records)
-                Generate_Report(records)
+                var records = res.records;
+                console.log(records);
+                Generate_Report(records);
             },
             error: function (res) {
-                console.log(res)
-            }
-        })
-    })
+                console.log(res);
+            },
+        });
+    });
 }
 
 function Asc() {
@@ -149,6 +149,7 @@ function Asc() {
         success: function (res) {
             if (res.status == 200) {
                 $.each(res.asc, function (ascIndex, ascData) {
+                    $("#sort-text").text("Ascending");
                     var list = ` <div data-id="${ascData.id}" class="col-lg-3 col-sm-12 shadow-sm mt-2  text-center pt-3 px-4 unit-owner-btn">\
                             <span class="h4 float-start">${ascData.name}</span>\
                             <span class="h4 float-end">\
@@ -175,6 +176,7 @@ function Desc() {
         dataType: "json",
         success: function (res) {
             if (res.status == 200) {
+                $("#sort-text").text("Descending");
                 $.each(res.desc, function (ascIndex, ascData) {
                     var list = ` <div data-id="${ascData.id}" class="col-lg-3 col-sm-12 shadow-sm mt-2  text-center pt-3 px-4 unit-owner-btn">\
                             <span class="h4 float-start">${ascData.name}</span>\
@@ -250,14 +252,14 @@ function Get_Unit_Owners() {
         url: "/unit-owners-display",
         success: function (res) {
             var selectElement = $(".todelete-owners");
-            selectElement.empty()
+            selectElement.empty();
 
             $.each(res.unit_owners, function (index, field) {
-                var option = $('<option>').text(field.name).val(field.id)
-                selectElement.append(option)
-            })
+                var option = $("<option>").text(field.name).val(field.id);
+                selectElement.append(option);
+            });
 
-            selectElement.val('')
+            selectElement.val("");
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -266,35 +268,39 @@ function Get_Unit_Owners() {
 }
 
 function Generate_Report(records) {
-    var tbl = $('<table>').addClass('d-none')
-    tbl.attr('id', 'rental-details-tbl')
+    var tbl = $("<table>").addClass("d-none");
+    tbl.attr("id", "rental-details-tbl");
 
-    var thr = $('<tr>')
-    thr.append($('<th>').text('Unit Owner'))
-    thr.append($('<th>').text('Project'))
-    thr.append($('<th>').text('Unit No.'))
-    thr.append($('<th>').text('Rental'))
-    thr.append($('<th>').text('Markup'))
-    thr.append($('<th>').text('Deposit'))
-    thr.append($('<th>').text('Contract Period'))
-    thr.append($('<th>').text('Status'))
-    tbl.append(thr)
+    var thr = $("<tr>");
+    thr.append($("<th>").text("Unit Owner"));
+    thr.append($("<th>").text("Project"));
+    thr.append($("<th>").text("Unit No."));
+    thr.append($("<th>").text("Rental"));
+    thr.append($("<th>").text("Markup"));
+    thr.append($("<th>").text("Deposit"));
+    thr.append($("<th>").text("Contract Period"));
+    thr.append($("<th>").text("Status"));
+    tbl.append(thr);
 
-    $.each(records, function(row, field) {
-        var tr = $('<tr>')
-        tr.append($('<td>').text(field.name))
-        tr.append($('<td>').text(field.project))
-        tr.append($('<td>').text(field.unit_no))
-        tr.append($('<td>').text(field.rental))
-        tr.append($('<td>').text(field.markup))
-        tr.append($('<td>').text(field.deposit))
-        tr.append($('<td>').text(`${field.contract_start}-${field.contract_end}`))
-        tr.append($('<td>').text(field.status))
-        tbl.append(tr)
-    })
+    $.each(records, function (row, field) {
+        var tr = $("<tr>");
+        tr.append($("<td>").text(field.name));
+        tr.append($("<td>").text(field.project));
+        tr.append($("<td>").text(field.unit_no));
+        tr.append($("<td>").text(field.rental));
+        tr.append($("<td>").text(field.markup));
+        tr.append($("<td>").text(field.deposit));
+        tr.append(
+            $("<td>").text(`${field.contract_start}-${field.contract_end}`)
+        );
+        tr.append($("<td>").text(field.status));
+        tbl.append(tr);
+    });
 
-    $('#unit-owner-list-data').append(tbl)
+    $("#unit-owner-list-data").append(tbl);
 
-    var wb = XLSX.utils.table_to_book(document.getElementById("rental-details-tbl"));
+    var wb = XLSX.utils.table_to_book(
+        document.getElementById("rental-details-tbl")
+    );
     XLSX.writeFile(wb, "report.xlsx");
 }
