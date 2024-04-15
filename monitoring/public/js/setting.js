@@ -1,4 +1,24 @@
 function Setting_Events() {
+    $("#account-btn").click(function (e) {
+        $(this).addClass('active-setting-option')
+        $(this).next().removeClass('active-setting-option')
+
+        var content_data = $('#account-content-data')
+        $(content_data).removeClass('d-none')
+        $(content_data).next().addClass('d-none')
+
+        AccountInformation()
+    });
+    $("#changelog-btn").click(function (e) {
+        $(this).addClass('active-setting-option')
+        $(this).prev().removeClass('active-setting-option')
+
+        var content_data = $('#changelog-content-data')
+        $(content_data).removeClass('d-none')
+        $(content_data).prev().addClass('d-none')
+
+        ChangelogInformation()
+    });
     $("#logout-btn").click(function (e) {
         e.preventDefault();
         var label = "Confirm logout";
@@ -145,4 +165,68 @@ function UpdateProfile() {
             },
         });
     });
+}
+
+function ChangelogInformation() {
+    $("#changelog-content-data").empty();
+
+    $.ajax({
+        type: "GET",
+        url: "/settings/changelog",
+        success: function (res) {
+            if (res.status == 200) {
+                var changelog_header = `
+                                            <div class="rounded-2 lh-1 shadow-sm p-1">
+                                                <h3 class="text-primary ps-4 mb-3">Changelog</h3>
+                                            </div>
+                                        `;
+
+                $("#changelog-content-data").append(changelog_header);
+
+                $.each(res.changelog, function (ind, col) {
+                    var action = col.action.split(' ')
+
+                    var operation = action[0].toLowerCase().split()
+
+                    operation = operation.map((word) => { 
+                        return word[0].toUpperCase() + word.substring(1); 
+                    }).join(' ')
+
+                    var index = 1;
+
+                    operation.slice(-1) == 'e' ? operation += 'd' : operation += 'ed'
+                    operation == 'Delete' ? index = 1 : index = 2
+
+                    var entity = action[index].replace(/[\W]+/g, "").replace('_', ' ').split(' ')
+
+                    entity = entity.map((word) => { 
+                        return word[0].toUpperCase() + word.substring(1); 
+                    }).join(' ')
+                    
+                    is_vowel = word => (/[aeiou]/i).test(word[0])
+                    if (!is_vowel(entity) || entity[0] == 'U') { operation += ' a' }
+                    else { operation += ' an' }
+
+                    var datetime = new Date(col.action_date)
+                    date = datetime.toDateString()
+                    time = datetime.toLocaleTimeString()
+
+                    var change_content = `
+                                            <p class="p-2  rounded-1">
+                                                <strong>- ${col.username} ${operation} ${entity} Record on ${date} at ${time}</strong>
+                                            </p>
+                                         `
+                    $("#changelog-content-data").append(change_content);
+                })
+    
+
+
+            } else if (res.status == 400) {
+                showToast(res.message, res.status);
+            }
+        },
+        error: function (res) {
+            console.log(res)
+        },
+    })
 }

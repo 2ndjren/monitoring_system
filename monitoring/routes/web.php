@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,8 @@ Route::post('/add-unit-owner', [PropertyController::class, 'Create_Unit_Owner'])
 Route::post('/add-unit', [PropertyController::class, 'Create_Unit']);
 Route::post('/add-unit-rentals', [PropertyController::class, 'Create_Rentals']);
 Route::get('/display-current-rental/{id}', [PropertyController::class, 'Display_Current_Rental']);
+Route::get('/view-completed-contracts/{id}', [PropertyController::class, 'View_Completed_Contracts']);
+Route::get('/view-contract-details/{id}', [PropertyController::class, 'View_Contract_Details']);
 Route::get('/edit-rental-details/{id}', [PropertyController::class, 'Edit_Rental_Details']);
 Route::post('/edit-rental-details', [PropertyController::class, 'Update_Rental_Details']);
 Route::post('/add-asso-dues', [PropertyController::class, 'Create_Asso_Dues']);
@@ -57,6 +60,7 @@ Route::get('/pay-asso-dues/{id}', [PropertyController::class, 'Pay_Asso_Dues']);
 Route::get('generate-report', [PropertyController::class, 'Generate_Report']);
 Route::get('/accounts', [RouteController::class, 'Accounts']);
 Route::get('/settings', [RouteController::class, 'Settings']);
+Route::get('/settings/changelog', [SettingsController::class, 'Changelog']);
 
 
 

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('contract_end');
             $table->tinyInteger('notified');
             $table->string('status');
+            $table->date('completed_on')->nullable();
         });
     }
 

@@ -20,5 +20,6 @@ class unit_rentals extends Model
         "contract_end",
         "notified",
         "status",
+        'completed_on',
     ];
 }

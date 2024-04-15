@@ -190,7 +190,7 @@
                             <option value="Paid">Paid</option>
                             <option value="Unpaid">Unpaid</option>
                         </select>
-                        <label for="floatingSelect">Works with selects</label>
+                        <label for="floatingSelect">Status</label>
                     </div>
 
                     <div class="d-flex justify-content-end">
@@ -276,6 +276,27 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id='confirm-delete-unit-rental'>Yes</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{-- Completed Contract Details Modal  --}}
+<div class="modal fade" id="completed-contract-details-modal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel"><i
+                        class="fa-solid fa-circle-info"></i>
+                    Info </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id='contract-details' class="container">
+
+                </div>
             </div>
         </div>
     </div>

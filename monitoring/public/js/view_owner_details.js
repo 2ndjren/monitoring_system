@@ -37,6 +37,137 @@ function View_Owners_Events() {
         $("#units-data-menu-btn").addClass("d-none");
     });
 
+    $(document).on("click", ".completed-contract", function (e) {   
+        var id = $(this).data('id')
+        $.ajax({
+            type: "GET",
+            url: `/view-contract-details/${id}`,
+            success: function (res) {
+                console.log(res)
+                $("#contract-details").empty()
+                let money = new Intl.NumberFormat("fil-PH", {
+                    style: "currency",
+                    currency: "PHP",
+                })
+
+                var rent = money.format(res.rental_detail.rental);
+                var deposit = money.format(res.rental_detail.deposit);
+                var markup = money.format(res.rental_detail.markup);
+
+                var options = {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                };
+
+                var contract_start = new Date(res.rental_detail.contract_start);
+                var contract_end = new Date(res.rental_detail.contract_end);
+                var contract_completed = new Date(res.rental_detail.completed_on);
+
+                contract_start = contract_start.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+                contract_end = contract_end.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+                contract_completed = contract_completed.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+
+                var row = ` 
+                            <div class='row mb-3'>
+                                <div class="col-lg-6 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                    <p class="fw-semibold "> <span class="me-3"><i
+                                                class="fa-solid fa-calendar-days"></i></span>Transaction Period
+                                    </p>
+                                    <p class="-center">${contract_start} - ${contract_completed}</p>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                    <p class="fw-semibold "> <span class="me-3"><i
+                                                class="fa-solid fa-calendar-days"></i></span>Contract Period
+                                    </p>
+                                    <p class="-center">${contract_start} - ${contract_end}</p>
+                                </div>
+                            </div>
+
+                            <div class='row mb-3'>
+                                <div class="col-lg-4 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                    <p class="fw-semibold "> <span class="me-3"><i
+                                                class="fa-solid fa-money-bill"></i></span>Rental
+                                    </p>
+                                    <p class="-center">${rent}</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                    <p class="fw-semibold "> <span class="me-3"><i
+                                                class="fa-solid fa-money-bill"></i></span>Markup
+                                    </p>
+                                    <p class="-center">${deposit}</p>
+                                </div>
+                                <div class="col-lg-4 col-sm-12 shadow-sm mt-2 bg-white border-end border-success border-2">
+                                    <p class="fw-semibold "> <span class="me-3"><i
+                                                class="fa-solid fa-money-bill"></i></span>Deposit
+                                    </p>
+                                    <p class="-center">${markup}</p>
+                                </div>
+                            </div>
+
+                            <div id='asso-dues-details' class='row mb-3 text-center'>
+                                <p class="fw-semibold"> <span class="me-3"><i
+                                class="fa-solid fa-calendar-days"></i></span>Associated Monthly Dues
+                                </p>
+                            </div>
+                          `
+
+                $("#contract-details").append(row)
+
+                if (res.asso_dues.length > 0) {
+                    var tbl = $('<table>').addClass('tbl')
+
+                    var thr = $('<tr>')
+                    thr.append($('<th>').text('Start Date'))
+                    thr.append($('<th>').text('End Date'))
+                    thr.append($('<th>').text('Total'))
+                    thr.append($('<th>').text('Status'))
+                    tbl.append(thr)
+                    
+                    $.each(res.asso_dues, function (ind, field) { 
+                        var start = new Date(field.start);
+                        var end = new Date(field.end);
+        
+                        start = start.toLocaleDateString(
+                            "en-US",
+                            options
+                        );
+                        end = end.toLocaleDateString(
+                            "en-US",
+                            options
+                        );
+
+                        var total = money.format(field.total)
+
+                        var tbr = $('<tr>')
+                        tbr.append($('<td>').text(start))
+                        tbr.append($('<td>').text(end))
+                        tbr.append($('<td>').text(total))
+                        tbr.append($('<td>').text(field.status))
+                        tbl.append(tbr)
+                    });
+                    $('#asso-dues-details').append(tbl)
+                }
+                else {
+                    $('#asso-dues-details').addClass('d-none')
+                }
+                $("#completed-contract-details-modal").modal("show");
+            },
+            error: function (res) {
+                console.log(res);
+            },
+        });
+    });
+
     $("#create-rental-details-btn").click(function (e) {
         e.preventDefault();
         $("#create-rental-details-modal").modal("show");
@@ -516,7 +647,9 @@ function Display_Current_Rental() {
                             </div>
                             `;
                 $("#current-transaction").append(row);
+
             }
+            View_Completed_Contracts()
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -530,51 +663,54 @@ function Edit_Rental_Details(id) {
         url: "/edit-rental-details/" + id,
         success: function (res) {
             var modal = "#edit-rental-details-modal";
-            $(`${modal} input[name=rental_id]`).val(res.ongoing.rental_id);
-            $(`${modal} input[name=rental]`).val(res.ongoing.rental);
-            $(`${modal} input[name=markup]`).val(res.ongoing.markup);
-            $(`${modal} input[name=deposit]`).val(res.ongoing.deposit);
-            $(`${modal} input[name=contract_start]`).val(
-                res.ongoing.contract_start
-            );
-            $(`${modal} input[name=contract_end]`).val(
-                res.ongoing.contract_end
-            );
+            $(`${modal} input[name=rental_id]`).val(res.rental_detail.rental_id);
+            $(`${modal} input[name=rental]`).val(res.rental_detail.rental);
+            $(`${modal} input[name=markup]`).val(res.rental_detail.markup);
+            $(`${modal} input[name=deposit]`).val(res.rental_detail.deposit);
+            $(`${modal} input[name=contract_start]`).val(res.rental_detail.contract_start);
+            $(`${modal} input[name=contract_end]`).val(res.rental_detail.contract_end);
         },
         error: function (res) {},
     });
 }
 
-function Generate_Report_Rental_Details(rental_details) {
-    var tbl = $("<table>").addClass("d-none");
-    tbl.attr("id", "rental-details-tbl");
+function View_Completed_Contracts() {
+    $('#completed-transactions').empty()
+    var id = localStorage.getItem("u_id");
+    $.ajax({
+        type: "GET",
+        url: "/view-completed-contracts/" + id,
+        success: function (res) {
+            var options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            };
 
-    var thr = $("<tr>");
-    thr.append($("<th>").text("Rental"));
-    thr.append($("<th>").text("Markup"));
-    thr.append($("<th>").text("Deposit"));
-    thr.append($("<th>").text("Contract Period"));
-    thr.append($("<th>").text("Status"));
-    tbl.append(thr);
+            $.each(res.completed, function (ind, field) { 
+                var start = new Date(field.contract_start)
+                var completed = new Date(field.completed_on)
 
-    $.each(rental_details, function (row, field) {
-        var tr = $("<tr>");
-        tr.append($("<td>").text(field.rental));
-        tr.append($("<td>").text(field.markup));
-        tr.append($("<td>").text(field.deposit));
-        tr.append(
-            $("<td>").text(`${field.contract_start}-${field.contract_end}`)
-        );
-        tr.append($("<td>").text(field.status));
-        tbl.append(tr);
+                start = start.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+                completed = completed.toLocaleDateString(
+                    "en-US",
+                    options
+                );
+
+                var transaction = `
+                                    <p class='completed-contract' data-id='${field.rental_id}' style='cursor: pointer;'>${start} - ${completed}</p>
+                                  `
+
+                $('#completed-transactions').append(transaction)
+            });
+        },
+        error: function (res) {
+
+        },
     });
-
-    $("#transactions").append(tbl);
-
-    var wb = XLSX.utils.table_to_book(
-        document.getElementById("rental-details-tbl")
-    );
-    XLSX.writeFile(wb, "report.xlsx");
 }
 
 function NoResults(message) {

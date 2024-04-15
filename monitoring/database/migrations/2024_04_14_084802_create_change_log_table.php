@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('change_log', function (Blueprint $table) {
             $table->id('log_id');
-            $table->integer('user_id');
-            $table->string('target_id');
+            $table->string('username');
             $table->text('action');
-            $table->dateTime('action_date');
+            $table->dateTime('action_date')->useCurrent();
         });
     }
 

@@ -12,8 +12,7 @@ class change_log extends Model
     protected $table = 'change_log';
     protected $fillable = [
         'log_id',
-        'user_id',
-        'target_id',
+        'username',
         'action',
         'action_date',
     ];

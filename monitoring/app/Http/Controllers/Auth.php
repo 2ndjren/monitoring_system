@@ -32,6 +32,7 @@ class Auth extends Controller
                     $updated = users::where('user_id', $match->user_id)->first();
                     $data = [
                         'user_id' => $updated->user_id,
+                        'username' => $request->username,
                         'fname' => $updated->fname,
                         'lname' => $updated->lname,
                         'status' => $updated->status,

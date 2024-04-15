@@ -38,14 +38,15 @@
                 </div>
                 <div class="d-none w-100" id="unit-details-data">
                     <span id="exit-unit-details">Exit</span>
-                    <div class="w-100">
+                    <div class="w-100 mb-3">
                         <p>Current Transaction</p>
                         <div id="current-transaction" class=" row w-100 overflow-auto">
 
                         </div>
                     </div>
-                    <div class="" id='transactions'>
+                    <div class="">
                         <p>Completed Transactions</p>
+                        <div id="completed-transactions" class=" row w-100 overflow-auto">
                     </div>
                 </div>
             </div>

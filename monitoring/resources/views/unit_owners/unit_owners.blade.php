@@ -49,7 +49,6 @@
             UnitOwnersEvent()
             Asc()
             Search()
-
         });
     </script>
 @endsection

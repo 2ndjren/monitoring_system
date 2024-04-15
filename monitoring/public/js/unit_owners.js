@@ -41,6 +41,7 @@ function UnitOwnersEvent() {
                 "X-CSRF-TOKEN": csrfToken,
             },
             success: function (res) {
+                // console.log(res)
                 $("#unit-owner span").remove();
                 if (res.status == 200) {
                     $("button[type=submit],[type=button]").prop(
