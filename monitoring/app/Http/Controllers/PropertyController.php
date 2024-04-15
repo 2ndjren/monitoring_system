@@ -331,4 +331,7 @@ class PropertyController extends Controller
             return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
         }
     }
+    public function Completed_Rental_Transaction($id)
+    {
+    }
 }

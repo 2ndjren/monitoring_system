@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="" id='transactions'>
-                        <p>Recent Transactions</p>
+                        <p>Completed Transactions</p>
                     </div>
                 </div>
             </div>
