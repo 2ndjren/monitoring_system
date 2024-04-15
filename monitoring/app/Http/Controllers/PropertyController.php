@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Send_Mail_To_Expire_Notification;
 use App\Models\asso_dues;
+use App\Models\notification;
 use App\Models\property_units;
 use App\Models\unit_owners;
 use App\Models\unit_rentals;
+use App\Models\users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class PropertyController extends Controller
@@ -325,13 +331,129 @@ class PropertyController extends Controller
         $records = unit_owners::join('property_units', 'unit_owners.id', '=', 'property_units.unit_owner_id')
             ->join('unit_rentals', 'property_units.unit_no', '=', 'unit_rentals.property_unit_id')->get();
 
+        dd($records);
         if ($records) {
             return response()->json(['status' => 200, 'records' => $records]);
         } else {
             return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
         }
     }
-    public function Completed_Rental_Transaction($id)
+
+    public function Monitoring()
     {
+        // Find ongoing rentals that are not yet notified
+        $rentals = unit_rentals::where('status', 'Ongoing')->where('notified', '0')->get();
+
+        if (count($rentals) > 0) {
+            // dd($rentals);
+            foreach ($rentals as $rent) {
+                if ($rent->notified == '0') {
+                    $end = Carbon::parse($rent->contract_end);
+                    $check_expiry = $end->subDays(7);
+                    $today = Carbon::today();
+                    $unit_owners = unit_owners::join('property_units', 'unit_owners.id', '=', 'property_units.unit_owner_id')->get();
+                    if ($today == $check_expiry) {
+                        foreach ($unit_owners as $owner) {
+                            if ($owner->unit_id == $rent->property_unit_id) {
+                                $rents = unit_rentals::join('property_units', 'unit_rentals.property_unit_id', '=', 'property_units.unit_id')->select('property_units.*', 'unit_rentals.*', 'unit_rentals.status as rent_status')->first();
+                                $admins = users::all();
+                                foreach ($admins as $admin) {
+
+                                    $start = Carbon::parse($rent->contract_start);
+                                    $end = Carbon::parse($rent->contract_end);
+
+                                    $dues = asso_dues::where('rent_id', $rents->rental_id)->get();
+                                    $cont_start = $start->format('F j, Y');
+                                    $cont_end = $end->format('F j, Y');
+                                    $now = $today->format('F j, Y');
+                                    $mail_data = [
+                                        'receiver' => $admin->fname,
+                                        'project' => $owner->project,
+                                        'unit_owner' => $owner->name,
+                                        'unit_no' => $owner->unit_no,
+                                        'contract_start' => $cont_start,
+                                        'contract_end' => $cont_end,
+                                        'asso_dues' => $dues,
+                                        'rental' => $rents,
+                                    ];
+                                    $mail_now = Mail::to($admin->email)->send(new Send_Mail_To_Expire_Notification($mail_data));
+                                }
+                            }
+                        }
+                        if ($mail_now) {
+                            $notif = new notification();
+                            $notif->notif_id = "notif" . mt_rand(11111, 99999);
+                            // dd($cont_end);
+                            $notif->content = "The  property with Unit No." . $owner->unit_no . " under the ownership of " . $owner->name . " that resides in " . $owner->project . " is near to expire one week from this day " . $now . " to " . $cont_end . ".";
+                            $notif->user_id = $admin->user_id;
+                            $notif->status = 'Delivered';
+                            $notify = $notif->save();
+                            if ($notify) {
+                                $updated = unit_rentals::where('rental_id', $rent->rental_id)->update([
+                                    'notified' => '1'
+                                ]);
+                                if ($updated) {
+                                    return response()->json(['status' => 200, 'message' => '' . $admin->fname . ' has been successfully notified']);
+                                }
+                            }
+                        } else {
+                            return response()->json(['status' => 400, 'message' => 'Something went wrong']);
+                        }
+                    }
+                }
+            }
+        } else {
+            return response()->json(['status' => 400, 'message' => 'No ongoing rentals found']);
+        }
     }
 }
+// $property = property_units::where('unit_id', $rent->property_unit_id)->first();
+
+
+
+
+// if ($property) {
+//     // Retrieve owner details
+//     $unit_owner = unit_owners::find($property->unit_owner_id);
+//     $owner = $unit_owner ? $unit_owner->name : '';
+
+//     // Send notification to each account
+//     $accounts = users::all();
+//     foreach ($accounts as $account) {
+//         $start = Carbon::parse($rent->contract_start);
+//         $end = Carbon::parse($rent->contract_end);
+//         $cont_start = $start->format('F j, Y');
+//         $cont_end = $end->format('F j, Y');
+
+//         $rental = unit_rentals::find($rent->rental_id);
+//         $dues = asso_dues::where('rent_id', $rent->rental_id)->get();
+//         $mail_data = [
+//             'receiver' => $account->fname,
+//             'project' => $property->project,
+//             'unit_owner' => $owner,
+//             'unit_no' => $property->unit_no,
+//             'contract_start' => $cont_start,
+//             'contract_end' => $cont_end,
+//             'asso_dues' => $dues,
+//         ];
+//         $mail_now = Mail::to($account->email)->send(new Send_Mail_To_Expire_Notification($mail_data));
+
+//         if ($mail_now) {
+//             // Update rental status and set as notified
+//             $rental->status = '1'; // Assuming '1' means notified
+//             $rental->notified = '1';
+//             $rental->save();
+
+//             // Create notification record
+//             $notif = new notification();
+//             $notif->notif_id = "notif" . mt_rand(11111, 99999);
+//             if (Session::exists('user')) {
+//                 $notif->user_id = Session::get('user')['user_id'];
+//             }
+//             $notif->status = 'Delivered';
+//             $notif->save();
+//         } else {
+//             return response()->json(['status' => 400, 'message' => 'Something went wrong']);
+//         }
+//     }
+// }

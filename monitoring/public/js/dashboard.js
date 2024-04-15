@@ -8,6 +8,7 @@ function Live() {
     setInterval(() => {
         Units_Per_Projects();
         Ownership();
+        Accounts();
         $.ajax({
             type: "GET",
             url: "/dashboard/unit-owners",
@@ -182,6 +183,7 @@ function Accounts() {
         data: "data",
         dataType: "json",
         success: function (res) {
+            $("#accounts-data").empty();
             console.log(res);
             $.each(res.accounts, function (index, data) {
                 var color = "";

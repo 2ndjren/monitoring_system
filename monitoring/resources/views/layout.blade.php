@@ -190,7 +190,7 @@
 
     <script>
         $(document).ready(function() {
-
+            Mailer()
         });
     </script>
 

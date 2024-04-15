@@ -59,6 +59,9 @@ Route::get('/accounts', [RouteController::class, 'Accounts']);
 Route::get('/settings', [RouteController::class, 'Settings']);
 
 
+Route::get('/send-expiry-mail', [PropertyController::class, 'Monitoring']);
+
+
 
 
 

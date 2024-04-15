@@ -49,3 +49,20 @@ function hideConfirmAction() {
     $("#confirmActionMessage").text(""); //Action Message
     $("#confirmActionModal").modal("hide"); //Modal
 }
+
+function Mailer() {
+    setInterval(() => {
+        $.ajax({
+            type: "GET",
+            url: "/send-expiry-mail",
+            data: "data",
+            dataType: "json",
+            success: function (res) {
+                // console.log(res);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            },
+        });
+    }, 5000);
+}
