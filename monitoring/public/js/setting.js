@@ -207,8 +207,17 @@ function ChangelogInformation() {
                     if (!is_vowel(entity) || entity[0] == 'U') { operation += ' a' }
                     else { operation += ' an' }
 
+                    var options = {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    };
+
                     var datetime = new Date(col.action_date)
-                    date = datetime.toDateString()
+                    date = datetime.toLocaleDateString(
+                        "en-US",
+                        options
+                    )
                     time = datetime.toLocaleTimeString()
 
                     var change_content = `
