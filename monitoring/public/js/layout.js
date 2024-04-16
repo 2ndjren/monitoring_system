@@ -1,25 +1,33 @@
 $(document).ready(function () {
     $('#notifs-btn').click(function (e) { 
-        $.ajax({
-            type: "GET",
-            url: "/dashboard/notifs",
-            success: function (res) {
-                $('#notifs').empty()
-                $('#notifs').append(`<h5 class="mb-3">Notifications</h5>`)
+        if ($('#notifs').hasClass('d-none')) {
+            $('#notifs').empty()
 
-                $.each(res.notifs, function (ind, field) { 
-                    var notif = `
-                                    <p class="mb-1">${field.content}</p>
-                                `
-                    $('#notifs').append(notif)
-                })
+            $.ajax({
+                type: "GET",
+                url: "/dashboard/notifs",
+                success: function (res) {
+                    $('#notifs').append(`<h5 class="mb-3">Notifications</h5>`)
+    
+                    $.each(res.notifs, function (ind, field) { 
+                        var notif = `
+                                        <p class="mb-1">${field.content}</p>
+                                    `
+                        $('#notifs').append(notif)
+                    })
+    
+                },
+                error: function (res) {
+                    console.log(res)
+                },
+            })
 
-                $('#notifs').toggleClass('d-none')
-            },
-            error: function (res) {
-                console.log(res)
-            },
-        })
+            $('#notifs').removeClass('d-none')
+        } 
+        else {
+            $('#notifs').addClass('d-none')
+        }
+        
     });
 });
 
