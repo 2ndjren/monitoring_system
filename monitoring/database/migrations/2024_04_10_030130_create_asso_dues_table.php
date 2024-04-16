@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('total');
             $table->string('status');
             $table->foreign('rent_id')->references('rental_id')->on('unit_rentals')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

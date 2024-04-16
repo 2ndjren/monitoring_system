@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\asso_dues;
+use App\Models\unit_owners;
+use App\Models\unit_rentals;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -70,5 +73,22 @@ class RouteController extends Controller
         } else {
             return view('login');
         }
+    }
+
+
+
+
+
+    public function TestExport()
+    {
+        $properties = unit_owners::join('property_units', 'unit_owners.id', '=', 'property_units.unit_owner_id')->get();
+        // $data = [];
+        foreach ($properties as $property) {
+            $rent = unit_rentals::where('property_unit_id', $property->unit_id)->where('status', 'Ongoing')->first();
+            $dues = asso_dues::where('rent_id', $rent->rental_id)->orderBy('created_at', 'desc')->first();
+            $property['asso_dues'] = $dues;
+            $property['rental'] = $rent;
+        }
+        return view('test.test_export', ['properties' => $properties]);
     }
 }

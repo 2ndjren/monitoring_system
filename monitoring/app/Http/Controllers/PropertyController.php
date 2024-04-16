@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportListings;
 use App\Mail\Send_Mail_To_Expire_Notification;
 use App\Models\asso_dues;
 use App\Models\notification;
@@ -12,12 +13,11 @@ use App\Models\users;
 use App\Models\change_log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PropertyController extends Controller
 {
@@ -450,6 +450,7 @@ class PropertyController extends Controller
                             if ($owner->unit_id == $rent->property_unit_id) {
                                 $rents = unit_rentals::join('property_units', 'unit_rentals.property_unit_id', '=', 'property_units.unit_id')->select('property_units.*', 'unit_rentals.*', 'unit_rentals.status as rent_status')->first();
                                 $admins = users::all();
+                                // dd($admins);
                                 foreach ($admins as $admin) {
 
                                     $start = Carbon::parse($rent->contract_start);
@@ -476,6 +477,7 @@ class PropertyController extends Controller
                         if ($mail_now) {
                             $notif = new notification();
                             $notif->notif_id = "notif" . mt_rand(11111, 99999);
+                            // dd()
                             // dd($cont_end);
                             $notif->content = "The  property with Unit No." . $owner->unit_no . " under the ownership of " . $owner->name . " that resides in " . $owner->project . " is near to expire one week from this day " . $now . " to " . $cont_end . ".";
                             $notif->user_id = $admin->user_id;
@@ -498,6 +500,10 @@ class PropertyController extends Controller
         } else {
             return response()->json(['status' => 400, 'message' => 'No ongoing rentals found']);
         }
+    }
+    public function DownloadListings()
+    {
+        return Excel::download(new ExportListings, 'listings.xlsx');
     }
 }
 // $property = property_units::where('unit_id', $rent->property_unit_id)->first();
