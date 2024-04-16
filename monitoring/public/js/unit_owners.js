@@ -12,18 +12,20 @@ function UnitOwnersEvent() {
 
     $("#del_btn").click(function (e) {
         var id = $(".todelete-owners").val();
-        $.ajax({
-            type: "GET",
-            url: `/delete-unit-owner/${id}`,
-            success: function (res) {
-                showToast(res.message, res.status);
-                Asc();
-                Get_Unit_Owners();
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            },
-        });
+
+        var label = "Confirm Delete";
+        var message = "Are you sure?";
+        showConfirmAction(label, message);
+    });
+    $(".confirmActionBtn").click(function (e) {
+        e.preventDefault();
+        var check = $(this).data("value");
+        if (check == "yes") {
+            var id = $(".todelete-owners").val();
+            DeleteUnit_OWner(id);
+        } else {
+            hideConfirmAction();
+        }
     });
 
     $("#create-unit-owner-form").submit(function (e) {
@@ -136,6 +138,21 @@ function UnitOwnersEvent() {
                 console.log(res);
             },
         });
+    });
+}
+function DeleteUnit_OWner(id) {
+    $.ajax({
+        type: "GET",
+        url: `/delete-unit-owner/${id}`,
+        success: function (res) {
+            showToast(res.message, res.status);
+            Asc();
+            Get_Unit_Owners();
+            hideConfirmAction();
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        },
     });
 }
 

@@ -23,9 +23,7 @@ class Auth extends Controller
         if ($match) {
             if (password_verify($request->password, $match->password)) {
                 Session::flush();
-                if ($match->status == "Online") {
-                    return response()->json(['status' => 400, 'message' => 'Your account is already logged in in someone device.']);
-                } else {
+                if ($match->status == "Online" || $match->status == "Offline") {
                     $change = users::where('user_id', $match->user_id)->update([
                         'status' => 'Online'
                     ]);

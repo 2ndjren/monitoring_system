@@ -65,6 +65,8 @@ Route::get('/settings/changelog', [SettingsController::class, 'Changelog']);
 
 
 Route::get('/send-expiry-mail', [PropertyController::class, 'Monitoring']);
+Route::get('/test-export', [RouteController::class, 'TestExport']);
+Route::get('/export-listings', [PropertyController::class, 'DownloadListings']);
 
 
 

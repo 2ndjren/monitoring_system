@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class asso_dues extends Model
 {
     use HasFactory;
-    public $timestamps = false;
     protected $table = "asso_dues";
     protected $fillable = [
         "asso_id",
