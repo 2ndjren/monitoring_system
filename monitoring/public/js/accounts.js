@@ -98,7 +98,7 @@ function Accounts() {
         data: "data",
         dataType: "json",
         success: function (res) {
-            console.log(res);
+            // console.log(res);
             if (res.status == 200) {
                 $("#accounts-container").empty();
 

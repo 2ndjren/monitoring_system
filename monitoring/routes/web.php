@@ -37,6 +37,7 @@ Route::get('/dashboard/units-per-owners', [DashboardController::class, 'Units_Pe
 
 
 Route::get('/dashboard', [RouteController::class, 'Dashboard']);
+Route::get('/dashboard/notifs', [DashboardController::class, 'Get_Notifs']);
 Route::get('/unit-owners', [RouteController::class, 'Unit_Owners']);
 Route::get('/unit-owners-list', [PropertyController::class, 'Unit_Owners']);
 Route::get('/search/{search}', [PropertyController::class, 'Search_Owners']);
@@ -57,7 +58,7 @@ Route::post('/add-asso-dues', [PropertyController::class, 'Create_Asso_Dues']);
 Route::get('/delete-rental-details/{id}', [PropertyController::class, 'Delete_Rental_Details']);
 Route::get('/end-transaction-rental-details/{id}', [PropertyController::class, 'End_Transaction_Rental_Details']);
 Route::get('/pay-asso-dues/{id}', [PropertyController::class, 'Pay_Asso_Dues']);
-Route::get('generate-report', [PropertyController::class, 'Generate_Report']);
+Route::get('/generate-report', [PropertyController::class, 'Generate_Report']);
 Route::get('/accounts', [RouteController::class, 'Accounts']);
 Route::get('/settings', [RouteController::class, 'Settings']);
 Route::get('/settings/changelog', [SettingsController::class, 'Changelog']);

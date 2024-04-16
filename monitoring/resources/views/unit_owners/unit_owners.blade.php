@@ -39,7 +39,6 @@
     <div class="container-fluid clearfix">
         <div id="unit-owner-list-data" class="row">
 
-
         </div>
     </div>
     @include('unit_owners.modals.modal')

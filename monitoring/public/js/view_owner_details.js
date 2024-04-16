@@ -497,7 +497,7 @@ function Display_Current_Rental() {
         data: "data",
         dataType: "json",
         success: function (res) {
-            console.log(res);
+            // console.log(res);
             if (res.status == 200) {
                 let money = new Intl.NumberFormat("fil-PH", {
                     style: "currency",

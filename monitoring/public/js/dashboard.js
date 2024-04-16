@@ -146,7 +146,7 @@ function Ownership() {
         url: "/dashboard/units-per-owners",
         dataType: "json",
         success: function (res) {
-            console.log(res);
+            // console.log(res);
             var owners = [];
             $.each(res.units_per_owner, function (index, owner) {
                 // Push owner data into owners array
@@ -184,7 +184,7 @@ function Accounts() {
         dataType: "json",
         success: function (res) {
             $("#accounts-data").empty();
-            console.log(res);
+            // console.log(res);
             $.each(res.accounts, function (index, data) {
                 var color = "";
                 if (data.status == "Online") {

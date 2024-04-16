@@ -10,11 +10,10 @@ use App\Models\unit_owners;
 use App\Models\unit_rentals;
 use App\Models\users;
 use App\Models\change_log;
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -422,9 +421,8 @@ class PropertyController extends Controller
     public function Generate_Report()
     {
         $records = unit_owners::join('property_units', 'unit_owners.id', '=', 'property_units.unit_owner_id')
-            ->join('unit_rentals', 'property_units.unit_no', '=', 'unit_rentals.property_unit_id')->get();
+            ->join('unit_rentals', 'property_units.unit_id', '=', 'unit_rentals.property_unit_id')->get();
 
-        dd($records);
         if ($records) {
             return response()->json(['status' => 200, 'records' => $records]);
         } else {
@@ -472,6 +470,9 @@ class PropertyController extends Controller
                                     $mail_now = Mail::to($admin->email)->send(new Send_Mail_To_Expire_Notification($mail_data));
                                 }
                             }
+                            else {
+                                return response()->json(['status' => 400, 'message' => 'Something went wrong']);
+                            }
                         }
                         if ($mail_now) {
                             $notif = new notification();
@@ -493,6 +494,12 @@ class PropertyController extends Controller
                             return response()->json(['status' => 400, 'message' => 'Something went wrong']);
                         }
                     }
+                    else {
+                        return response()->json(['status' => 400, 'message' => 'Something went wrong', 'rentals' => $rentals, 'expiry' => $check_expiry]);
+                    }
+                }
+                else {
+                    return response()->json(['status' => 400, 'message' => 'Something went wrong']);
                 }
             }
         } else {

@@ -21,6 +21,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
+    <link href="{{ asset('css/layout.css') }}" rel='stylesheet'></link>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="{{ asset('js/layout.js') }}"></script>
@@ -54,6 +56,9 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Add your navbar content here -->
+                <li class="nav-item">
+                    <i class="fa-solid fa-bell mr-3" id='notifs-btn'></i>
+                </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -130,7 +135,11 @@
 
 
         <div class="content-wrapper ">
-            <section class="content p-2 overflow-auto "style="height:100vh">
+            <section class="content p-2 overflow-auto "style="height:100vh; position:relative;">
+                <div id='notifs' class="bg-white d-none">
+
+                </div>
+
                 @yield('dashboard')
 
                 @yield('unit_owners')
@@ -187,10 +196,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            Mailer()
+            // Mailer()
         });
     </script>
 

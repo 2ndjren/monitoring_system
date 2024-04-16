@@ -7,6 +7,8 @@ use App\Models\property_units;
 use App\Models\unit_owners;
 use App\Models\unit_rentals;
 use App\Models\users;
+use App\Models\notification;
+
 use Illuminate\Http\Request;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
@@ -111,6 +113,16 @@ class DashboardController extends Controller
             return response()->json(['status' => 200, 'accounts' => $accounts]);
         } else {
             return response()->json(['status' => 400, 'accounts' => $accounts]);
+        }
+    }
+
+    public function Get_Notifs() {
+        $notifs = notification::orderBy('created_at', 'desc')->get();
+
+        if (count($notifs) > 0) {
+            return response()->json(['status' => 200, 'notifs' => $notifs]);
+        } else {
+            return response()->json(['status' => 400, 'message' => 'No notifications']);
         }
     }
 }

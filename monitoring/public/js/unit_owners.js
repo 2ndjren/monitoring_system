@@ -129,9 +129,8 @@ function UnitOwnersEvent() {
             type: "GET",
             url: `/generate-report`,
             success: function (res) {
-                var records = res.records;
-                console.log(records);
-                Generate_Report(records);
+                // console.log(res.records);
+                Generate_Report(res.records);
             },
             error: function (res) {
                 console.log(res);
@@ -291,9 +290,7 @@ function Generate_Report(records) {
         tr.append($("<td>").text(field.rental));
         tr.append($("<td>").text(field.markup));
         tr.append($("<td>").text(field.deposit));
-        tr.append(
-            $("<td>").text(`${field.contract_start}-${field.contract_end}`)
-        );
+        tr.append($("<td>").text(`${field.contract_start}-${field.contract_end}`));
         tr.append($("<td>").text(field.status));
         tbl.append(tr);
     });
