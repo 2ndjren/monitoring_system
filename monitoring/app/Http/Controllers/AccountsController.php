@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\users;
+use App\Models\change_log;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class AccountsController extends Controller
 {
@@ -22,6 +26,7 @@ class AccountsController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 400, 'errors' => $validator->errors()]);
         }
+        DB::enableQueryLog();
         $user = new users();
         $id = mt_rand(111111111, 999999999);;
         $user->user_id = $id;
@@ -33,7 +38,15 @@ class AccountsController extends Controller
         $user->status = "Offline";
         $user->token = mt_rand(111111, 999999);
         $saved = $user->save();
+        $query_log = DB::getQueryLog();
+        DB::disableQueryLog();
         if ($saved) {
+            $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']); 
+            $change_log = new change_log();
+            $change_log->username = Session::get('user')['username'];
+            $change_log->action = $action;
+            $change_log->save();
+
             return response()->json(['status' => 200, 'message' => 'New user successfully created.']);
         } else {
             return response()->json(['status' => 400, 'message' => 'Something went wrong, please try again.']);
@@ -55,6 +68,7 @@ class AccountsController extends Controller
             'lname' => $request->lname,
             'email' => $request->email
         ]);
+
         if ($update) {
             $updated = users::where('user_id', $request->user_id)->first();
             $data = [

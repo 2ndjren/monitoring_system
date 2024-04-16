@@ -9,12 +9,15 @@ use App\Models\property_units;
 use App\Models\unit_owners;
 use App\Models\unit_rentals;
 use App\Models\users;
+use App\Models\change_log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class PropertyController extends Controller
 {
@@ -28,12 +31,21 @@ class PropertyController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 400, 'errors' => $validator->errors()]);
         }
+        DB::enableQueryLog();
         $owner = new unit_owners();
         $id = mt_rand(111111111, 999999999);
         $owner->id = $id;
         $owner->name = ucfirst($request->name);
         $saved = $owner->save();
+        $query_log = DB::getQueryLog();
+        DB::disableQueryLog();
+
         if ($saved) {
+            $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+            $change_log = new change_log();
+            $change_log->username = Session::get('user')['username'];
+            $change_log->action = $action;
+            $change_log->save();
             return response()->json(['status' => 200, 'message' => 'New unit owner successfully created.']);
         } else {
             return response()->json(['status' => 400, 'message' => 'Something went wrong, please try again.']);
@@ -52,17 +64,28 @@ class PropertyController extends Controller
             return response()->json(['status' => 400, 'errors' => $validator->errors()]);
         }
         $check = property_units::where('project', $request->project)->where('unit_no', $request->unit_no)->first();
+        DB::enableQueryLog();
         $owner = new property_units();
         $owner->unit_id = mt_rand(11111111, 99999999);
         $owner->unit_no = $request->unit_no;
         $owner->unit_owner_id = $request->owner_id;
         $owner->project = $request->project;
         $owner->status = $request->status;
+
         if ($check) {
             return response()->json(['status' => 400, 'message' => 'Unit is already exist']);
         } else {
             $saved = $owner->save();
+            $query_log = DB::getQueryLog();
+            DB::disableQueryLog();
+
             if ($saved) {
+                $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+                $change_log = new change_log();
+                $change_log->username = Session::get('user')['username'];
+                $change_log->action = $action;
+                $change_log->save();
+
                 if ($request->status == "Available") {
                     return response()->json(['status' => 200, 'message' => 'Unit successfully added yet not occupied.']);
                 } else if ($request->status == "Occupied") {
@@ -87,6 +110,7 @@ class PropertyController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 400, 'errors' => $validator->errors()]);
         }
+        DB::enableQueryLog();
         $owner = new unit_rentals();
         $owner->rental_id = mt_rand(11111111, 99999999);
         $owner->property_unit_id = $request->u_id;
@@ -103,7 +127,14 @@ class PropertyController extends Controller
         } else {
             $property_unit = property_units::where('unit_id', $request->u_id)->update(['status' => 'Occupied']);
             $saved = $owner->save();
+            $query_log = DB::getQueryLog();
+            DB::disableQueryLog();
             if ($saved) {
+                $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[2]['query']), $query_log[2]['bindings']);
+                $change_log = new change_log();
+                $change_log->username = Session::get('user')['username'];
+                $change_log->action = $action;
+                $change_log->save();
                 $property_unit = property_units::where('unit_no', $request->u_no)
                     ->update([
                         'status' => 'Occupied',
@@ -198,11 +229,30 @@ class PropertyController extends Controller
         }
     }
 
+    public function View_Completed_Contracts($id)
+    {
+        $completed = unit_rentals::where('property_unit_id', $id)->where('status', 'Completed')->orderBy('completed_on', 'desc')->get();
+        $count = count($completed);
+        if ($count > 0) {
+            return response()->json(['status' => 200, 'completed' => $completed]);
+        }
+    }
+
+    public function View_Contract_Details($id)
+    {
+        $rental_detail = unit_rentals::where('rental_id', $id)->first();
+        $asso_dues = asso_dues::where('rent_id', $id)->orderBy('end', 'desc')->get();
+
+        if ($rental_detail) {
+            return response()->json(['status' => 200, 'rental_detail' => $rental_detail, 'asso_dues' => $asso_dues]);
+        }
+    }
+
     public function Edit_Rental_Details($id)
     {
-        $ongoing = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->first();
-        if ($ongoing) {
-            return response()->json(['status' => 200, 'ongoing' => $ongoing]);
+        $rental_detail = unit_rentals::where('rental_id', $id)->first();
+        if ($rental_detail) {
+            return response()->json(['status' => 200, 'rental_detail' => $rental_detail]);
         } else {
             return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
         }
@@ -210,6 +260,7 @@ class PropertyController extends Controller
 
     public function Update_Rental_Details(Request $request)
     {
+        DB::enableQueryLog();
         $ongoing = unit_rentals::where('rental_id', $request->rental_id)->where('status', 'Ongoing')
             ->update([
                 'rental' => $request->rental,
@@ -218,8 +269,16 @@ class PropertyController extends Controller
                 'contract_start' => $request->contract_start,
                 'contract_end' => $request->contract_end,
             ]);
+        $query_log = DB::getQueryLog();
+        DB::disableQueryLog();
 
         if ($ongoing) {
+            $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+            $change_log = new change_log();
+            $change_log->username = Session::get('user')['username'];
+            $change_log->action = $action;
+            $change_log->save();
+
             return response()->json(['status' => 200, 'message' => 'Update Rental Details']);
         } else {
             return response()->json(['status' => 400,  'message' => 'No changes found.',]);
@@ -233,15 +292,33 @@ class PropertyController extends Controller
             'status' => 'Available'
         ]);
         if ($update) {
+            DB::enableQueryLog();
             $ongoing = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->delete();
+            $query_log = DB::getQueryLog();
+            DB::disableQueryLog();
             if ($ongoing) {
+                $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+                $change_log = new change_log();
+                $change_log->username = Session::get('user')['username'];
+                $change_log->action = $action;
+                $change_log->save();
+
                 return response()->json(['status' => 200, 'message' => 'Deleted Rental Details']);
             } else {
                 return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
             }
         } else {
+            DB::enableQueryLog();
             $ongoing = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->delete();
+            $query_log = DB::getQueryLog();
+            DB::disableQueryLog();
             if ($ongoing) {
+                $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+                $change_log = new change_log();
+                $change_log->username = Session::get('user')['username'];
+                $change_log->action = $action;
+                $change_log->save();
+
                 return response()->json(['status' => 200, 'message' => 'Deleted Rental Details']);
             } else {
                 return response()->json(['status' => 400,  'message' => 'No existing transaction.',]);
@@ -255,16 +332,16 @@ class PropertyController extends Controller
         $property_unit = property_units::where('unit_id', $rent->property_unit_id)->update(['status' => 'Available']);
         if ($property_unit) {
 
-            $rental_details = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->update(['status' => 'Completed']);
+            $rental_details = unit_rentals::where('rental_id', $id)->where('status', 'Ongoing')->update(['status' => 'Completed', 'completed_on' => date("Y-m-d")]);
             if ($rental_details) {
                 $dues = asso_dues::where('rent_id', $id)->where('status', 'Unpaid')->first();
                 if ($dues) {
                     $update_dues = asso_dues::where('rent_id', $dues->rent_id)->update(['status' => 'Paid']);
                     if ($update_dues) {
-                        return response()->json(['status' => 200, 'message' => 'Transaction Completed1111']);
+                        return response()->json(['status' => 200, 'message' => 'Transaction Completed']);
                     }
                 } else {
-                    return response()->json(['status' => 200, 'message' => 'Transaction Completed  123']);
+                    return response()->json(['status' => 200, 'message' => 'Transaction Completed']);
                 }
             }
         } else {
@@ -285,10 +362,17 @@ class PropertyController extends Controller
 
     public function Delete_Unit_Owner($id)
     {
-        $owner = unit_owners::where('id', $id);
-        $owner->delete();
+        DB::enableQueryLog();
+        $owner = unit_owners::where('id', $id)->delete();
+        $query_log = DB::getQueryLog();
+        DB::disableQueryLog();
 
         if ($owner) {
+            $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+            $change_log = new change_log();
+            $change_log->username = Session::get('user')['username'];
+            $change_log->action = $action;
+            $change_log->save();
             return response(['status' => 200, 'message' => 'Deleted Unit Owner']);
         } else {
             return response()->json(['status' => 400,  'message' => 'Please Try Again',]);
@@ -308,6 +392,7 @@ class PropertyController extends Controller
         }
         $ongoing = unit_rentals::where('rental_id', $request->rental_id)->where('status', 'Ongoing')->first();
         if ($ongoing) {
+            DB::enableQueryLog();
             $dues = new asso_dues();
             $dues->asso_id = mt_rand(111111111, 999999999);
             $dues->rent_id = $ongoing->rental_id;
@@ -316,7 +401,15 @@ class PropertyController extends Controller
             $dues->total = $request->total;
             $dues->status = $request->status;
             $saved = $dues->save();
+            $query_log = DB::getQueryLog();
+            DB::disableQueryLog();
             if ($saved) {
+                $action = vsprintf(str_replace(['?'], ['\'%s\''], $query_log[0]['query']), $query_log[0]['bindings']);
+                $change_log = new change_log();
+                $change_log->username = Session::get('user')['username'];
+                $change_log->action = $action;
+                $change_log->save();
+
                 return response()->json(['status' => 200, 'message' => 'Associated monthly dues successfully applied.']);
             } else {
                 return response()->json(['status' => 400, 'message' => 'Please try again, something went wrong.']);

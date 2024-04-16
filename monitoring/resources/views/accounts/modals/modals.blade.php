@@ -31,7 +31,7 @@
                         <label for="floatingInput">Username</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" name="password" class="form-control" id="floatingInput" placeholder="">
+                        <input type="password" name="password" class="form-control" id="floatingInput" placeholder="">
                         <label for="floatingInput">Password</label>
                     </div>
                     <div class="d-flex justify-content-end">
