@@ -4,26 +4,109 @@
 @section('projects')
     <div class="card rounded-0">
         <div class="card-body ">
-            <table class="w-100 overflow-auto">
-                <thead>
-                    <tr class="">
-                        <th class="bg-success border border-dark border-5 m-1 text-center"><i class="fa-solid fa-hashtag"></i>
-                        </th>
-                        <th class="bg-success border border-dark border-5 m-1 text-center p-2">Name</th>
-                        <th class="bg-success border border-dark border-5 m-1 text-center p-2">Alias</th>
-                        <th class="bg-success border border-dark border-5 m-1 text-center p-2">Date Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-dark border-5 text-center"><i class="fa-solid fa-building"></i></td>
-                        <td class="p-2 border border-dark border-5 text-center">Aleah Recidences</td>
-                        <td class="p-2 border border-dark border-5 text-center">ALR</td>
-                        <td class="p-2 border border-dark border-5 text-center">112313</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col">
+                    <h2>Projects</h2>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <button class="btn btn-primary mb-3 p-2" data-bs-target="#addModal" data-bs-toggle="modal">
+                        <i class="fa-solid fa-plus"></i>
+                        Add Project
+                    </button>
+                </div>
+            </div>
+            <div id="tbl_div">
 
+            </div>
         </div>
     </div>
+
+    <div class="modal fade" id="addModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
+                        <i class="fa-solid fa-building mr-1"></i>
+                        Add Project
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addForm">
+                        <div class="form-floating mb-3">
+                            <input type="text" name="project_name" class="form-control">
+                            <label for="floatingInput">Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="project_code" class="form-control">
+                            <label for="floatingInput">Alias</label>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Save</button>
+                            <button type="button" class="btn btn-warning px-3 me-2 fw-semibold">Clear</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="updModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
+                        <i class="fa-solid fa-building mr-1"></i>
+                        Edit Project
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updForm">
+                        <input type="hidden" name="id" class="form-control">
+                        <div class="form-floating mb-3">
+                            <input type="text" name="project_name" class="form-control">
+                            <label for="floatingInput">Name</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="project_code" class="form-control">
+                            <label for="floatingInput">Alias</label>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Update</button>
+                            <button type="button" class="btn btn-warning px-3 me-2 fw-semibold">Clear</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
+                        <i class="fa-solid fa-building mr-1"></i>
+                        Delete Project
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="mb-3">Are you sure you want to delete this Project?</h5>
+                    <form id="delForm">
+                        <input type="hidden" name="id" class="form-control">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Delete</button>
+                            <button type="button" class="btn btn-warning px-3 me-2 fw-semibold">Clear</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('js/projects.js') }}"></script>
 @endsection

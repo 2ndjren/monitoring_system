@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Route_Controller;
+use App\Http\Controllers\Project_Controller;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +20,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('dashboard', [Route_Controller::class, 'Dashboard']);
-Route::get('agents', [Route_Controller::class, 'Agents']);
-Route::get('clients', [Route_Controller::class, 'Clients']);
-Route::get('coordinators', [Route_Controller::class, 'Coordinators']);
-Route::get('projects', [Route_Controller::class, 'Projects']);
-Route::get('properties', [Route_Controller::class, 'properties']);
+Route::get('/dashboard', [Route_Controller::class, 'Dashboard']);
+Route::get('/agents', [Route_Controller::class, 'Agents']);
+Route::get('/clients', [Route_Controller::class, 'Clients']);
+Route::get('/coordinators', [Route_Controller::class, 'Coordinators']);
+Route::get('/projects', [Route_Controller::class, 'Projects']);
+Route::get('/properties', [Route_Controller::class, 'properties']);
+
+Route::prefix('/projects')->group(function () {
+    Route::post('/', [Project_Controller::class, 'get_all']);
+    Route::post('/add', [Project_Controller::class, 'add']);
+    Route::post('/edit', [Project_Controller::class, 'edit']);
+    Route::post('/upd', [Project_Controller::class, 'upd']);
+    Route::post('/del', [Project_Controller::class, 'del']);
+});
