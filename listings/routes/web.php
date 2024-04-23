@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Route_Controller;
 use App\Http\Controllers\Client_Controller;
+use App\Http\Controllers\Coordinator_Controller;
 use App\Http\Controllers\Project_Controller;
 
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,14 @@ Route::prefix('/clients')->group(function () {
     Route::post('/edit', [Client_Controller::class, 'edit']);
     Route::post('/upd', [Client_Controller::class, 'upd']);
     Route::post('/del', [Client_Controller::class, 'del']);
+});
+
+Route::prefix('/coordinators')->group(function () {
+    Route::post('/', [Coordinator_Controller::class, 'get_all']);
+    Route::post('/add', [Coordinator_Controller::class, 'add']);
+    Route::post('/edit', [Coordinator_Controller::class, 'edit']);
+    Route::post('/upd', [Coordinator_Controller::class, 'upd']);
+    Route::post('/del', [Coordinator_Controller::class, 'del']);
 });
 
 Route::prefix('/projects')->group(function () {
