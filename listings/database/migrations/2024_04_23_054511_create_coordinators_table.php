@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\building;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unit', function (Blueprint $table) {
-            $table->id('u_id');
-            $table->string('unit_no');
-            $table->string('unit_type');
-            $table->foreignIdFor(building::class);
+        Schema::create('coordinators', function (Blueprint $table) {
+            $table->id('co_id');
+            $table->string('coordinator_fname');
+            $table->string('coordinator_lname');
+            $table->string('coordinator_phone');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unit');
+        Schema::dropIfExists('coordinators');
     }
 };

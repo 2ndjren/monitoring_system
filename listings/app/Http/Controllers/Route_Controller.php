@@ -11,6 +11,10 @@ class Route_Controller extends Controller
     {
         return view('dashboard.dashboard');
     }
+    public function Contracts()
+    {
+        return view('contracts.contracts');
+    }
     public function Clients()
     {
         return view('partners.clients');
