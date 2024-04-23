@@ -168,8 +168,8 @@ function get_all() {
                 for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }
 
                 tr.append($('<td>').addClass(td_class).html(`
-                    <i class='fa fa-pen-to-square mr-2 i_edit'></i>
-                    <i class='fa-solid fa-trash i_del'></i>
+                    <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+                    <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
                 `))
                 tbody.append(tr)
             }

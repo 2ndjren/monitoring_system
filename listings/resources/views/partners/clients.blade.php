@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Cleints')
+@section('title', 'Clients')
 
 @section('clients')
     @php $ent = 'Client' @endphp
