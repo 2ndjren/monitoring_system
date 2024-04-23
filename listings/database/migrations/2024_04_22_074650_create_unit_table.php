@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('unit', function (Blueprint $table) {
-            $table->id('unit_id');
+            $table->id('u_id');
             $table->string('unit_no');
             $table->string('unit_type');
             $table->foreignIdFor(building::class);

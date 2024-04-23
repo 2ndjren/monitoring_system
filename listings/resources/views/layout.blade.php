@@ -21,7 +21,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
-    <link href="{{ asset('css/layout.css') }}" rel='stylesheet'></link>
+    <link href="{{ asset('css/layout.css') }}" rel='stylesheet'>
+    </link>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -84,6 +85,14 @@
 
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a id="contracts-link" href="{{ '/contracts' }}"
+                                class="nav-link {{ Request::url() == url('/contracts') ? 'active' : '' }}">
+                                <i class="fa-solid fa-file-contract nav-icon"></i>
+                                <p>Contracts</p>
+
+                            </a>
+                        </li>
 
                         <li
                             class="nav-item has-treeview {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'menu-open' : '' }} ">
@@ -121,7 +130,7 @@
                             class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/properties')]) ? 'menu-open' : '' }} ">
                             <a href="#"
                                 class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/properties')]) ? 'active' : '' }}  ">
-                                <i class="fa-solid fa-users nav-icon"></i>
+                                <i class="fa-solid fa-building nav-icon"></i>
                                 <p>Assets<i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">

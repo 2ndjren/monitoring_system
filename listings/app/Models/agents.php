@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class unit extends Model
+class agents extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'unit_no',
-        'unit_type',
-        'building_id',
+        'agent_fname',
+        'agent_lname',
+        'agent_phone',
+        'agent_email',
     ];
 }

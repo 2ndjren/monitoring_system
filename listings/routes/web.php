@@ -22,6 +22,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [Route_Controller::class, 'Dashboard']);
+Route::get('/contracts', [Route_Controller::class, 'Contracts']);
 Route::get('/agents', [Route_Controller::class, 'Agents']);
 Route::get('/clients', [Route_Controller::class, 'Clients']);
 Route::get('/coordinators', [Route_Controller::class, 'Coordinators']);
