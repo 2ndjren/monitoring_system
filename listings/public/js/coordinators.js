@@ -152,20 +152,30 @@ function get_all() {
       thead.append(thr)
       tbl.append(thead)
 
+      var td_class = 'p-2 border border-dark border-5 text-center'
+      
       var tbody = $('<tbody>')
-      for (record of records) {
-        var vals = [record.co_fname, record.co_lname, record.co_phone]
+      if (records.length > 0) {
+        for (record of records) {
+            var vals = [record.co_fname, record.co_lname, record.co_phone]
 
-        var tr = $('<tr>').data('id', record.co_id)
-        tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
+            var tr = $('<tr>').data('id', record.co_id)
+            tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
 
-        var td_class = 'p-2 border border-dark border-5 text-center'
-        for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }
+            for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }
 
-        tr.append($('<td>').addClass(td_class).html(`
-          <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
-          <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
-        `))
+            tr.append($('<td>').addClass(td_class).html(`
+            <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+            <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
+            `))
+            tbody.append(tr)
+        }
+      }
+      else {
+        var tr = $('<tr>')
+        var td = $('<td>').addClass(td_class).attr({'colspan': cols.length}).text('No results found.')
+
+        tr.append(td)
         tbody.append(tr)
       }
       tbl.append(tbody)
