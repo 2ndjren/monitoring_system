@@ -117,7 +117,7 @@ $(document).ready( function () {
           success: function(res) {
             var record = res.record
             
-            var keys = ['project_name', 'project_code']
+            var keys = ['fname', 'lname', 'phone', 'email']
 
             for (key of (keys)) { $(`#updForm input[name=${key}]`).val(record[key]) }
           }
@@ -149,20 +149,17 @@ function get_all() {
 
             var thead = $('<thead>')
             var thr = $('<tr>')
-            var cols = ['#', 'Project Name', 'Project Code', 'Date Created', 'Action']
+            var cols = ['#', 'First Name', 'Last Name', 'Contact Number', 'Email', 'Action']
             for (col of cols) { thr.append($('<th>').addClass('bg-success border border-dark border-5 m-1 text-center p-2').text(col)) }
             thead.append(thr)
             tbl.append(thead)
 
             var tbody = $('<tbody>')
             for (record of records) {
-                var date = new Date(record.created_at)
-                date = date.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
-
-                var vals = [record.project_name, record.project_code, date]
+                var vals = [record.fname, record.lname, record.phone, record.email]
 
                 var tr = $('<tr>').data('id', record.id)
-                tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-building"></i>'))
+                tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
 
                 var td_class = 'p-2 border border-dark border-5 text-center'
                 for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }

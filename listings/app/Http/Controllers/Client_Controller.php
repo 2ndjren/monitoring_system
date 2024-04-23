@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\projects;
+use App\Models\clients;
 
-class Project_Controller extends Controller
+class Client_Controller extends Controller
 {
-    public $ent = 'Project';
+    public $ent = 'Client';
 
     public function get_all() {
-        $records = projects::all();
+        $records = clients::all();
         
         $data = [
             'records' => $records,
@@ -22,13 +22,15 @@ class Project_Controller extends Controller
 
     public function add(Request $request) {
         $request->validate([
-            'project_name'=>'required',
-            'project_code'=>'required',
+            'fname'=>'required',
+            'lname'=>'required',
+            'phone'=>'required',
+            'email'=>'required|email',
         ]);
 
-        $record = new projects;
+        $record = new clients;
 
-        $keys = ['project_name', 'project_code'];
+        $keys = ['fname', 'lname', 'phone', 'email'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
@@ -38,7 +40,7 @@ class Project_Controller extends Controller
     }
 
     public function edit(Request $request) {
-        $record = projects::find($request->id);
+        $record = clients::find($request->id);
 
         $data = [
             'record' => $record,
@@ -49,12 +51,14 @@ class Project_Controller extends Controller
 
     public function upd(Request $request) {
         $request->validate([
-            'project_name'=>'required',
-            'project_code'=>'required',
+            'fname'=>'required',
+            'lname'=>'required',
+            'phone'=>'required',
+            'email'=>'required|email',
         ]);
 
-        $record = projects::find($request->id);
-        $keys = ['project_name', 'project_code'];
+        $record = clients::find($request->id);
+        $keys = ['fname', 'lname', 'phone', 'email'];
 
         $upd = [];
         foreach ($keys as $key) {
@@ -67,7 +71,7 @@ class Project_Controller extends Controller
     }
 
     public function del(Request $request) {
-        $record = projects::find($request->id);
+        $record = clients::find($request->id);
         $record->delete();
         
         return response(['msg' => "Deleted $this->ent"]);

@@ -2,16 +2,17 @@
 @section('title', 'Projects')
 
 @section('projects')
+    @php $ent = 'Project' @endphp
     <div class="card rounded-0">
         <div class="card-body ">
             <div class="row">
                 <div class="col">
-                    <h2>Projects</h2>
+                    <h2 class="ent">{{ $ent }}s</h2>
                 </div>
                 <div class="col d-flex justify-content-end">
                     <button class="btn btn-primary mb-3 p-2" data-bs-target="#addModal" data-bs-toggle="modal">
                         <i class="fa-solid fa-plus"></i>
-                        Add Project
+                        Add {{ $ent }}
                     </button>
                 </div>
             </div>
@@ -27,7 +28,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
                         <i class="fa-solid fa-building mr-1"></i>
-                        Add Project
+                        Add {{ $ent }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -58,7 +59,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
                         <i class="fa-solid fa-building mr-1"></i>
-                        Edit Project
+                        Edit {{ $ent }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -90,12 +91,12 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
                         <i class="fa-solid fa-building mr-1"></i>
-                        Delete Project
+                        Delete {{ $ent }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h5 class="mb-3">Are you sure you want to delete this Project?</h5>
+                    <h5 class="mb-3">Are you sure you want to delete this {{ $ent }}?</h5>
                     <form id="delForm">
                         <input type="hidden" name="id" class="form-control">
                         <div class="d-flex justify-content-end">
