@@ -139,7 +139,7 @@ function get_all() {
 
   $.ajax({
     type: 'POST',
-    url: `${ent}`,
+    url: `/${ent}`,
     success: function (res) {
       var records = res.records
 
