@@ -161,18 +161,13 @@
 
 
         <div class="toast-container position-fixed top-0 end-0 p-3">
-            <div id="toast-message" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div id="toasMessage" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
-                    <strong id="toast-text-color" class="me-auto ">
-                        <i id="toast-icon-success" class="fa-solid fa-circle-check me-3  d-none"></i>
-                        <i id="toast-icon-failed" class="fa-solid fa-circle-xmark me-3 d-none"></i>
-                        <span id="toast-header-text"></span>
-                    </strong>
-                    <button type="button" id=clearModal class="btn-close" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
+                    <strong class="me-auto" id="toast-header"></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
-
+                    <span id="toast-content"></span>
                 </div>
             </div>
         </div>
@@ -240,10 +235,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-
-    <script>
-        $(document).ready(function() {});
-    </script>
+    <script src="{{ asset('js/layout.js') }}"></script>
 
 </body>
 
