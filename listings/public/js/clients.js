@@ -154,19 +154,19 @@ function get_all() {
 
       var tbody = $('<tbody>')
       for (record of records) {
-          var vals = [record.fname, record.lname, record.phone, record.email]
+        var vals = [record.fname, record.lname, record.phone, record.email]
 
-          var tr = $('<tr>').data('id', record.c_id)
-          tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
+        var tr = $('<tr>').data('id', record.c_id)
+        tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
 
-          var td_class = 'p-2 border border-dark border-5 text-center'
-          for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }
+        var td_class = 'p-2 border border-dark border-5 text-center'
+        for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }
 
-          tr.append($('<td>').addClass(td_class).html(`
-              <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
-              <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
-          `))
-          tbody.append(tr)
+        tr.append($('<td>').addClass(td_class).html(`
+          <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+          <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
+        `))
+        tbody.append(tr)
       }
       tbl.append(tbody)
       $('#tbl_div').append(tbl)
