@@ -1,7 +1,7 @@
 $(document).ready( function () {
     $.ajaxSetup({
       headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
 
@@ -156,7 +156,7 @@ function get_all() {
       for (record of records) {
           var vals = [record.fname, record.lname, record.phone, record.email]
 
-          var tr = $('<tr>').data('id', record.id)
+          var tr = $('<tr>').data('id', record.c_id)
           tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
 
           var td_class = 'p-2 border border-dark border-5 text-center'

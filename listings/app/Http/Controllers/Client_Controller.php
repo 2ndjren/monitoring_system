@@ -40,7 +40,7 @@ class Client_Controller extends Controller
     }
 
     public function edit(Request $request) {
-        $record = clients::find($request->id);
+        $record = clients::where('c_id', $request->id)->first();
 
         $data = [
             'record' => $record,
@@ -57,7 +57,7 @@ class Client_Controller extends Controller
             'email'=>'required|email',
         ]);
 
-        $record = clients::find($request->id);
+        $record = clients::where('c_id', $request->id);
         $keys = ['fname', 'lname', 'phone', 'email'];
 
         $upd = [];
@@ -71,7 +71,7 @@ class Client_Controller extends Controller
     }
 
     public function del(Request $request) {
-        $record = clients::find($request->id);
+        $record = clients::where('c_id', $request->id);
         $record->delete();
         
         return response(['msg' => "Deleted $this->ent"]);
