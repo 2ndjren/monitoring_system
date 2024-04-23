@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class coordinators extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'co_id';
     protected $fillable = [
-        'coordinator_fname',
-        'coordinator_lname',
-        'coordinator_phone',
+        'co_fname',
+        'co_lname',
+        'co_phone',
     ];
 }
