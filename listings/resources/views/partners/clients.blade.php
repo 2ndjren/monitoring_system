@@ -116,8 +116,8 @@
                     <form id="delForm">
                         <input type="hidden" name="id" class="form-control">
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Delete</button>
-                            <button type="button" class="btn btn-warning px-3 me-2 fw-semibold">Clear</button>
+                            <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Yes</button>
+                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold">No</button>
                         </div>
                     </form>
                 </div>
