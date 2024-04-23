@@ -104,8 +104,7 @@ $(document).ready( function () {
     })  
 
     $(document).on('click', '.i_edit', function() {
-        var tr = $(this).parents()[1]
-        var id = $(tr).data('id')
+      var id = $($(this).parents()[1]).data('id')
 
         $('#updForm input[name=id]').val(id)
         $(`#updModal`).modal('show')
@@ -125,8 +124,7 @@ $(document).ready( function () {
     })
 
     $(document).on('click', '.i_del', function() {
-        var tr = $(this).parents()[1]
-        var id = $(tr).data('id')
+      var id = $($(this).parents()[1]).data('id')
 
         $('#delForm input[name=id]').val(id)
         $(`#delModal`).modal('show')
