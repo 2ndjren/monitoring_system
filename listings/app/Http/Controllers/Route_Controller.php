@@ -43,4 +43,12 @@ class Route_Controller extends Controller
     {
         return view('assets.properties');
     }
+    public function Import()
+    {
+        return view('file.import');
+    }
+    public function Export()
+    {
+        return view('file.export');
+    }
 }

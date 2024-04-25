@@ -16,7 +16,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- AdminLTE CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet"></link>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+    <link href="{{ asset('css/layout.css') }}" rel='stylesheet'>
+    </link>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -145,6 +148,31 @@
 
                             </ul>
                         </li>
+                        <li
+                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/import'), url('/export')]) ? 'menu-open' : '' }} ">
+                            <a href="#"
+                                class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/import'), url('/export')]) ? 'active' : '' }}  ">
+                                <i class="fa-solid fa-file nav-icon"></i>
+                                <p>File<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ '/export' }}"
+                                        class="nav-link  {{ Request::url() == url('/export') ? 'active menu-open' : '' }} ">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Export</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ '/import' }}"
+                                        class="nav-link  {{ Request::url() == url('/import') ? 'active menu-open' : '' }} ">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Import</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
 
 
                     </ul>
@@ -182,6 +210,8 @@
                 @yield('buildings')
                 @yield('units')
                 @yield('properties')
+                @yield('import')
+                @yield('export')
 
                 <div class="h-25"></div>
 

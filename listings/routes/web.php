@@ -33,6 +33,8 @@ Route::get('/projects', [Route_Controller::class, 'Projects']);
 Route::get('/buildings', [Route_Controller::class, 'Buildings']);
 Route::get('/units', [Route_Controller::class, 'Units']);
 Route::get('/properties', [Route_Controller::class, 'properties']);
+Route::get('/import', [Route_Controller::class, 'import']);
+Route::get('/export', [Route_Controller::class, 'export']);
 
 
 Route::prefix('/contracts')->group(function () {
