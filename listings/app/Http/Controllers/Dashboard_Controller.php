@@ -46,12 +46,16 @@ class Dashboard_Controller extends Controller
                             ->where('projects_id', $project->id)->groupBy('building_name')->get();
                             
             $sum = 0;
-            foreach ($records as $record) {
-                $sum += $record['units'];
-            }
+            foreach ( $records as $record ) { $sum += $record['units']; }
             $project['units'] = $sum;
         }
 
         return $projects;
     }
+
+    public function clients_per_agents() {
+
+    }
+
+
 }

@@ -15,22 +15,19 @@ function get_data() {
                 `
     $(loader).insertAfter(".dash-loader");
 
-    setInterval(() => {
-        $.ajax({
-            url: `/dashboard/get-data/`,
-            method: "GET",
-            success: function (res) {
-                $(".dash-loader").removeClass("d-none")
-                $(".loading-spinner").addClass("d-none")
+    $.ajax({
+        url: `/dashboard/get-data/`,
+        method: "GET",
+        success: function (res) {
+            // console.log(res)
+            $(".dash-loader").removeClass("d-none")
+            $(".loading-spinner").addClass("d-none")
 
-                var counts = res.counts
-                for (var key in counts) { $(`#counts-${key}`).text(counts[key]) }
-            },
-            error: function (res) {
-    
-            },
-        })
-    }, 1000)
+            var counts = res.counts
+            for (var key in counts) { $(`#counts-${key}`).text(counts[key]) }
+        },
+        error: function (res) {
 
-
+        },
+    })
 }

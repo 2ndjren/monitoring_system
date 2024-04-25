@@ -150,7 +150,7 @@ $(document).ready(function () {
     $(document).on("click", ".i_units", function () {
         var id = $($(this).parents()[1]).data("id");
         storeId("buildings_b_id", id);
-        console.log(getId("buildings_b_id"));
+
         window.location.href = "/units";
     });
 });
@@ -183,7 +183,7 @@ function get_all_data() {
                 "Street",
                 "Barangay",
                 "City",
-                "Unit",
+                "Units",
                 "Action",
             ];
             for (col of cols) {
@@ -225,7 +225,7 @@ function get_all_data() {
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
                             .html(
-                                '<i class="fa-solid fa-building-un i_units" title="Units" style="cursor:pointer;"></i>'
+                                '<i class="fa-solid fa-house-user i_units" title="Units" style="cursor:pointer;"></i>'
                             )
                     );
 

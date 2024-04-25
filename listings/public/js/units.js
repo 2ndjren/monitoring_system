@@ -187,7 +187,7 @@ function get_all() {
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
-                            .html('<i class="fa-solid fa-user"></i>')
+                            .html('<i class="fa-solid fa-house-user"></i>')
                     );
 
                     for (val of vals) {
