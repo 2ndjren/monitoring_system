@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="" href="{{ url('/projects') }}">Projects</a></li>
-            <li class="breadcrumb-item active"><a class="text-secondary" id="b_name"
+            <li class="breadcrumb-item active"><a class="text-secondary" id="buildings"
                     href="{{ url('/buildings') }}">Buildings</a></li>
         </ol>
     </nav>

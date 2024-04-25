@@ -147,6 +147,7 @@ $(document).on("click", ".i_buildings", function () {
     var name = $($(this).parents()[1]).data("value");
     storeId("projects_id", id);
     storeId("projects_name", name);
+    
     window.location.href = "/buildings";
 });
 

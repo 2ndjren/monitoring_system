@@ -142,7 +142,14 @@ $(document).ready(function () {
 });
 
 var ent = $(".ent").text().toLowerCase();
-const buildings_b_id = getId("buildings_b_id");
+
+const projects_name = getId("projects_name");
+$("#buildings").text(projects_name + " " + ent);
+$("#buildings").addClass("text-capitalize");
+
+const buildings_name = getId("buildings_name");
+$("#units").text(buildings_name + " " + ent);
+$("#units").addClass("text-capitalize");
 
 function get_all() {
     $("#tbl_div").empty();

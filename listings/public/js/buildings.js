@@ -149,8 +149,9 @@ $(document).ready(function () {
 
     $(document).on("click", ".i_units", function () {
         var id = $($(this).parents()[1]).data("id");
+        var name = $($(this).parents()[1]).data("value");
         storeId("buildings_b_id", id);
-
+        storeId("buildings_name", name);
         window.location.href = "/units";
     });
 });
@@ -158,9 +159,9 @@ $(document).ready(function () {
 var ent = $(".ent").text().toLowerCase();
 
 const project_id = getId("projects_id");
-const project_name = getId("projects_name");
-$("#b_name").text(project_name + " " + ent);
-$("#b_name").addClass("text-capitalize");
+const projects_name = getId("projects_name");
+$("#buildings").text(projects_name + " " + ent);
+$("#buildings").addClass("text-capitalize");
 
 function get_all_data() {
     $("#tbl_div").empty();
@@ -211,7 +212,7 @@ function get_all_data() {
                         record.city,
                     ];
 
-                    var tr = $("<tr>").data("id", record.b_id);
+                    var tr = $("<tr>").data("id", record.b_id).data('value', record.building_name);
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")

@@ -6,9 +6,9 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url('/projects') }}">Projects</a></li>
-            <li class="breadcrumb-item"><a id="b_name" href="{{ url('/buildings') }}">Buildings</a>
+            <li class="breadcrumb-item"><a id="buildings" href="{{ url('/buildings') }}">Buildings</a>
             </li>
-            <li class="breadcrumb-item active"><a class="text-secondary" href="{{ url('/units') }}">Units</a></li>
+            <li class="breadcrumb-item active"><a id='units' class="text-secondary" href="{{ url('/units') }}">Units</a></li>
         </ol>
     </nav>
     <div class="card rounded-0">
