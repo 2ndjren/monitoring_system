@@ -30,7 +30,6 @@ $(document).ready(function () {
             error: function (res) {
                 var errors = res.responseJSON.errors;
                 // console.log(errors)
-
                 var inputs = $(
                     "#addForm input, #addForm select, #addForm textarea"
                 );
@@ -72,7 +71,7 @@ $(document).ready(function () {
                 $(`#updModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res);
+                // console.log(res);
                 var errors = res.responseJSON.errors;
                 // console.log(errors)
 
