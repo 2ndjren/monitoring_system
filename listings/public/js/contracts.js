@@ -6,6 +6,7 @@ $(document).ready(function () {
     });
 
     get_all();
+    Selection();
 
     $("#addModal").on("show.bs.modal", function (e) {
         $("#addForm span").remove();
@@ -240,8 +241,98 @@ function get_all() {
     });
 }
 
-function Selction() {
-    $(document).on(change, "input[select=name]", function (e) {
-        
+function Selection() {
+    var clients = $("#addForm select[name=clients_id]");
+    var agents = $("#addForm select[name=agents_id]");
+    var coordinators = $("#addForm select[name=coordinators_id]");
+    var projects = $("#addForm select[name=projects_id]");
+    var buildings = $("#addForm select[name=buildings_b_id]");
+    var units = $("#addForm select[name=units_u_id]");
+    var selectProject = `<option  selected>Choose Projects</option>`;
+    var selectClients = `<option  selected>Choose Clients </option>`;
+    var selectAgents = `<option  selected>Choose Agents </option>`;
+    var selectCoordinators = `<option  selected>Choose Coordinators </option>`;
+    clients.append(selectClients);
+    agents.append(selectAgents);
+    coordinators.append(selectCoordinators);
+    projects.append(selectProject);
+
+    $.ajax({
+        type: "GET",
+        url: `/${ent}/selections`,
+        success: function (res) {
+            console.log(res);
+            for (client of res.clients) {
+                var opt = $("<option>");
+                opt.val(client.c_id);
+                opt.text(`${client.fname} ${client.lname}`);
+                clients.append(opt);
+            }
+            for (agent of res.agents) {
+                var opt = $("<option>");
+                opt.val(agent.a_id);
+                opt.text(`${agent.agent_fname} ${agent.agent_lname}`);
+                agents.append(opt);
+            }
+            for (coor of res.coordinators) {
+                var opt = $("<option>");
+                opt.val(coor.co_id);
+                opt.text(`${coor.co_fname} ${coor.co_lname}`);
+                coordinators.append(opt);
+            }
+        },
+        error: function (xhr, status, error) {},
+    });
+    $.ajax({
+        type: "GET",
+        url: `/${ent}/select-projects`,
+        success: function (res) {
+            var opt = $("<option>");
+            for (project of res.projects) {
+                opt.val(project.id);
+                opt.text(project.project_name);
+                projects.append(opt);
+                
+            }
+
+        },
+        error: function (xhr, status, error) {},
+    });
+
+    $(document).on("change", projects, function (e) {
+        e.preventDefault();
+        buildings.empty();
+        $.ajax({
+            type: "GET",
+            url: `/${ent}/select-buildings/${projects.val()}`,
+            success: function (res) {
+                var opt = $("<option>");
+
+                for (building of res.buildings) {
+                    opt.val(building.b_id);
+                    opt.text(building.building_name);
+                    buildings.append(opt);
+                }
+            },
+        });
+    });
+    $(document).on("change", buildings, function (e) {
+        e.preventDefault();
+        units.empty();
+        console.log(buildings)
+        console.log(buildings.val());
+        $.ajax({
+            type: "GET",
+            url: `/${ent}/select-units/${buildings.val()}`,
+            success: function (res) {
+                console.log(res)
+                var opt = $("<option>");
+                for (unit of res.units) {
+                    opt.val(unit.u_id);
+                    opt.text(unit.unit_no);
+                    units.append(opt);
+                }
+            },
+        });
     });
 }

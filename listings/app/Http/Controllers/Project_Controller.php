@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\buildings;
 use Illuminate\Http\Request;
 
 use App\Models\projects as model;
+use App\Models\units;
 
 class Project_Controller extends Controller
 {
@@ -73,8 +75,10 @@ class Project_Controller extends Controller
     public function del(Request $request)
     {
         $record = model::find($request->id);
+        $building = buildings::where('projects_id', $request->id)->first();
+        units::where('buildings_b_id', $building->b_id)->delete();
+        buildings::where('projects_id', $request->id)->delete();
         $record->delete();
-
         return response(['msg' => "Deleted $this->ent"]);
     }
 }

@@ -46,7 +46,10 @@ Route::prefix('/contracts')->group(function () {
     Route::post('/edit', [Contract_Controller::class, 'edit']);
     Route::post('/upd', [Contract_Controller::class, 'upd']);
     Route::post('/del', [Contract_Controller::class, 'del']);
-    Route::get('/selections', [Contract_Controller::class, 'Selections']);
+    Route::get('/select-projects', [Contract_Controller::class, 'selectProjects']);
+    Route::get('/select-buildings/{id}', [Contract_Controller::class, 'selectBuilding']);
+    Route::get('/select-units/{id}', [Contract_Controller::class, 'selectUnits']);
+    Route::get('/selections', [Contract_Controller::class, 'selections']);
 });
 
 Route::prefix('/clients')->group(function () {

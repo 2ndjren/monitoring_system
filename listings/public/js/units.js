@@ -126,8 +126,8 @@ $(document).ready(function () {
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
 
-                    if (key == 'unit_type') {
-                        $(`#updForm select[name=${key}]`).val(record[key])
+                    if (key == "unit_type") {
+                        $(`#updForm select[name=${key}]`).val(record[key]);
                     }
                 }
             },
@@ -143,6 +143,9 @@ $(document).ready(function () {
 
 var ent = $(".ent").text().toLowerCase();
 const buildings_b_id = getId("buildings_b_id");
+const project_name = getId("projects_name");
+$("#b_name").text(project_name + " Buildings");
+$("#b_name").addClass("text-capitalize");
 
 function get_all() {
     $("#tbl_div").empty();

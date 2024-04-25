@@ -11,17 +11,22 @@ class contracts extends Model
     use HasFactory;
     protected $fillable = [
         'clients_id',
-        'unit_id',
+        'units_id',
         'coordinators_id',
         'agents_id',
+        'projects_id',
+        'buildings_b_id',
+        'units_id',
         'contract_start',
         'contract_end',
         'contract_price',
+        'advance',
+        'deposit',
         'client_income',
         'company_income',
-        'payment_date',
+        'payment_day',
+        'payment_interval',
         'due_date',
-        'contract_status',
         'status',
 
     ];

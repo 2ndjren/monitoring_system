@@ -22,7 +22,7 @@
     </div>
 
     <div class="modal fade" id="addModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
@@ -33,18 +33,108 @@
                 </div>
                 <div class="modal-body">
                     <form id="addForm">
-                        <div class="form-floating">
-                            <select class="form-select" name="clients_id" id="floatingSelect"
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name='clients_id' id="floatingSelect"
                                 aria-label="Floating label select example">
                             </select>
-                            <label for="floatingSelect">Client Name</label>
+                            <label for="floatingSelect">Client</label>
                         </div>
-                        <div class="form-floating">
-                            <select class="form-select" name='project_id' id="floatingSelect"
+                        <div class="d-flex mb-3">
+                            <div class="form-floating me-3 w-100">
+                                <select class="form-select" name='projects_id' id="floatingSelect"
+                                    aria-label="Floating label select example">
+                                </select>
+                                <label for="floatingSelect">Project</label>
+                            </div>
+                            <div class="form-floating me-3 w-100">
+                                <select class="form-select" name='buildings_b_id' id="floatingSelect"
+                                    aria-label="Floating label select example">
+                                </select>
+                                <label for="floatingSelect">Buildings</label>
+                            </div>
+                            <div class="form-floating w-100">
+                                <select class="form-select" name='units_u_id' id="floatingSelect"
+                                    aria-label="Floating label select example">
+                                </select>
+                                <label for="floatingSelect">Units</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name='coordinators_id' id="floatingSelect"
                                 aria-label="Floating label select example">
                             </select>
-                            <label for="floatingSelect">Project</label>
+                            <label for="floatingSelect">Coordinator</label>
                         </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name='agents_id' id="floatingSelect"
+                                aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelect">Agent</label>
+                        </div>
+                        <div class="d-flex mb-3 ">
+                            <div class="form-floating me-3 w-100">
+                                <input type="date" name="contract_start" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Contract Start</label>
+                            </div>
+                            <div class="form-floating  w-100">
+                                <input type="date" name="contract_end" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Contract End</label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex mb-3 ">
+                            <div class="form-floating me-3 w-100">
+                                <input type="number" name="advance" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Advance</label>
+                            </div>
+                            <div class="form-floating me-3  w-100">
+                                <input type="number" name="deposit" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Deposit</label>
+                            </div>
+                            <div class="form-floating  w-100">
+                                <input type="number" name="tenant_price" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Tenant Price</label>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3 ">
+
+                            <div class="form-floating  w-100 me-3">
+                                <input type="number" name="client_income" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Owner Income</label>
+                            </div>
+                            <div class="form-floating me-3 w-100">
+                                <input type="number" name="company_income" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Company Income</label>
+                            </div>
+                            <div class="form-floating  w-100">
+                                <input type="date" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Due Date</label>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-3">
+                            <div class="form-floating  w-100 me-3">
+                                <input type="number" name="payment_day" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Payment Day</label>
+                            </div>
+                            <div class="form-floating me-3 w-100">
+                                <input type="number" name="payment_interval" class="form-control" id="floatingInput"
+                                    <input type="number" name="" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Payment Interval</label>
+                            </div>
+                        </div>
+
+
+
 
 
                         <div class="d-flex justify-content-end">

@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\agents;
+use App\Models\buildings;
 use App\Models\clients;
 use App\Models\coordinators;
+use App\Models\projects;
 use App\Models\units;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -21,15 +23,19 @@ return new class extends Migration
             $table->foreignIdFor(units::class);
             $table->foreignIdFor(coordinators::class);
             $table->foreignIdFor(agents::class);
+            $table->foreignIdFor(projects::class);
+            $table->foreignIdFor(buildings::class);
+            $table->foreignIdFor(units::class);
             $table->string('contract_start');
             $table->string('contract_end');
-            $table->string('payment_term');
+            $table->string('advance');
+            $table->string('deposit');
             $table->string('tenant_price');
             $table->string('client_income');
-            $table->string('comapany_income');
-            $table->string('payment_date');
+            $table->string('company_income');
+            $table->string('payment_day');
+            $table->string('payment_interval');
             $table->string('due_date');
-            $table->string('contract_status');
             $table->string('status');
             $table->timestamps();
         });

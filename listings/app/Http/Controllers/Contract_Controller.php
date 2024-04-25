@@ -9,6 +9,7 @@ use App\Models\contracts as model;
 use App\Models\coordinators;
 use App\Models\projects;
 use App\Models\units;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class Contract_Controller extends Controller
@@ -28,25 +29,42 @@ class Contract_Controller extends Controller
         return response()->json($data);
     }
 
-    public function display_Entitie()
-    {
-    }
-
     public function add(Request $request)
     {
         $request->validate([
-            'agent_fname' => 'required',
-            'agent_lname' => 'required',
-            'agent_phone' => 'required',
-            'agent_email' => 'required|email',
+            'clients_id' => 'required',
+            'projects_id' => 'required',
+            'coordinators_id' => 'required',
+            'agents_id' => 'required',
+            'contract_start' => 'required',
+            'contract_end' => 'required',
+            'advance' => 'required',
+            'deposit' => 'required',
+            'tenant_price' => 'required',
+            'client_income' => 'required',
+            'payment_day' => 'required',
+            'payment_interval' => 'required',
+            'due_date' => 'required',
+            'status' => 'required',
         ]);
 
         $record = new model;
 
-        $keys = ['agent_fname', 'agent_lname', 'agent_phone', 'agent_email'];
+        $keys = ['clients_id', 'projects_id', 'coordinators_id', 'agents_id,contract_start', 'contract_end', 'client_income', 'contract_start', 'contract_end', 'advance', 'deposit', 'tenant_price', 'client_income', 'due_date'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
+        $today = Carbon::today();
+        $due = Carbon::parse($request->due_date);
+
+        if ($today > $request->due_date) {
+            $pass = $today->diffInDays($due);
+            $record->status = $pass . " Days Past Due";
+        } else {
+            $remaining = $today->diffInDays($due);
+            $record->status = $remaining . " Days Remaining";
+        }
+
         $record->save();
 
         return response(['msg' => "Added $this->ent"]);
@@ -93,14 +111,27 @@ class Contract_Controller extends Controller
 
         return response(['msg' => "Deleted $this->ent"]);
     }
-    public function Selections()
+    public function selections()
     {
         $data['clients'] = clients::all();
-        $data['coordinators'] = coordinators::all();
         $data['agents'] = agents::all();
+        $data['coordinators'] = coordinators::all();
+
+        return response()->json($data);
+    }
+    public function selectProjects()
+    {
         $data['projects'] = projects::all();
-        $data['buildings'] = buildings::all();
-        $data['units'] = units::all();
+        return response()->json($data);
+    }
+    public function selectBuilding($projects_id)
+    {
+        $data['buildings'] = buildings::where('projects_id', $projects_id)->get();
+        return response()->json($data);
+    }
+    public function selectUnits($buildings_b_id)
+    {
+        $data['units'] = units::where('buildings_b_id', $buildings_b_id)->get();
         return response()->json($data);
     }
 }

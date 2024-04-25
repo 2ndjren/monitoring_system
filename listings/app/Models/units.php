@@ -12,6 +12,6 @@ class units extends Model
     protected $fillable = [
         'unit_no',
         'unit_type',
-        'buildingS_b_id',
+        'buildings_b_id',
     ];
 }
