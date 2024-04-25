@@ -91,7 +91,7 @@
                         </div>
                         <select class="form-select" name="unit_type" id="floatingSelect"
                             aria-label="Floating label select example">
-                            <option selected>Choose Type of Unit</option>
+                            <option option="">Choose Type of Unit</option>
                             <option value="Studio">Studio</option>
                             <option value="PH">PH</option>
                             <option value="1BR">1BR</option>
