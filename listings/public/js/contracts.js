@@ -158,24 +158,32 @@ function get_all() {
             var records = res.records;
 
             var tbl = $("<table>")
-                .addClass("w-100 overflow-auto")
+                .addClass("w-100 overflow-x-auto table-responsive")
                 .attr("id", "tbl_records");
 
             var thead = $("<thead>");
-            var thr = $("<tr>");
+            var thr = $("<tr text-nowrap>");
             var cols = [
                 "#",
-                "First Name",
-                "Last Name",
+                "Client Name",
+                "Property Details",
+                "Coordinator",
                 "Contact Number",
-                "Email",
-                "Action",
+                "Agent",
+                "Contract Started",
+                "Payment Term",
+                "Tenant Price",
+                "Owner Income",
+                "Payment Date",
+                "Due Date",
+                "Status",
+                "Update",
             ];
             for (col of cols) {
                 thr.append(
                     $("<th>")
                         .addClass(
-                            "bg-success border border-dark border-5 m-1 text-center p-2"
+                            "bg-success border border-dark border-5 m-1 text-center p-2 text-nowrap "
                         )
                         .text(col)
                 );
@@ -229,5 +237,11 @@ function get_all() {
             $("#tbl_div").append(tbl);
         },
         error: function (res) {},
+    });
+}
+
+function Selction() {
+    $(document).on(change, "input[select=name]", function (e) {
+        
     });
 }

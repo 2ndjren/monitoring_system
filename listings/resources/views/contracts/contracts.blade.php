@@ -33,22 +33,19 @@
                 </div>
                 <div class="modal-body">
                     <form id="addForm">
-                        <div class="form-floating mb-3">
-                            <input type="text" name="agent_fname" class="form-control">
-                            <label for="floatingInput">First Name</label>
+                        <div class="form-floating">
+                            <select class="form-select" name="clients_id" id="floatingSelect"
+                                aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelect">Client Name</label>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="agent_lname" class="form-control">
-                            <label for="floatingInput">Last Name</label>
+                        <div class="form-floating">
+                            <select class="form-select" name='project_id' id="floatingSelect"
+                                aria-label="Floating label select example">
+                            </select>
+                            <label for="floatingSelect">Project</label>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="agent_phone" class="form-control">
-                            <label for="floatingInput">Contact Number</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="agent_email" class="form-control">
-                            <label for="floatingInput">Email</label>
-                        </div>
+
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Save</button>

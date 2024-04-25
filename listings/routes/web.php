@@ -4,6 +4,7 @@ use App\Http\Controllers\Agent_Controller;
 use App\Http\Controllers\Building_Controller;
 use App\Http\Controllers\Route_Controller;
 use App\Http\Controllers\Client_Controller;
+use App\Http\Controllers\Contract_Controller;
 use App\Http\Controllers\Coordinator_Controller;
 use App\Http\Controllers\Project_Controller;
 use App\Http\Controllers\Unit_Controller;
@@ -38,11 +39,12 @@ Route::get('/export', [Route_Controller::class, 'export']);
 
 
 Route::prefix('/contracts')->group(function () {
-    Route::post('/', [Client_Controller::class, 'get_all']);
-    Route::post('/add', [Client_Controller::class, 'add']);
-    Route::post('/edit', [Client_Controller::class, 'edit']);
-    Route::post('/upd', [Client_Controller::class, 'upd']);
-    Route::post('/del', [Client_Controller::class, 'del']);
+    Route::post('/', [Contract_Controller::class, 'get_all']);
+    Route::post('/add', [Contract_Controller::class, 'add']);
+    Route::post('/edit', [Contract_Controller::class, 'edit']);
+    Route::post('/upd', [Contract_Controller::class, 'upd']);
+    Route::post('/del', [Contract_Controller::class, 'del']);
+    Route::get('/selections', [Contract_Controller::class, 'Selections']);
 });
 
 Route::prefix('/clients')->group(function () {

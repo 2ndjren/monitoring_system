@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\agents;
+use App\Models\buildings;
+use App\Models\clients;
 use App\Models\contracts as model;
+use App\Models\coordinators;
+use App\Models\projects;
+use App\Models\units;
 use Illuminate\Http\Request;
 
 class Contract_Controller extends Controller
@@ -86,5 +92,15 @@ class Contract_Controller extends Controller
         $record->delete();
 
         return response(['msg' => "Deleted $this->ent"]);
+    }
+    public function Selections()
+    {
+        $data['clients'] = clients::all();
+        $data['coordinators'] = coordinators::all();
+        $data['agents'] = agents::all();
+        $data['projects'] = projects::all();
+        $data['buildings'] = buildings::all();
+        $data['units'] = units::all();
+        return response()->json($data);
     }
 }
