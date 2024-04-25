@@ -102,18 +102,19 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (res) {
                 showtoastMessage("text-success", "Delete Successful", res.msg);
-
                 get_all();
                 $(`#delModal`).modal("hide");
             },
-            error: function (xhr, status, error) {},
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            },
         });
     });
 
     $(document).on("click", ".i_edit", function () {
         var id = $($(this).parents()[1]).data("id");
-
         $("#updForm input[name=id]").val(id);
+        console.log(id);
         $(`#updModal`).modal("show");
 
         $.ajax({
@@ -127,6 +128,7 @@ $(document).ready(function () {
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
+                    $(`#updForm select[name=unit_type]`);
                 }
             },
         });
@@ -134,7 +136,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".i_del", function () {
         var id = $($(this).parents()[1]).data("id");
-
+        console.log(id);
         $("#delForm input[name=id]").val(id);
         $(`#delModal`).modal("show");
     });
@@ -147,6 +149,7 @@ function get_all() {
     $("#tbl_div").empty();
     var id = getId("buildings_b_id");
     // console.log(buildings_b_id);
+
     $("input[name=buildings_b_id]").val(id);
 
     $.ajax({
@@ -182,7 +185,7 @@ function get_all() {
                 for (record of records) {
                     var vals = [record.unit_no, record.unit_type];
 
-                    var tr = $("<tr>").data("id", record.b_id);
+                    var tr = $("<tr>").data("id", record.u_id);
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")

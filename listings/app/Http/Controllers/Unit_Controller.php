@@ -31,7 +31,7 @@ class Unit_Controller extends Controller
 
         $record = new model;
 
-        $keys = ['unit_no', 'unit_type'];
+        $keys = ['unit_no', 'unit_type', 'buildings_b_id'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
