@@ -29,7 +29,7 @@ $(document).ready(function () {
             },
             error: function (res) {
                 var errors = res.responseJSON.errors;
-                // console.log(errors)
+
                 var inputs = $(
                     "#addForm input, #addForm select, #addForm textarea"
                 );
@@ -71,9 +71,7 @@ $(document).ready(function () {
                 $(`#updModal`).modal("hide");
             },
             error: function (res) {
-                // console.log(res);
                 var errors = res.responseJSON.errors;
-                // console.log(errors)
 
                 var inputs = $(
                     "#updForm input, #updForm select, #updForm textarea"
@@ -114,7 +112,6 @@ $(document).ready(function () {
     $(document).on("click", ".i_edit", function () {
         var id = $($(this).parents()[1]).data("id");
         $("#updForm input[name=id]").val(id);
-        console.log(id);
         $(`#updModal`).modal("show");
 
         $.ajax({
@@ -128,9 +125,10 @@ $(document).ready(function () {
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
-                    $(`#updForm select[name=${key}]`)
-                        .val(record[key])
-                        .text(record[key]);
+
+                    if (key == 'unit_type') {
+                        $(`#updForm select[name=${key}]`).val(record[key])
+                    }
                 }
             },
         });
@@ -138,7 +136,6 @@ $(document).ready(function () {
 
     $(document).on("click", ".i_del", function () {
         var id = $($(this).parents()[1]).data("id");
-        console.log(id);
         $("#delForm input[name=id]").val(id);
         $(`#delModal`).modal("show");
     });
@@ -150,7 +147,6 @@ const buildings_b_id = getId("buildings_b_id");
 function get_all() {
     $("#tbl_div").empty();
     var id = getId("buildings_b_id");
-    // console.log(buildings_b_id);
 
     $("input[name=buildings_b_id]").val(id);
 

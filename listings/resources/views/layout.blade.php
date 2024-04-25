@@ -18,6 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
+    </link>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -147,9 +148,9 @@
                             </ul>
                         </li>
                         <li
-                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/import'), url('/export')]) ? 'menu-open' : '' }} ">
+                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/import'), url('/export')]) ? 'menu-open' : '' }} ">
                             <a href="#"
-                                class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/import'), url('/export')]) ? 'active' : '' }}  ">
+                                class="nav-link       {{ in_array(Request::url(), [url('/import'), url('/export')]) ? 'active' : '' }}  ">
                                 <i class="fa-solid fa-file nav-icon"></i>
                                 <p>File<i class="right fas fa-angle-left"></i></p>
                             </a>

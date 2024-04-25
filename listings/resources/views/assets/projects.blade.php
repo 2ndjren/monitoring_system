@@ -133,7 +133,7 @@
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="city" class="form-control">
-                            <label for="floatingInput">CIty</label>
+                            <label for="floatingInput">City</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input type="text" name="barangay" class="form-control">

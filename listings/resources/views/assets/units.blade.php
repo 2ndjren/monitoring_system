@@ -47,9 +47,8 @@
                             <input type="text" name="unit_no" class="form-control">
                             <label for="floatingInput">Unit No</label>
                         </div>
-                        <div class="form-floating">
-                            <select class="form-select" name="unit_type" id="floatingSelect"
-                                aria-label="Floating label select example">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="unit_type">
                                 <option selected>Choose Type of Unit</option>
                                 <option value="Studio">Studio</option>
                                 <option value="PH">PH</option>
@@ -57,9 +56,8 @@
                                 <option value="2BR">2BR</option>
                                 <option value="3BR">3BR</option>
                             </select>
-                            <label for="floatingSelect">Works with selects</label>
+                            <label for="floatingSelect">Unit Type</label>
                         </div>
-
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Save</button>
@@ -84,20 +82,24 @@
                 </div>
                 <div class="modal-body">
                     <form id="updForm">
-                        <input type="hidden" name="id" class="form-control">
+                        <input type="hidden" name="id">
+                        <input type="hidden" name="buildings_b_id">
+
                         <div class="form-floating mb-3">
                             <input type="text" name="unit_no" class="form-control">
                             <label for="floatingInput">Name</label>
                         </div>
-                        <select class="form-select" name="unit_type" id="floatingSelect"
-                            aria-label="Floating label select example">
-                            <option option="">Choose Type of Unit</option>
-                            <option value="Studio">Studio</option>
-                            <option value="PH">PH</option>
-                            <option value="1BR">1BR</option>
-                            <option value="2BR">2BR</option>
-                            <option value="3BR">3BR</option>
-                        </select>
+                        <div class="form-floating mb-3">
+                            <select class="form-select" name="unit_type">
+                                <option selected>Choose Type of Unit</option>
+                                <option value="Studio">Studio</option>
+                                <option value="PH">PH</option>
+                                <option value="1BR">1BR</option>
+                                <option value="2BR">2BR</option>
+                                <option value="3BR">3BR</option>
+                            </select>
+                            <label for="floatingSelect">Unit Type</label>
+                        </div>
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Update</button>

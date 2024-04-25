@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 
 class Building_Controller extends Controller
 {
-    //
-    public $ent = 'Buildings';
+    public $ent = 'Building';
 
     public function get_all()
     {
@@ -44,7 +43,7 @@ class Building_Controller extends Controller
 
         $keys = ['projects_id', 'building_name', 'city', 'barangay', 'street'];
         foreach ($keys as $key) {
-            $record->$key = strtoupper($request->$key);
+            $record->$key = ucwords($request->$key);
         }
         $record->save();
 

@@ -162,7 +162,6 @@ const project_name = getId("projects_name");
 $("#b_name").text(project_name + " " + ent);
 $("#b_name").addClass("text-capitalize");
 
-console.log(project_id);
 function get_all_data() {
     $("#tbl_div").empty();
     $("input[name=projects_id]").val(project_id);
