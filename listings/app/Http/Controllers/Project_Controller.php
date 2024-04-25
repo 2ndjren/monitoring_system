@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\projects;
+use App\Models\projects as model;
 
 class Project_Controller extends Controller
 {
     public $ent = 'Project';
 
-    public function get_all() {
-        $records = projects::all();
-        
+    public function get_all()
+    {
+        $records = model::all();
+
         $data = [
             'records' => $records,
         ];
@@ -20,13 +21,14 @@ class Project_Controller extends Controller
         return response()->json($data);
     }
 
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
         $request->validate([
-            'project_name'=>'required',
-            'project_code'=>'required',
+            'project_name' => 'required',
+            'project_code' => 'required',
         ]);
 
-        $record = new projects;
+        $record = new model;
 
         $keys = ['project_name', 'project_code'];
         foreach ($keys as $key) {
@@ -37,8 +39,9 @@ class Project_Controller extends Controller
         return response(['msg' => "Added $this->ent"]);
     }
 
-    public function edit(Request $request) {
-        $record = projects::find($request->id);
+    public function edit(Request $request)
+    {
+        $record = model::find($request->id);
 
         $data = [
             'record' => $record,
@@ -47,13 +50,14 @@ class Project_Controller extends Controller
         return response()->json($data);
     }
 
-    public function upd(Request $request) {
+    public function upd(Request $request)
+    {
         $request->validate([
-            'project_name'=>'required',
-            'project_code'=>'required',
+            'project_name' => 'required',
+            'project_code' => 'required',
         ]);
 
-        $record = projects::find($request->id);
+        $record = model::find($request->id);
         $keys = ['project_name', 'project_code'];
 
         $upd = [];
@@ -66,10 +70,11 @@ class Project_Controller extends Controller
         return response(['msg' => "Updated $this->ent"]);
     }
 
-    public function del(Request $request) {
-        $record = projects::find($request->id);
+    public function del(Request $request)
+    {
+        $record = model::find($request->id);
         $record->delete();
-        
+
         return response(['msg' => "Deleted $this->ent"]);
     }
 }

@@ -1,12 +1,20 @@
 @extends('layout')
-@section('title', 'Contracts')
-@section('contracts')
-    @php $ent = 'Contract' @endphp
+@section('title', 'Projects')
+
+@section('buildings')
+    @php $ent = 'Building' @endphp
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="" href="{{ url('/projects') }}">Projects</a></li>
+            <li class="breadcrumb-item active"><a class="text-secondary" id="b_name"
+                    href="{{ url('/buildings') }}">Buildings</a></li>
+        </ol>
+    </nav>
     <div class="card rounded-0">
         <div class="card-body ">
             <div class="row">
                 <div class="col">
-                    <h2 class='ent'>{{ $ent }}s</h2>
+                    <h2 class="ent">{{ $ent }}s</h2>
                 </div>
                 <div class="col d-flex justify-content-end">
                     <button class="btn btn-primary mb-3 p-2" data-bs-target="#addModal" data-bs-toggle="modal">
@@ -26,28 +34,29 @@
             <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
-                        <i class="fa-solid fa-user mr-1"></i>
+                        <i class="fa-solid fa-building mr-1"></i>
                         Add {{ $ent }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addForm">
+                        <input type="hidden" name="projects_id">
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_fname" class="form-control">
-                            <label for="floatingInput">First Name</label>
+                            <input type="text" name="building_name" class="form-control">
+                            <label for="floatingInput">Name</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_lname" class="form-control">
-                            <label for="floatingInput">Last Name</label>
+                            <input type="text" name="street" class="form-control">
+                            <label for="floatingInput">Street</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_phone" class="form-control">
-                            <label for="floatingInput">Contact Number</label>
+                            <input type="text" name="barangay" class="form-control">
+                            <label for="floatingInput">Barangay</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_email" class="form-control">
-                            <label for="floatingInput">Email</label>
+                            <input type="text" name="city" class="form-control">
+                            <label for="floatingInput">City</label>
                         </div>
 
                         <div class="d-flex justify-content-end">
@@ -60,12 +69,13 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="updModal" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
-                        <i class="fa-solid fa-user mr-1"></i>
+                        <i class="fa-solid fa-building mr-1"></i>
                         Edit {{ $ent }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -74,21 +84,23 @@
                     <form id="updForm">
                         <input type="hidden" name="id" class="form-control">
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_fname" class="form-control">
-                            <label for="floatingInput">First Name</label>
+                            <input type="text" name="building_name" class="form-control">
+                            <label for="floatingInput">Name</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_lname" class="form-control">
-                            <label for="floatingInput">Last Name</label>
+                            <input type="text" name="street" class="form-control">
+                            <label for="floatingInput">Street</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_phone" class="form-control">
-                            <label for="floatingInput">Contact Number</label>
+                            <input type="text" name="barangay" class="form-control">
+                            <label for="floatingInput">Barangay</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" name="agent_email" class="form-control">
-                            <label for="floatingInput">Email</label>
+                            <input type="text" name="city" class="form-control">
+                            <label for="floatingInput">City</label>
                         </div>
+
+
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Update</button>
@@ -105,7 +117,7 @@
             <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
-                        <i class="fa-solid fa-user mr-1"></i>
+                        <i class="fa-solid fa-building mr-1"></i>
                         Delete {{ $ent }}
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -124,5 +136,5 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/contracts.js') }}"></script>
+    <script src="{{ asset('js/buildings.js') }}"></script>
 @endsection

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\agents as model;
 use Illuminate\Http\Request;
 
-use App\Models\clients as model;
-
-class Client_Controller extends Controller
+class Agent_Controller extends Controller
 {
+    //
     public $ent = 'Client';
 
     public function get_all()
@@ -24,15 +24,15 @@ class Client_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'agent_fname' => 'required',
+            'agent_lname' => 'required',
+            'agent_phone' => 'required',
+            'agent_email' => 'required|email',
         ]);
 
         $record = new model;
 
-        $keys = ['fname', 'lname', 'phone', 'email'];
+        $keys = ['agent_fname', 'agent_lname', 'agent_phone', 'agent_email'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
@@ -55,14 +55,15 @@ class Client_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'agent_fname' => 'required',
+            'agent_lname' => 'required',
+            'agent_phone' => 'required',
+            'agent_email' => 'required|email',
         ]);
 
         $record = model::find($request->id);
-        $keys = ['fname', 'lname', 'phone', 'email'];
+        $keys = ['agent_fname', 'agent_lname', 'agent_phone', 'agent_email'];
+
 
         $upd = [];
         foreach ($keys as $key) {

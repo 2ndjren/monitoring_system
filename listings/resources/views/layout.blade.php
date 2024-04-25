@@ -127,16 +127,16 @@
                         </li>
 
                         <li
-                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/properties')]) ? 'menu-open' : '' }} ">
+                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'menu-open' : '' }} ">
                             <a href="#"
-                                class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/properties')]) ? 'active' : '' }}  ">
+                                class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'active' : '' }}  ">
                                 <i class="fa-solid fa-building nav-icon"></i>
                                 <p>Assets<i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ '/projects' }}"
-                                        class="nav-link  {{ Request::url() == url('/projects') ? 'active menu-open' : '' }} ">
+                                        class="nav-link  {{ Request::url() == url('/projects') ? 'active menu-open' : '' }}   {{ Request::url() == url('/buildings') ? 'active menu-open' : '' }}{{ Request::url() == url('/units') ? 'active menu-open' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Projects</p>
                                     </a>
@@ -180,10 +180,13 @@
                 </div>
 
                 @yield('dashboard')
+                @yield('contracts')
                 @yield('clients')
                 @yield('coordinators')
                 @yield('agents')
                 @yield('projects')
+                @yield('buildings')
+                @yield('units')
                 @yield('properties')
 
                 <div class="h-25"></div>

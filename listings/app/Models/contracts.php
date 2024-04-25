@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class contract extends Model
+class contracts extends Model
 {
+    protected $primaryKey = 'con_id';
     use HasFactory;
     protected $fillable = [
         'clients_id',

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\projects;
+use App\Models\buildings;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,13 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('building', function (Blueprint $table) {
-            $table->id('b_id');
-            $table->string('building_name');
-            $table->string('city');
-            $table->string('barangay');
-            $table->string('street');
-            $table->foreignIdFor(projects::class);
+        Schema::create('units', function (Blueprint $table) {
+            $table->id('u_id');
+            $table->string('unit_no');
+            $table->string('unit_type');
+            $table->foreignIdFor(buildings::class);
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('building');
+        Schema::dropIfExists('unit');
     }
 };

@@ -23,7 +23,6 @@ $(document).ready(function () {
             processData: false,
             success: function (res) {
                 showtoastMessage("text-success", "Added Successful", res.msg);
-
                 get_all();
                 $(`#addForm`).trigger("reset");
                 $(`#addModal`).modal("hide");
@@ -125,54 +124,10 @@ $(document).ready(function () {
             success: function (res) {
                 var record = res.record;
 
-                var keys = ["project_name", "project_code"];
+                var keys = ["unit_no", "unit_type", "buildings_b_id"];
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
-                }
-            },
-        });
-    });
-    $(document).on("click", ".i_add_bldg", function () {
-        var id = $($(this).parents()[1]).data("id");
-
-        $("#addBuildingForm input[name=projects_id]").val(id);
-        $(`#addBuildingModal`).modal("show");
-    });
-    $("#addBuildingForm").submit(function (e) {
-        e.preventDefault();
-        $("#addBuildingForm span").remove();
-
-        $.ajax({
-            url: `/buildings/add/`,
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                showtoastMessage("text-success", "Added Successful", res.msg);
-                $(`#addBuildingForm`).trigger("reset");
-                $(`#addModal`).modal("hide");
-            },
-            error: function (res) {
-                console.log(res);
-                var errors = res.responseJSON.errors;
-                // console.log(errors)
-
-                var inputs = $(
-                    "#addBuildingForm input, #addBuildingForm select, #addBuildingForm textarea"
-                );
-                for (input of inputs) {
-                    var name = $(input).attr("name");
-
-                    if (name in errors) {
-                        for (error of errors[name]) {
-                            var error_msg = $(
-                                `<span class='text-danger'>${error}</span>`
-                            );
-                            error_msg.insertAfter($(input));
-                        }
-                    }
                 }
             },
         });
@@ -186,22 +141,18 @@ $(document).ready(function () {
     });
 });
 
-$(document).on("click", ".i_buildings", function () {
-    var id = $($(this).parents()[1]).data("id");
-    var name = $($(this).parents()[1]).data("value");
-    storeId("projects_id", id);
-    storeId("projects_name", name);
-    window.location.href = "/buildings";
-});
-
 var ent = $(".ent").text().toLowerCase();
+const buildings_b_id = getId("buildings_b_id");
 
 function get_all() {
     $("#tbl_div").empty();
+    var id = getId("buildings_b_id");
+    // console.log(buildings_b_id);
+    $("input[name=buildings_b_id]").val(id);
 
     $.ajax({
-        type: "POST",
-        url: `/${ent}`,
+        type: "GET",
+        url: `/${ent}/` + id,
         success: function (res) {
             var records = res.records;
 
@@ -211,14 +162,7 @@ function get_all() {
 
             var thead = $("<thead>");
             var thr = $("<tr>");
-            var cols = [
-                "#",
-                "Project Name",
-                "Project Code",
-                "Date Created",
-                "Buildings",
-                "Action",
-            ];
+            var cols = ["#", "Unit_No", "Unit Type", "Action"];
             for (col of cols) {
                 thr.append(
                     $("<th>")
@@ -228,45 +172,33 @@ function get_all() {
                         .text(col)
                 );
             }
+
             thead.append(thr);
             tbl.append(thead);
+
             var td_class = "p-2 border border-dark border-5 text-center";
+
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
-                    var date = new Date(record.created_at);
-                    date = date.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
+                    var vals = [record.unit_no, record.unit_type];
 
-                    var vals = [record.project_name, record.project_code, date];
-
-                    var tr = $("<tr>")
-                        .data("id", record.id)
-                        .data("value", record.project_name);
+                    var tr = $("<tr>").data("id", record.b_id);
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
-                            .html('<i class="fa-solid fa-building"></i>')
+                            .html('<i class="fa-solid fa-user"></i>')
                     );
 
                     for (val of vals) {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
-                    tr.append(
-                        $("<td>").addClass(td_class).html(`
-                        <i class="fa-solid fa-building-circle-arrow-right i_buildings" title='Buildings' style='cursor:pointer;'></i>
-                `)
-                    );
 
                     tr.append(
                         $("<td>").addClass(td_class).html(`
-                    <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
-                    <i class='fa-solid fa-trash i_del mr-2' title='Delete' style='cursor:pointer;'></i>
-                    <i class='fa-solid fa-building mr-2 i_add_bldg' title='Add Building' style='cursor:pointer';></i>
-                `)
+          <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+          <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
+        `)
                     );
                     tbody.append(tr);
                 }

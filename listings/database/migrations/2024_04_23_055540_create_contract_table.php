@@ -3,7 +3,7 @@
 use App\Models\agents;
 use App\Models\clients;
 use App\Models\coordinators;
-use App\Models\unit;
+use App\Models\units;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +16,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('contract', function (Blueprint $table) {
-            $table->id();
+            $table->id('con_id');
             $table->foreignIdFor(clients::class);
-            $table->foreignIdFor(unit::class);
+            $table->foreignIdFor(units::class);
             $table->foreignIdFor(coordinators::class);
             $table->foreignIdFor(agents::class);
             $table->string('contract_start');

@@ -31,6 +31,14 @@ class Route_Controller extends Controller
     {
         return view('assets.projects');
     }
+    public function Buildings()
+    {
+        return view('assets.buildings');
+    }
+    public function Units()
+    {
+        return view('assets.units');
+    }
     public function Properties()
     {
         return view('assets.properties');

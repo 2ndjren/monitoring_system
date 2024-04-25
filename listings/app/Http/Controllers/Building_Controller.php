@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\buildings as model;
 use Illuminate\Http\Request;
 
-use App\Models\clients as model;
-
-class Client_Controller extends Controller
+class Building_Controller extends Controller
 {
-    public $ent = 'Client';
+    //
+    public $ent = 'Buildings';
 
     public function get_all()
     {
@@ -20,21 +20,31 @@ class Client_Controller extends Controller
 
         return response()->json($data);
     }
+    public function get_all_data($id)
+    {
+        $records = model::where('projects_id', $id)->get();
+
+        $data = [
+            'records' => $records,
+        ];
+
+        return response()->json($data);
+    }
 
     public function add(Request $request)
     {
         $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'building_name' => 'required',
+            'city' => 'required',
+            'barangay' => 'required',
+            'street' => 'required',
         ]);
 
         $record = new model;
 
-        $keys = ['fname', 'lname', 'phone', 'email'];
+        $keys = ['projects_id', 'building_name', 'city', 'barangay', 'street'];
         foreach ($keys as $key) {
-            $record->$key = $request->$key;
+            $record->$key = strtoupper($request->$key);
         }
         $record->save();
 
@@ -55,18 +65,17 @@ class Client_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'building_name' => 'required',
+            'city' => 'required',
+            'barangay' => 'required',
+            'street' => 'required',
         ]);
 
         $record = model::find($request->id);
-        $keys = ['fname', 'lname', 'phone', 'email'];
-
+        $keys = ['building_name', 'city', 'barangay', 'street'];
         $upd = [];
         foreach ($keys as $key) {
-            $upd[$key] = $request->$key;
+            $upd[$key] = ucwords($request->$key);
         }
 
         $record->update($upd);

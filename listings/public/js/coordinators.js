@@ -1,188 +1,225 @@
-$(document).ready( function () {
+$(document).ready(function () {
     $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
     });
 
-    get_all()
+    get_all();
 
-    $('#addModal').on('show.bs.modal', function(e) {
-      $('#addForm span').remove()
-    })
+    $("#addModal").on("show.bs.modal", function (e) {
+        $("#addForm span").remove();
+    });
 
-    $('#addForm').submit(function(e) {
-      e.preventDefault()
-      $('#addForm span').remove()
+    $("#addForm").submit(function (e) {
+        e.preventDefault();
+        $("#addForm span").remove();
 
-      $.ajax({
-        url: `/${ent}/add/`,
-        method: 'POST',
-        data: new FormData(this),
-        contentType: false,
-        processData: false,
-        success: function (res) {
-          alert(res.msg)
-          get_all()
-          $(`#addForm`).trigger('reset')
-          $(`#addModal`).modal('hide')
-        },
-        error: function (res) {
-          var errors = res.responseJSON.errors
-          // console.log(errors)
+        $.ajax({
+            url: `/${ent}/add/`,
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                showtoastMessage("text-success", "Added Successful", res.msg);
 
-          var inputs = $('#addForm input, #addForm select, #addForm textarea')
-          for (input of inputs) {
-            var name = $(input).attr('name')
+                get_all();
+                $(`#addForm`).trigger("reset");
+                $(`#addModal`).modal("hide");
+            },
+            error: function (res) {
+                var errors = res.responseJSON.errors;
+                // console.log(errors)
 
-            if (name in errors) {
-              for (error of errors[name]) {
-                var error_msg = $(`<span class='text-danger'>${error}</span>`)
-                error_msg.insertAfter($(input))
-              }
-            }
-          }
-        },
-      })    
-    })   
+                var inputs = $(
+                    "#addForm input, #addForm select, #addForm textarea"
+                );
+                for (input of inputs) {
+                    var name = $(input).attr("name");
 
-    $('#updModal').on('show.bs.modal', function(e) {
-      $('#updForm span').remove()
-    })
+                    if (name in errors) {
+                        for (error of errors[name]) {
+                            var error_msg = $(
+                                `<span class='text-danger'>${error}</span>`
+                            );
+                            error_msg.insertAfter($(input));
+                        }
+                    }
+                }
+            },
+        });
+    });
 
-    $('#updForm').submit(function(e) {
-      e.preventDefault()
-      $('#updForm span').remove()
+    $("#updModal").on("show.bs.modal", function (e) {
+        $("#updForm span").remove();
+    });
 
-      $.ajax({
-        type: 'POST',
-        url: `/${ent}/upd/`,
-        data: new FormData(this),
-        contentType: false,
-        processData: false,
-        success: function (res) {
-          alert(res.msg)
-          get_all()
-          $(`#updForm`).trigger('reset')
-          $(`#updModal`).modal('hide')
-        },
-        error: function (res) {
-          console.log(res)
-          var errors = res.responseJSON.errors
-          // console.log(errors)
+    $("#updForm").submit(function (e) {
+        e.preventDefault();
+        $("#updForm span").remove();
 
-          var inputs = $('#updForm input, #updForm select, #updForm textarea')
-          $.each(inputs, function(index, input) {
-            var name = $(input).attr('name')
+        $.ajax({
+            type: "POST",
+            url: `/${ent}/upd/`,
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                showtoastMessage("text-success", "Update Successful", res.msg);
+                get_all();
+                $(`#updForm`).trigger("reset");
+                $(`#updModal`).modal("hide");
+            },
+            error: function (res) {
+                console.log(res);
+                var errors = res.responseJSON.errors;
+                // console.log(errors)
 
-            if (name in errors) {
-              for (error of errors[name]) {
-                var error_msg = $(`<span class='text-danger'>${error}</span>`)
-                error_msg.insertAfter($(input))
-              }
-            }
-          })
-        },
-      })    
-    })  
+                var inputs = $(
+                    "#updForm input, #updForm select, #updForm textarea"
+                );
+                $.each(inputs, function (index, input) {
+                    var name = $(input).attr("name");
 
-    $('#delForm').submit(function(e) {
-      e.preventDefault()
-      $.ajax({
-        type: 'POST',
-        url: `/${ent}/del/`,
-        data: $(this).serialize(),
-        success: function (res) {
-          alert(res.msg)
-          get_all()
-          $(`#delModal`).modal('hide')
-        },
-        error: function (xhr, status, error) {
+                    if (name in errors) {
+                        for (error of errors[name]) {
+                            var error_msg = $(
+                                `<span class='text-danger'>${error}</span>`
+                            );
+                            error_msg.insertAfter($(input));
+                        }
+                    }
+                });
+            },
+        });
+    });
 
-        },
-      })    
-    })  
+    $("#delForm").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: `/${ent}/del/`,
+            data: $(this).serialize(),
+            success: function (res) {
+                showtoastMessage("text-success", "Delete Successful", res.msg);
 
-    $(document).on('click', '.i_edit', function() {
-      var id = $($(this).parents()[1]).data('id')
-      
-      $('#updForm input[name=id]').val(id)
-      $(`#updModal`).modal('show')
+                get_all();
+                $(`#delModal`).modal("hide");
+            },
+            error: function (xhr, status, error) {},
+        });
+    });
 
-      $.ajax( {
-        method:"POST",
-        url: `/${ent}/edit/`,
-        data: {'id' : id},
-        success: function(res) {
-          var record = res.record
-          
-          var keys = ['co_fname', 'co_lname', 'co_phone']
+    $(document).on("click", ".i_edit", function () {
+        var id = $($(this).parents()[1]).data("id");
 
-          for (key of (keys)) { $(`#updForm input[name=${key}]`).val(record[key]) }
-        }
-      })
-    })
+        $("#updForm input[name=id]").val(id);
+        $(`#updModal`).modal("show");
 
-    $(document).on('click', '.i_del', function() {
-      var id = $($(this).parents()[1]).data('id')
+        $.ajax({
+            method: "POST",
+            url: `/${ent}/edit/`,
+            data: { id: id },
+            success: function (res) {
+                var record = res.record;
 
-      $('#delForm input[name=id]').val(id)
-      $(`#delModal`).modal('show')
-    })
+                var keys = ["co_fname", "co_lname", "co_phone"];
 
+                for (key of keys) {
+                    $(`#updForm input[name=${key}]`).val(record[key]);
+                }
+            },
+        });
+    });
+
+    $(document).on("click", ".i_del", function () {
+        var id = $($(this).parents()[1]).data("id");
+
+        $("#delForm input[name=id]").val(id);
+        $(`#delModal`).modal("show");
+    });
 });
 
-var ent = $('.ent').text().toLowerCase()
+var ent = $(".ent").text().toLowerCase();
 
 function get_all() {
-  $('#tbl_div').empty()
+    $("#tbl_div").empty();
 
-  $.ajax({
-    type: 'POST',
-    url: `/${ent}`,
-    success: function (res) {
-      var records = res.records
+    $.ajax({
+        type: "POST",
+        url: `/${ent}`,
+        success: function (res) {
+            var records = res.records;
 
-      var tbl = $('<table>').addClass('w-100 overflow-auto').attr('id', 'tbl_records')
+            var tbl = $("<table>")
+                .addClass("w-100 overflow-auto")
+                .attr("id", "tbl_records");
 
-      var thead = $('<thead>')
-      var thr = $('<tr>')
-      var cols = ['#', 'First Name', 'Last Name', 'Contact Number', 'Action']
-      for (col of cols) { thr.append($('<th>').addClass('bg-success border border-dark border-5 m-1 text-center p-2').text(col)) }
-      thead.append(thr)
-      tbl.append(thead)
+            var thead = $("<thead>");
+            var thr = $("<tr>");
+            var cols = [
+                "#",
+                "First Name",
+                "Last Name",
+                "Contact Number",
+                "Action",
+            ];
+            for (col of cols) {
+                thr.append(
+                    $("<th>")
+                        .addClass(
+                            "bg-success border border-dark border-5 m-1 text-center p-2"
+                        )
+                        .text(col)
+                );
+            }
+            thead.append(thr);
+            tbl.append(thead);
 
-      var td_class = 'p-2 border border-dark border-5 text-center'
-      
-      var tbody = $('<tbody>')
-      if (records.length > 0) {
-        for (record of records) {
-            var vals = [record.co_fname, record.co_lname, record.co_phone]
+            var td_class = "p-2 border border-dark border-5 text-center";
 
-            var tr = $('<tr>').data('id', record.co_id)
-            tr.append($('<td>').addClass('border border-dark border-5 text-center').html('<i class="fa-solid fa-user"></i>'))
+            var tbody = $("<tbody>");
+            if (records.length > 0) {
+                for (record of records) {
+                    var vals = [
+                        record.co_fname,
+                        record.co_lname,
+                        record.co_phone,
+                    ];
 
-            for (val of vals) { tr.append($('<td>').addClass(td_class).html(val)) }
+                    var tr = $("<tr>").data("id", record.co_id);
+                    tr.append(
+                        $("<td>")
+                            .addClass("border border-dark border-5 text-center")
+                            .html('<i class="fa-solid fa-user"></i>')
+                    );
 
-            tr.append($('<td>').addClass(td_class).html(`
+                    for (val of vals) {
+                        tr.append($("<td>").addClass(td_class).html(val));
+                    }
+
+                    tr.append(
+                        $("<td>").addClass(td_class).html(`
             <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
             <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
-            `))
-            tbody.append(tr)
-        }
-      }
-      else {
-        var tr = $('<tr>')
-        var td = $('<td>').addClass(td_class).attr({'colspan': cols.length}).text('No results found.')
+            `)
+                    );
+                    tbody.append(tr);
+                }
+            } else {
+                var tr = $("<tr>");
+                var td = $("<td>")
+                    .addClass(td_class)
+                    .attr({ colspan: cols.length })
+                    .text("No results found.");
 
-        tr.append(td)
-        tbody.append(tr)
-      }
-      tbl.append(tbody)
-      $('#tbl_div').append(tbl)
-    },
-    error: function(res) {
-
-    }
-  })
+                tr.append(td);
+                tbody.append(tr);
+            }
+            tbl.append(tbody);
+            $("#tbl_div").append(tbl);
+        },
+        error: function (res) {},
+    });
 }
