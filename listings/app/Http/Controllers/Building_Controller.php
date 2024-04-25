@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class Building_Controller extends Controller
 {
-    //
     public $ent = 'Building';
 
     public function get_all()
