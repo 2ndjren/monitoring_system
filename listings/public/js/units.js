@@ -128,7 +128,9 @@ $(document).ready(function () {
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
-                    $(`#updForm select[name=unit_type]`);
+                    $(`#updForm select[name=${key}]`)
+                        .val(record[key])
+                        .text(record[key]);
                 }
             },
         });
