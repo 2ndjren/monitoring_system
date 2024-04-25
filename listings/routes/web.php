@@ -5,6 +5,7 @@ use App\Http\Controllers\Building_Controller;
 use App\Http\Controllers\Route_Controller;
 use App\Http\Controllers\Client_Controller;
 use App\Http\Controllers\Coordinator_Controller;
+use App\Http\Controllers\Dashboard_Controller;
 use App\Http\Controllers\Project_Controller;
 use App\Http\Controllers\Unit_Controller;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::get('/properties', [Route_Controller::class, 'properties']);
 Route::get('/import', [Route_Controller::class, 'import']);
 Route::get('/export', [Route_Controller::class, 'export']);
 
+Route::get('/dashboard/get-data', [Dashboard_Controller::class, 'get_data']);
 
 Route::prefix('/contracts')->group(function () {
     Route::post('/', [Client_Controller::class, 'get_all']);

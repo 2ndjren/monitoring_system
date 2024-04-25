@@ -148,9 +148,9 @@
                             </ul>
                         </li>
                         <li
-                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/import'), url('/export')]) ? 'menu-open' : '' }} ">
+                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/import'), url('/export')]) ? 'menu-open' : '' }} ">
                             <a href="#"
-                                class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/import'), url('/export')]) ? 'active' : '' }}  ">
+                                class="nav-link       {{ in_array(Request::url(), [url('/import'), url('/export')]) ? 'active' : '' }}  ">
                                 <i class="fa-solid fa-file nav-icon"></i>
                                 <p>File<i class="right fas fa-angle-left"></i></p>
                             </a>
