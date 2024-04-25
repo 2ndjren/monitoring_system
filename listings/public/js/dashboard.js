@@ -23,12 +23,8 @@ function get_data() {
                 $(".dash-loader").removeClass("d-none")
                 $(".loading-spinner").addClass("d-none")
 
-                console.log(res)
                 var counts = res.counts
-
-                var keys = ['clients', 'coordinators', 'agents', 'projects', 'units']
-
-                for (var key of keys) { $(`#counts-${key}`).text(counts[key]) }
+                for (var key in counts) { $(`#counts-${key}`).text(counts[key]) }
             },
             error: function (res) {
     
