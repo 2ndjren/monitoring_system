@@ -15,7 +15,6 @@ function getId(id_name) {
         var key = localStorage.getItem(id_name);
         return key;
     } else {
-        var key = localStorage.getItem(id_name);
         return null;
     }
 }
