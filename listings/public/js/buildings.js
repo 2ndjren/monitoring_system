@@ -158,13 +158,13 @@ $(document).ready(function () {
 
 var ent = $(".ent").text().toLowerCase();
 
-const project_id = getId("projects_id");
 const projects_name = getId("projects_name");
 $("#buildings").text(projects_name + " " + ent);
 $("#buildings").addClass("text-capitalize");
 
 function get_all_data() {
     $("#tbl_div").empty();
+    const project_id = getId("projects_id");
     $("input[name=projects_id]").val(project_id);
     $.ajax({
         type: "get",
