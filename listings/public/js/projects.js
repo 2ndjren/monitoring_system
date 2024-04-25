@@ -133,50 +133,6 @@ $(document).ready(function () {
             },
         });
     });
-    $(document).on("click", ".i_add_bldg", function () {
-        var id = $($(this).parents()[1]).data("id");
-
-        $("#addBuildingForm input[name=projects_id]").val(id);
-        $(`#addBuildingModal`).modal("show");
-    });
-    $("#addBuildingForm").submit(function (e) {
-        e.preventDefault();
-        $("#addBuildingForm span").remove();
-
-        $.ajax({
-            url: `/buildings/add/`,
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                showtoastMessage("text-success", "Added Successful", res.msg);
-                $(`#addBuildingForm`).trigger("reset");
-                $(`#addModal`).modal("hide");
-            },
-            error: function (res) {
-                console.log(res);
-                var errors = res.responseJSON.errors;
-                // console.log(errors)
-
-                var inputs = $(
-                    "#addBuildingForm input, #addBuildingForm select, #addBuildingForm textarea"
-                );
-                for (input of inputs) {
-                    var name = $(input).attr("name");
-
-                    if (name in errors) {
-                        for (error of errors[name]) {
-                            var error_msg = $(
-                                `<span class='text-danger'>${error}</span>`
-                            );
-                            error_msg.insertAfter($(input));
-                        }
-                    }
-                }
-            },
-        });
-    });
 
     $(document).on("click", ".i_del", function () {
         var id = $($(this).parents()[1]).data("id");
@@ -191,6 +147,7 @@ $(document).on("click", ".i_buildings", function () {
     var name = $($(this).parents()[1]).data("value");
     storeId("projects_id", id);
     storeId("projects_name", name);
+    
     window.location.href = "/buildings";
 });
 
@@ -213,8 +170,8 @@ function get_all() {
             var thr = $("<tr>");
             var cols = [
                 "#",
-                "Project Name",
-                "Project Code",
+                "Name",
+                "Code",
                 "Date Created",
                 "Buildings",
                 "Action",
@@ -265,7 +222,6 @@ function get_all() {
                         $("<td>").addClass(td_class).html(`
                     <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
                     <i class='fa-solid fa-trash i_del mr-2' title='Delete' style='cursor:pointer;'></i>
-                    <i class='fa-solid fa-building mr-2 i_add_bldg' title='Add Building' style='cursor:pointer';></i>
                 `)
                     );
                     tbody.append(tr);

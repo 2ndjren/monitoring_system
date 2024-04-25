@@ -142,10 +142,14 @@ $(document).ready(function () {
 });
 
 var ent = $(".ent").text().toLowerCase();
-const buildings_b_id = getId("buildings_b_id");
-const project_name = getId("projects_name");
-$("#b_name").text(project_name + " Buildings");
-$("#b_name").addClass("text-capitalize");
+
+const projects_name = getId("projects_name");
+$("#buildings").text(projects_name + " " + ent);
+$("#buildings").addClass("text-capitalize");
+
+const buildings_name = getId("buildings_name");
+$("#units").text(buildings_name + " " + ent);
+$("#units").addClass("text-capitalize");
 
 function get_all() {
     $("#tbl_div").empty();
@@ -190,7 +194,7 @@ function get_all() {
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
-                            .html('<i class="fa-solid fa-user"></i>')
+                            .html('<i class="fa-solid fa-house-user"></i>')
                     );
 
                     for (val of vals) {
