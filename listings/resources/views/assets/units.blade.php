@@ -42,13 +42,14 @@
                 </div>
                 <div class="modal-body">
                     <form id="addForm">
-                        <input type="text" name="buildings_b_id">
+                        <input type="hidden" name="buildings_b_id">
                         <div class="form-floating mb-3">
                             <input type="text" name="unit_no" class="form-control">
                             <label for="floatingInput">Unit No</label>
                         </div>
                         <div class="form-floating">
-                            <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                            <select class="form-select" name="unit_type" id="floatingSelect"
+                                aria-label="Floating label select example">
                                 <option selected>Choose Type of Unit</option>
                                 <option value="Studio">Studio</option>
                                 <option value="PH">PH</option>
@@ -85,23 +86,18 @@
                     <form id="updForm">
                         <input type="hidden" name="id" class="form-control">
                         <div class="form-floating mb-3">
-                            <input type="text" name="building_name" class="form-control">
+                            <input type="text" name="unit_no" class="form-control">
                             <label for="floatingInput">Name</label>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="street" class="form-control">
-                            <label for="floatingInput">Street</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="barangay" class="form-control">
-                            <label for="floatingInput">Barangay</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="city" class="form-control">
-                            <label for="floatingInput">City</label>
-                        </div>
-
-
+                        <select class="form-select" name="unit_type" id="floatingSelect"
+                            aria-label="Floating label select example">
+                            <option selected>Choose Type of Unit</option>
+                            <option value="Studio">Studio</option>
+                            <option value="PH">PH</option>
+                            <option value="1BR">1BR</option>
+                            <option value="2BR">2BR</option>
+                            <option value="3BR">3BR</option>
+                        </select>
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Update</button>
@@ -137,5 +133,5 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/buildings.js') }}"></script>
+    <script src="{{ asset('js/units.js') }}"></script>
 @endsection
