@@ -20,22 +20,21 @@ function get_data() {
             url: `/dashboard/get-data/`,
             method: "GET",
             success: function (res) {
-                $(".dash-loader").removeClass("d-none");
-                $(".loading-spinner").addClass("d-none");
+                $(".dash-loader").removeClass("d-none")
+                $(".loading-spinner").addClass("d-none")
+
                 console.log(res)
                 var counts = res.counts
-    
-                $('#counts-clients').text(counts.clients)
-                $('#counts-coordinators').text(counts.coordinators)
-                $('#counts-agents').text(counts.agents)
-                $('#counts-projects').text(counts.projects)
-                $('#counts-units').text(counts.units)
+
+                var keys = ['clients', 'coordinators', 'agents', 'projects', 'units']
+
+                for (var key of keys) { $(`#counts-${key}`).text(counts[key]) }
             },
             error: function (res) {
     
             },
         })
-    }, 3000)
+    }, 1000)
 
 
 }
