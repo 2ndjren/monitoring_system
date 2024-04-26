@@ -20,11 +20,11 @@ return new class extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->id('con_id');
             $table->foreignIdFor(clients::class);
-            $table->foreignIdFor(coordinators::class);
-            $table->foreignIdFor(agents::class);
             $table->foreignIdFor(projects::class);
             $table->foreignIdFor(buildings::class);
             $table->foreignIdFor(units::class);
+            $table->foreignIdFor(coordinators::class);
+            $table->foreignIdFor(agents::class);
             $table->string('contract_start');
             $table->string('contract_end');
             $table->string('advance');
@@ -32,9 +32,9 @@ return new class extends Migration
             $table->string('tenant_price');
             $table->string('client_income');
             $table->string('company_income');
+            $table->string('due_date');
             $table->string('payment_day');
             $table->string('payment_interval');
-            $table->string('due_date');
             $table->string('status');
             $table->timestamps();
         });

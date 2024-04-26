@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class contracts extends Model
 {
+    protected $table = 'contracts';
     protected $primaryKey = 'con_id';
     use HasFactory;
     protected $fillable = [
@@ -28,4 +30,8 @@ class contracts extends Model
         'payment_interval',
         'status',
     ];
+
+    public function clients(): BelongsToMany {
+        return $this->belongsToMany(clients::class, 'clients_c_id', 'c_id');
+    }
 }
