@@ -29,6 +29,7 @@ $(document).ready(function () {
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
+                console.log(res)
                 var errors = res.responseJSON.errors;
                 // console.log(errors)
 
@@ -244,9 +245,9 @@ function get_all() {
 }
 
 function Selection() {
-    var clients = "#addForm select[name=clients_id]";
-    var agents = "#addForm select[name=agents_id]";
-    var coordinators = "#addForm select[name=coordinators_id]";
+    var clients = "#addForm select[name=clients_c_id]";
+    var agents = "#addForm select[name=agents_a_id]";
+    var coordinators = "#addForm select[name=coordinators_co_id]";
     var projects = "#addForm select[name=projects_id]";
     var buildings = "#addForm select[name=buildings_b_id]";
     var units = "#addForm select[name=units_u_id]";

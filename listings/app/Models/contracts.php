@@ -10,24 +10,22 @@ class contracts extends Model
     protected $primaryKey = 'con_id';
     use HasFactory;
     protected $fillable = [
-        'clients_id',
-        'units_id',
-        'coordinators_id',
-        'agents_id',
+        'clients_c_id',
         'projects_id',
         'buildings_b_id',
-        'units_id',
+        'units_u_id',
+        'coordinators_co_id',
+        'agents_a_id',
         'contract_start',
         'contract_end',
-        'contract_price',
         'advance',
         'deposit',
+        'tenant_price',
         'client_income',
         'company_income',
+        'due_date',
         'payment_day',
         'payment_interval',
-        'due_date',
         'status',
-
     ];
 }
