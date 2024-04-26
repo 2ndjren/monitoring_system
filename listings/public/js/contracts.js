@@ -249,10 +249,12 @@ function Selection() {
     var buildings = $("#addForm select[name=buildings_b_id]");
     var units = $("#addForm select[name=units_u_id]");
     var selectProject = `<option  selected>Choose Projects</option>`;
+    // var selectBuild = `<option  value=''>Choose Building</option>`;
+    // var selectUnit = `<option  selected>Choose Units</option>`;
     var selectClients = `<option  selected>Choose Clients </option>`;
     var selectAgents = `<option  selected>Choose Agents </option>`;
     var selectCoordinators = `<option  selected>Choose Coordinators </option>`;
-    clients.append(selectClients);
+    // clients.append(selectClients);
     agents.append(selectAgents);
     coordinators.append(selectCoordinators);
     projects.append(selectProject);
@@ -292,40 +294,39 @@ function Selection() {
                 opt.val(project.id);
                 opt.text(project.project_name);
                 projects.append(opt);
-                
             }
-
         },
         error: function (xhr, status, error) {},
     });
 
     $(document).on("change", projects, function (e) {
         e.preventDefault();
-        buildings.empty();
+        console.log($(this).val());
+
         $.ajax({
             type: "GET",
             url: `/${ent}/select-buildings/${projects.val()}`,
             success: function (res) {
+                // buildings.append(selectBuild);
                 var opt = $("<option>");
 
                 for (building of res.buildings) {
                     opt.val(building.b_id);
                     opt.text(building.building_name);
                     buildings.append(opt);
+                    console.log(building);
                 }
             },
         });
     });
     $(document).on("change", buildings, function (e) {
-        e.preventDefault();
-        units.empty();
-        console.log(buildings)
-        console.log(buildings.val());
+        // e.preventDefault();
+        console.log($(this).val());
         $.ajax({
             type: "GET",
-            url: `/${ent}/select-units/${buildings.val()}`,
+            url: `/${ent}/units/${buildings.val()}`,
             success: function (res) {
-                console.log(res)
+                console.log(res);
                 var opt = $("<option>");
                 for (unit of res.units) {
                     opt.val(unit.u_id);
