@@ -17,10 +17,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contract', function (Blueprint $table) {
+        Schema::create('contracts', function (Blueprint $table) {
             $table->id('con_id');
             $table->foreignIdFor(clients::class);
-            $table->foreignIdFor(units::class);
             $table->foreignIdFor(coordinators::class);
             $table->foreignIdFor(agents::class);
             $table->foreignIdFor(projects::class);

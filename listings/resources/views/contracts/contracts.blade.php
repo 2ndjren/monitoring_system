@@ -126,7 +126,7 @@
                                 <label for="floatingInput">Payment Day</label>
                             </div>
                             <div class="form-floating me-3 w-100">
-                                <input type="number" name="payment_interval" class="form-control" id="floatingInput"
+                                <input type="number" name="payment_interval" class="form-control" id="floatingInput">
                                     <input type="number" name="" class="form-control" id="floatingInput"
                                     placeholder="name@example.com">
                                 <label for="floatingInput">Payment Interval</label>

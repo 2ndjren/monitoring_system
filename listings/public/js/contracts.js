@@ -237,17 +237,19 @@ function get_all() {
             tbl.append(tbody);
             $("#tbl_div").append(tbl);
         },
-        error: function (res) {},
+        error: function (res) {
+            console.log(res)
+        },
     });
 }
 
 function Selection() {
-    var clients = $("#addForm select[name=clients_id]");
-    var agents = $("#addForm select[name=agents_id]");
-    var coordinators = $("#addForm select[name=coordinators_id]");
-    var projects = $("#addForm select[name=projects_id]");
-    var buildings = $("#addForm select[name=buildings_b_id]");
-    var units = $("#addForm select[name=units_u_id]");
+    var clients = "#addForm select[name=clients_id]";
+    var agents = "#addForm select[name=agents_id]";
+    var coordinators = "#addForm select[name=coordinators_id]";
+    var projects = "#addForm select[name=projects_id]";
+    var buildings = "#addForm select[name=buildings_b_id]";
+    var units = "#addForm select[name=units_u_id]";
     var selectProject = `<option  selected>Choose Projects</option>`;
     // var selectBuild = `<option  value=''>Choose Building</option>`;
     // var selectUnit = `<option  selected>Choose Units</option>`;
@@ -255,9 +257,9 @@ function Selection() {
     var selectAgents = `<option  selected>Choose Agents </option>`;
     var selectCoordinators = `<option  selected>Choose Coordinators </option>`;
     // clients.append(selectClients);
-    agents.append(selectAgents);
-    coordinators.append(selectCoordinators);
-    projects.append(selectProject);
+    $(agents).append(selectAgents);
+    $(coordinators).append(selectCoordinators);
+    $(projects).append(selectProject);
 
     $.ajax({
         type: "GET",
@@ -268,19 +270,19 @@ function Selection() {
                 var opt = $("<option>");
                 opt.val(client.c_id);
                 opt.text(`${client.fname} ${client.lname}`);
-                clients.append(opt);
+                $(clients).append(opt);
             }
             for (agent of res.agents) {
                 var opt = $("<option>");
                 opt.val(agent.a_id);
                 opt.text(`${agent.agent_fname} ${agent.agent_lname}`);
-                agents.append(opt);
+                $(agents).append(opt);
             }
             for (coor of res.coordinators) {
                 var opt = $("<option>");
                 opt.val(coor.co_id);
                 opt.text(`${coor.co_fname} ${coor.co_lname}`);
-                coordinators.append(opt);
+                $(coordinators).append(opt);
             }
         },
         error: function (xhr, status, error) {},
@@ -293,7 +295,7 @@ function Selection() {
             for (project of res.projects) {
                 opt.val(project.id);
                 opt.text(project.project_name);
-                projects.append(opt);
+                $(projects).append(opt);
             }
         },
         error: function (xhr, status, error) {},
@@ -301,11 +303,11 @@ function Selection() {
 
     $(document).on("change", projects, function (e) {
         e.preventDefault();
-        console.log($(this).val());
+        $(buildings).empty()
 
         $.ajax({
             type: "GET",
-            url: `/${ent}/select-buildings/${projects.val()}`,
+            url: `/${ent}/select-buildings/${$(projects).val()}`,
             success: function (res) {
                 // buildings.append(selectBuild);
                 var opt = $("<option>");
@@ -313,26 +315,28 @@ function Selection() {
                 for (building of res.buildings) {
                     opt.val(building.b_id);
                     opt.text(building.building_name);
-                    buildings.append(opt);
-                    console.log(building);
+                    $(buildings).append(opt);
                 }
+                $(buildings).val('')
             },
         });
     });
     $(document).on("change", buildings, function (e) {
-        // e.preventDefault();
-        console.log($(this).val());
+        e.preventDefault()
+        $(units).empty()
+
         $.ajax({
             type: "GET",
-            url: `/${ent}/units/${buildings.val()}`,
+            url: `/${ent}/units/${$(buildings).val()}`,
             success: function (res) {
                 console.log(res);
                 var opt = $("<option>");
                 for (unit of res.units) {
                     opt.val(unit.u_id);
                     opt.text(unit.unit_no);
-                    units.append(opt);
+                    $(units).append(opt);
                 }
+                $(units).val('')
             },
         });
     });
