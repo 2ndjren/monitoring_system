@@ -15,26 +15,26 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    public function startRow(): int
+    {
+        return 6; // Skip the first 5 rows
+    }
     public function up(): void
     {
         Schema::create('contract', function (Blueprint $table) {
             $table->id('con_id');
-            $table->foreignIdFor(clients::class);
-            $table->foreignIdFor(units::class);
-            $table->foreignIdFor(coordinators::class);
-            $table->foreignIdFor(agents::class);
-            $table->foreignIdFor(projects::class);
-            $table->foreignIdFor(buildings::class);
-            $table->foreignIdFor(units::class);
+            $table->string('client');
+            $table->string('property_details');
+            $table->string('coordinator');
+            $table->string('contact');
+            $table->string('agent');
             $table->string('contract_start');
             $table->string('contract_end');
-            $table->string('advance');
-            $table->string('deposit');
+            $table->string('payment_term');
             $table->string('tenant_price');
             $table->string('client_income');
-            $table->string('company_income');
-            $table->string('payment_day');
-            $table->string('payment_interval');
+            $table->string('company_income')->nullable();
+            $table->string('payment_date');
             $table->string('due_date');
             $table->string('status');
             $table->timestamps();

@@ -5,29 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class contracts extends Model
+// @param COllection $collection
+
+class contract extends Model
 {
     protected $primaryKey = 'con_id';
     use HasFactory;
+    protected $table = 'contract';
     protected $fillable = [
-        'clients_id',
-        'units_id',
-        'coordinators_id',
-        'agents_id',
-        'projects_id',
-        'buildings_b_id',
-        'units_id',
+        'client',
+        'property_details',
+        'coordinator',
+        'contact',
+        'agent',
         'contract_start',
         'contract_end',
-        'contract_price',
-        'advance',
-        'deposit',
+        'payment_term',
+        'tenant_price',
         'client_income',
         'company_income',
-        'payment_day',
-        'payment_interval',
+        'payment_date',
         'due_date',
         'status',
-
     ];
 }

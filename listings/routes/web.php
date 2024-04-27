@@ -7,6 +7,7 @@ use App\Http\Controllers\Client_Controller;
 use App\Http\Controllers\Contract_Controller;
 use App\Http\Controllers\Coordinator_Controller;
 use App\Http\Controllers\Dashboard_Controller;
+use App\Http\Controllers\File_Controller;
 use App\Http\Controllers\Project_Controller;
 use App\Http\Controllers\Unit_Controller;
 use Illuminate\Support\Facades\Route;
@@ -97,4 +98,7 @@ Route::prefix('/units')->group(function () {
     Route::post('/edit', [Unit_Controller::class, 'edit']);
     Route::post('/upd', [Unit_Controller::class, 'upd']);
     Route::post('/del', [Unit_Controller::class, 'del']);
+});
+Route::prefix('/file')->group(function () {
+    Route::post('/import', [File_Controller::class, 'Import']);
 });
