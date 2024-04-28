@@ -7,49 +7,6 @@ $(document).ready(function () {
 
     get_all();
 
-    $("#addModal").on("show.bs.modal", function (e) {
-        $("#addForm span").remove();
-    });
-
-    $("#addForm").submit(function (e) {
-        e.preventDefault();
-        $("#addForm span").remove();
-
-        $.ajax({
-            url: `/${ent}/add/`,
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                showtoastMessage("text-success", "Added Successful", res.msg);
-                get_all();
-                $(`#addForm`).trigger("reset");
-                $(`#addModal`).modal("hide");
-            },
-            error: function (res) {
-                var errors = res.responseJSON.errors;
-                // console.log(errors)
-
-                var inputs = $(
-                    "#addForm input, #addForm select, #addForm textarea"
-                );
-                for (input of inputs) {
-                    var name = $(input).attr("name");
-
-                    if (name in errors) {
-                        for (error of errors[name]) {
-                            var error_msg = $(
-                                `<span class='text-danger'>${error}</span>`
-                            );
-                            error_msg.insertAfter($(input));
-                        }
-                    }
-                }
-            },
-        });
-    });
-
     $("#updModal").on("show.bs.modal", function (e) {
         $("#updForm span").remove();
     });
@@ -112,24 +69,19 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_edit", function () {
-        var id = $($(this).parents()[1]).data("id");
+        var target = $($(this).parent().prev()).text()
 
-        $("#updForm input[name=id]").val(id);
+        $("#updForm input[name=target]").val(target);
         $(`#updModal`).modal("show");
 
         $.ajax({
             method: "POST",
             url: `/${ent}/edit/`,
-            data: { id: id },
+            data: { target: target },
             success: function (res) {
                 var record = res.record;
 
-                var keys = [
-                    "agent_fname",
-                    "agent_lname",
-                    "agent_phone",
-                    "agent_email",
-                ];
+                var keys = ["agent"];
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
@@ -139,9 +91,9 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_del", function () {
-        var id = $($(this).parents()[1]).data("id");
+        var target = $($(this).parent().prev()).text()
 
-        $("#delForm input[name=id]").val(id);
+        $("#delForm input[name=target]").val(target);
         $(`#delModal`).modal("show");
     });
 });
@@ -165,10 +117,7 @@ function get_all() {
             var thr = $("<tr>");
             var cols = [
                 "#",
-                "First Name",
-                "Last Name",
-                "Contact Number",
-                "Email",
+                "Full Name",
                 "Action",
             ];
             for (col of cols) {
@@ -190,13 +139,10 @@ function get_all() {
             if (records.length > 0) {
                 for (record of records) {
                     var vals = [
-                        record.agent_fname,
-                        record.agent_lname,
-                        record.agent_phone,
-                        record.agent_email,
+                        record.agent,
                     ];
 
-                    var tr = $("<tr>").data("id", record.a_id);
+                    var tr = $("<tr>")
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
@@ -228,6 +174,8 @@ function get_all() {
             tbl.append(tbody);
             $("#tbl_div").append(tbl);
         },
-        error: function (res) {},
+        error: function (res) {
+            console.log(res)
+        },
     });
 }

@@ -12,30 +12,14 @@ class Client_Controller extends Controller
 
     public function get_all()
     {
-        $records = model::select('client')->distinct('client')->get();
+        $col = strtolower($this->ent);
+        $records = model::select($col)->distinct($col)->get();
 
         $data = [
             'records' => $records,
         ];
 
         return response()->json($data);
-    }
-
-    public function add(Request $request)
-    {
-        $request->validate([
-            'client' => 'required',
-        ]);
-
-        $record = new model;
-
-        $keys = ['client'];
-        foreach ($keys as $key) {
-            $record->$key = $request->$key;
-        }
-        $record->save();
-
-        return response(['msg' => "Added $this->ent"]);
     }
 
     public function edit(Request $request)
@@ -57,7 +41,6 @@ class Client_Controller extends Controller
         $record = model::where($this->ent, $request->target);
         $keys = ['client'];
 
-        $upd = [];
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }

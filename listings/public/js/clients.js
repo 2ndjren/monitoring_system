@@ -7,50 +7,6 @@ $(document).ready(function () {
 
     get_all();
 
-    $("#addModal").on("show.bs.modal", function (e) {
-        $("#addForm span").remove();
-    });
-
-    $("#addForm").submit(function (e) {
-        e.preventDefault();
-        $("#addForm span").remove();
-
-        $.ajax({
-            url: `/${ent}/add/`,
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                showtoastMessage("text-success", "Added Successful", res.msg);
-
-                get_all();
-                $(`#addForm`).trigger("reset");
-                $(`#addModal`).modal("hide");
-            },
-            error: function (res) {
-                var errors = res.responseJSON.errors;
-                // console.log(errors)
-
-                var inputs = $(
-                    "#addForm input, #addForm select, #addForm textarea"
-                );
-                for (input of inputs) {
-                    var name = $(input).attr("name");
-
-                    if (name in errors) {
-                        for (error of errors[name]) {
-                            var error_msg = $(
-                                `<span class='text-danger'>${error}</span>`
-                            );
-                            error_msg.insertAfter($(input));
-                        }
-                    }
-                }
-            },
-        });
-    });
-
     $("#updModal").on("show.bs.modal", function (e) {
         $("#updForm span").remove();
     });
@@ -137,7 +93,7 @@ $(document).ready(function () {
     $(document).on("click", ".i_del", function () {
         var target = $($(this).parent().prev()).text()
 
-        $("#delForm input[name=target]").val(id);
+        $("#delForm input[name=target]").val(target);
         $(`#delModal`).modal("show");
     });
 });
