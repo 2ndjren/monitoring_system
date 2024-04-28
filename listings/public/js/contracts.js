@@ -127,10 +127,19 @@ $(document).ready(function () {
                 var record = res.record;
 
                 var keys = [
-                    "agent_fname",
-                    "agent_lname",
-                    "agent_phone",
-                    "agent_email",
+                    "client",
+                    "property_details",
+                    "coordinator",
+                    "agent",
+                    "contract_start",
+                    "contract_end",
+                    "payment_term",
+                    "tenent_price",
+                    "client_income",
+                    "company_income",
+                    "payment_date",
+                    "due_date",
+                    "status",
                 ];
 
                 for (key of keys) {
@@ -159,8 +168,8 @@ function get_all() {
         success: function (res) {
             var records = res.records;
 
-            var tbl = $("<table>")
-                .addClass("w-100 overflow-x-auto table-responsive")
+            var tbl = $("<table class='bg-light'>")
+                .addClass("overflow-auto")
                 .attr("id", "tbl_records");
 
             var thead = $("<thead>");
@@ -172,10 +181,12 @@ function get_all() {
                 "Coordinator",
                 "Contact Number",
                 "Agent",
-                "Contract Started",
+                "Contract Start",
+                "Contract End",
                 "Payment Term",
                 "Tenant Price",
                 "Owner Income",
+                "Company Income",
                 "Payment Date",
                 "Due Date",
                 "Status",
@@ -194,19 +205,32 @@ function get_all() {
             thead.append(thr);
             tbl.append(thead);
 
-            var td_class = "p-2 border border-dark border-5 text-center";
+            var td_class = "py-1 px-3 border border-dark border-5 text-center";
 
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
                     var vals = [
-                        record.agent_fname,
-                        record.agent_lname,
-                        record.agent_phone,
-                        record.agent_email,
+                        record.client,
+                        record.property_details,
+                        record.coordinator,
+                        record.contact,
+                        record.agent,
+                        record.contract_start,
+                        record.contract_end,
+                        record.payment_term,
+                        record.tenant_price,
+                        record.client_income,
+                        record.company_income,
+                        record.payment_date,
+                        record.due_date,
+                        record.status,
                     ];
 
-                    var tr = $("<tr>").data("id", record.a_id);
+                    var tr = $("<tr class='text-nowrap'>").data(
+                        "id",
+                        record.con_id
+                    );
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\agents;
 use App\Models\buildings;
 use App\Models\clients;
-use App\Models\contracts as model;
+use App\Models\contract as model;
+use App\Models\contract;
 use App\Models\coordinators;
 use App\Models\projects;
 use App\Models\units;
@@ -14,6 +15,8 @@ use Illuminate\Http\Request;
 
 class Contract_Controller extends Controller
 {
+    //
+    //
     public $ent = 'Contract';
 
     public function get_all()
@@ -30,49 +33,29 @@ class Contract_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'clients_c_id' => 'required',
+            'client' => 'required',
             'projects_id' => 'required',
-            'buildings_b_id' => 'required',
-            'units_u_id' => 'required',
-            'coordinators_co_id' => 'required',
-            'agents_a_id' => 'required',
+            'coordinators_id' => 'required',
+            'agents_id' => 'required',
             'contract_start' => 'required',
             'contract_end' => 'required',
-            'advance' => 'required|numeric',
-            'deposit' => 'required|numeric',
-            'tenant_price' => 'required|numeric',
-            'client_income' => 'required|numeric',
-            'company_income' => 'required|numeric',
+            'advance' => 'required',
+            'deposit' => 'required',
+            'tenant_price' => 'required',
+            'client_income' => 'required',
+            'payment_day' => 'required',
+            'payment_interval' => 'required',
             'due_date' => 'required',
-            'payment_day' => 'required|numeric',
-            'payment_interval' => 'required|numeric',
+            'status' => 'required',
         ]);
 
-        $record = new model;
+        // $record = new model;
 
-        $keys = [
-            'clients_c_id', 
-            'projects_id', 
-            'buildings_b_id', 
-            'units_u_id', 
-            'coordinators_co_id', 
-            'agents_a_id', 
-            'contract_start', 
-            'contract_end', 
-            'advance', 
-            'deposit', 
-            'tenant_price', 
-            'client_income', 
-            'company_income', 
-            'due_date', 
-            'payment_day', 
-            'payment_interval'
-        ];
-        
+        $keys = ['clients_id', 'projects_id', 'coordinators_id', 'agents_id,contract_start', 'contract_end', 'client_income', 'contract_start', 'contract_end', 'advance', 'deposit', 'tenant_price', 'client_income', 'due_date'];
+        $record = new contract();
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
-
         $today = Carbon::today();
         $due = Carbon::parse($request->due_date);
 
