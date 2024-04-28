@@ -113,19 +113,19 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_edit", function () {
-        var id = $($(this).parents()[1]).data("id");
+        var target = $($(this).parent().prev()).text()
 
-        $("#updForm input[name=id]").val(id);
+        $("#updForm input[name=target]").val(target);
         $(`#updModal`).modal("show");
 
         $.ajax({
             method: "POST",
             url: `/${ent}/edit/`,
-            data: { id: id },
+            data: { target: target },
             success: function (res) {
                 var record = res.record;
 
-                var keys = ["fname", "lname", "phone", "email"];
+                var keys = ["client"];
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
@@ -135,9 +135,9 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_del", function () {
-        var id = $($(this).parents()[1]).data("id");
+        var target = $($(this).parent().prev()).text()
 
-        $("#delForm input[name=id]").val(id);
+        $("#delForm input[name=target]").val(id);
         $(`#delModal`).modal("show");
     });
 });
@@ -161,10 +161,7 @@ function get_all() {
             var thr = $("<tr>");
             var cols = [
                 "#",
-                "First Name",
-                "Last Name",
-                "Contact Number",
-                "Email",
+                "Full Name",
                 "Action",
             ];
             for (col of cols) {
@@ -186,13 +183,10 @@ function get_all() {
             if (records.length > 0) {
                 for (record of records) {
                     var vals = [
-                        record.fname,
-                        record.lname,
-                        record.phone,
-                        record.email,
+                        record.client,
                     ];
 
-                    var tr = $("<tr>").data("id", record.c_id);
+                    var tr = $("<tr>")
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
@@ -224,6 +218,8 @@ function get_all() {
             tbl.append(tbody);
             $("#tbl_div").append(tbl);
         },
-        error: function (res) {},
+        error: function (res) {
+            console.log(res)
+        },
     });
 }

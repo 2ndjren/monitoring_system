@@ -35,20 +35,8 @@
                 <div class="modal-body">
                     <form id="addForm">
                         <div class="form-floating mb-3">
-                            <input type="text" name="fname" class="form-control">
-                            <label for="floatingInput">First Name</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="lname" class="form-control">
-                            <label for="floatingInput">Last Name</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="phone" class="form-control">
-                            <label for="floatingInput">Contact Number</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="email" class="form-control">
-                            <label for="floatingInput">Email</label>
+                            <input type="text" name="client" class="form-control">
+                            <label for="floatingInput">Full Name</label>
                         </div>
 
                         <div class="d-flex justify-content-end">
@@ -73,22 +61,10 @@
                 </div>
                 <div class="modal-body">
                     <form id="updForm">
-                        <input type="hidden" name="id" class="form-control">
+                        <input type="hidden" name="target" class="form-control">
                         <div class="form-floating mb-3">
-                            <input type="text" name="fname" class="form-control">
-                            <label for="floatingInput">First Name</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="lname" class="form-control">
-                            <label for="floatingInput">Last Name</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="phone" class="form-control">
-                            <label for="floatingInput">Contact Number</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="email" class="form-control">
-                            <label for="floatingInput">Email</label>
+                            <input type="text" name="client" class="form-control">
+                            <label for="floatingInput">Full Name</label>
                         </div>
 
                         <div class="d-flex justify-content-end">
@@ -114,7 +90,7 @@
                 <div class="modal-body">
                     <h5 class="mb-3">Are you sure you want to delete this {{ $ent }}?</h5>
                     <form id="delForm">
-                        <input type="hidden" name="id" class="form-control">
+                        <input type="hidden" name="target" class="form-control">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Yes</button>
                             <button type="button" class="btn btn-danger px-3 me-2 fw-semibold">No</button>

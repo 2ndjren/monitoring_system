@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\clients as model;
+use App\Models\contract as model;
 
 class Client_Controller extends Controller
 {
@@ -12,7 +12,7 @@ class Client_Controller extends Controller
 
     public function get_all()
     {
-        $records = model::all();
+        $records = model::select('client')->distinct('client')->get();
 
         $data = [
             'records' => $records,
@@ -24,15 +24,12 @@ class Client_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'client' => 'required',
         ]);
 
         $record = new model;
 
-        $keys = ['fname', 'lname', 'phone', 'email'];
+        $keys = ['client'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
@@ -43,8 +40,7 @@ class Client_Controller extends Controller
 
     public function edit(Request $request)
     {
-        $record = model::find($request->id);
-
+        $record = model::where($this->ent, $request->target)->first();
         $data = [
             'record' => $record,
         ];
@@ -55,14 +51,11 @@ class Client_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'fname' => 'required',
-            'lname' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
+            'client' => 'required',
         ]);
 
-        $record = model::find($request->id);
-        $keys = ['fname', 'lname', 'phone', 'email'];
+        $record = model::where($this->ent, $request->target);
+        $keys = ['client'];
 
         $upd = [];
         foreach ($keys as $key) {
@@ -76,7 +69,7 @@ class Client_Controller extends Controller
 
     public function del(Request $request)
     {
-        $record = model::find($request->id);
+        $record = model::where($this->ent, $request->target);
         $record->delete();
 
         return response(['msg' => "Deleted $this->ent"]);
