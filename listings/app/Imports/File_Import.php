@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class File_Import implements ToCollection, WithStartRow
 {
@@ -18,26 +19,31 @@ class File_Import implements ToCollection, WithStartRow
      */
     public function startRow(): int
     {
-        return 6; // Skip the first 5 rows
+        return 2;
     }
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
 
-            $client = $row[1];
-            $property_details = $row[2];
-            $coordinator = $row[3];
-            $contact = $row[4];
-            $agent = $row[5];
-            $contract_start = $row[6];
-            $contract_end = $row[7];
-            $payment_term = $row[8];
-            $tenant_price = $row[9];
-            $client_income = $row[10];
-            $ccompany_income = $row[11];
-            $payment_date = $row[12];
-            $due_date = $row[13];
-            $status = $row[14];
+            $client = $row[0];
+            $property_details = $row[1];
+            $coordinator = $row[2];
+            $contact = $row[3];
+            $agent = $row[4];
+            $contract_start = $row[5];
+            $contract_end = $row[6];
+            $payment_term = $row[7];
+            $tenant_price = $row[8];
+            $client_income = $row[9];
+            $ccompany_income = $row[10];
+            $payment_date = $row[11];
+            $due_date = $row[12];
+            $status = $row[13];
+
+            $contract_start = $this->format_date($contract_start);
+            $contract_end = $this->format_date($contract_end);
+            $due_date = $this->format_date($due_date);
+
             Contract::create([
                 'client' => $client ?? '-',
                 'property_details' => $property_details ?? '-',
@@ -57,33 +63,21 @@ class File_Import implements ToCollection, WithStartRow
         }
     }
 
+    public function format_date($date_string) {
+        $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    /**
-     * Format the date.
-     *
-     * @param string|null $date
-     * @return string|null
-     */
-    private function formatDate($date)
-    {
-        // Check if the date is not empty
-        if (!empty($date)) {
-            // Attempt to parse the date
-            $timestamp = strtotime($date);
+        $date_arr = explode(' ', $date_string);
+        
+        $year = $date_arr[2];
 
-            // Check if the parsing was successful and the date is not the default UNIX epoch
-            if ($timestamp !== false && $timestamp != -1) {
-                // Convert the parsed timestamp to 'Y-m-d' format
-                return date('Y-m-d', $timestamp);
-            } else {
-                // Log or handle invalid date values
-                // For now, let's return null to skip inserting the invalid date
-                return null;
-            }
-        } else {
-            // Handle empty date values
-            // For now, let's return null to skip inserting empty dates
-            return null;
-        }
+        $index = array_search($date_arr[0], $months);
+        $month = $index + 1;
+        if (strlen($month) == 1) { $month = '0' . $month; }
+
+        $day = str_replace(',', '', $date_arr[1]);
+        if (strlen($day) == 1) { $day = '0' . $day; }
+
+        $date = "$year-$month-$day";
+        return $date;
     }
 }

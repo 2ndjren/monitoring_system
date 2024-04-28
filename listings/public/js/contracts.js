@@ -210,20 +210,32 @@ function get_all() {
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
+                    var contract_start = record.contract_start
+                    contract_start = new Date(contract_start)
+                    contract_start = contract_start.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
+
+                    var contract_end = record.contract_end
+                    contract_end = new Date(contract_end)
+                    contract_end = contract_end.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
+
+                    var due_date = record.due_date
+                    due_date = new Date(due_date)
+                    due_date = due_date.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
+
                     var vals = [
                         record.client,
                         record.property_details,
                         record.coordinator,
                         record.contact,
                         record.agent,
-                        record.contract_start,
-                        record.contract_end,
+                        contract_start,
+                        contract_end,
                         record.payment_term,
                         record.tenant_price,
                         record.client_income,
                         record.company_income,
                         record.payment_date,
-                        record.due_date,
+                        due_date,
                         record.status,
                     ];
 

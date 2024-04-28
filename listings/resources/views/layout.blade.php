@@ -156,7 +156,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ '/export' }}"
+                                    <a href="{{ '/file/export' }}"
                                         class="nav-link  {{ Request::url() == url('/export') ? 'active menu-open' : '' }} ">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Export</p>

@@ -28,14 +28,14 @@ return new class extends Migration
             $table->string('coordinator');
             $table->string('contact');
             $table->string('agent');
-            $table->string('contract_start');
-            $table->string('contract_end');
+            $table->date('contract_start');
+            $table->date('contract_end');
             $table->string('payment_term');
             $table->string('tenant_price');
             $table->string('client_income');
             $table->string('company_income')->nullable();
             $table->string('payment_date');
-            $table->string('due_date');
+            $table->date('due_date');
             $table->string('status');
             $table->timestamps();
         });
