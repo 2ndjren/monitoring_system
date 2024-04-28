@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\File_Export;
 use App\Imports\File_Import;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,5 +22,9 @@ class File_Controller extends Controller
         } else {
             return redirect()->back()->with('msg', 'failed');
         }
+    }
+    public function Export()
+    {
+        return Excel::download(new File_Export, 'export.xlsx');
     }
 }

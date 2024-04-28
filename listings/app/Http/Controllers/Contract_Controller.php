@@ -6,6 +6,7 @@ use App\Models\agents;
 use App\Models\buildings;
 use App\Models\clients;
 use App\Models\contract as model;
+use App\Models\contract;
 use App\Models\coordinators;
 use App\Models\projects;
 use App\Models\units;
@@ -16,7 +17,7 @@ class Contract_Controller extends Controller
 {
     //
     //
-    public $ent = 'Client';
+    public $ent = 'Contract';
 
     public function get_all()
     {
@@ -51,6 +52,7 @@ class Contract_Controller extends Controller
         // $record = new model;
 
         $keys = ['clients_id', 'projects_id', 'coordinators_id', 'agents_id,contract_start', 'contract_end', 'client_income', 'contract_start', 'contract_end', 'advance', 'deposit', 'tenant_price', 'client_income', 'due_date'];
+        $record = new contract();
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }

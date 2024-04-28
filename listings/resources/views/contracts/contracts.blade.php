@@ -2,24 +2,21 @@
 @section('title', 'Contracts')
 @section('contracts')
     @php $ent = 'Contract' @endphp
-    <div class="card rounded-0">
-        <div class="card-body ">
-            <div class="row">
-                <div class="col">
-                    <h2 class='ent'>{{ $ent }}s</h2>
-                </div>
-                <div class="col d-flex justify-content-end">
-                    <button class="btn btn-primary mb-3 p-2" data-bs-target="#addModal" data-bs-toggle="modal">
-                        <i class="fa-solid fa-plus"></i>
-                        Add {{ $ent }}
-                    </button>
-                </div>
-            </div>
-            <div id="tbl_div">
+    <div class="row">
+        <div class="col">
+            <h2 class='ent'>{{ $ent }}s</h2>
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button class="btn btn-primary mb-3 p-2" data-bs-target="#addModal" data-bs-toggle="modal">
+                <i class="fa-solid fa-plus"></i>
+                Add {{ $ent }}
+            </button>
+        </div>
+        <div class="col-12 overflow-auto" id="tbl_div">
 
-            </div>
         </div>
     </div>
+
 
     <div class="modal fade" id="addModal" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">

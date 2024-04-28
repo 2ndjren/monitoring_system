@@ -101,4 +101,5 @@ Route::prefix('/units')->group(function () {
 });
 Route::prefix('/file')->group(function () {
     Route::post('/import', [File_Controller::class, 'Import']);
+    Route::get('/export', [File_Controller::class, 'Export']);
 });
