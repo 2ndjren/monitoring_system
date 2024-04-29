@@ -74,8 +74,8 @@
                         data-accordion="false">
                         <!-- Add your sidebar content here -->
                         <li class="nav-item">
-                            <a id="dashboard-link" href="{{ '/dashboard' }}"
-                                class="nav-link {{ Request::url() == url('/dashboard') ? 'active' : '' }}">
+                            <a id="dashboard-link" href="{{ '/' }}"
+                                class="nav-link {{ Request::url() == url('/') ? 'active' : '' }}">
                                 <i class="fa-solid fa-chart-simple nav-icon"></i>
                                 <p>Dashboard</p>
 

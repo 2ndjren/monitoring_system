@@ -24,11 +24,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', [Route_Controller::class, 'Dashboard']);
+Route::get('', [Route_Controller::class, 'Dashboard']);
 Route::get('/contracts', [Route_Controller::class, 'Contracts']);
 Route::get('/agents', [Route_Controller::class, 'Agents']);
 Route::get('/clients', [Route_Controller::class, 'Clients']);

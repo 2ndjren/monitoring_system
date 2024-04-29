@@ -192,7 +192,7 @@ function get_all() {
                 "Payment Date",
                 "Due Date",
                 "Status",
-                "Update",
+                "Action",
             ];
             for (col of cols) {
                 thr.append(
@@ -240,7 +240,6 @@ function get_all() {
                         record.company_income,
                         record.payment_date,
                         due_date,
-                        record.status,
                     ];
 
                     var tr = $("<tr class='text-nowrap'>").data(
@@ -256,6 +255,10 @@ function get_all() {
                     for (val of vals) {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
+
+                    var td_status = $("<td>").addClass(td_class).html(record.status)
+                    record.status.split(' ').length == 3 ? td_status.addClass('text-success') : td_status.addClass('text-danger')
+                    tr.append(td_status)
 
                     tr.append(
                         $("<td>").addClass(td_class).html(`
