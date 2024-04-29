@@ -176,7 +176,7 @@ function get_all() {
             var thr = $("<tr text-nowrap>");
             var cols = [
                 "#",
-                "Client Name",
+                "Client",
                 "Property Details",
                 "Coordinator",
                 "Contact Number",

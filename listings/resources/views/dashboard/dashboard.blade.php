@@ -79,8 +79,8 @@
                                     </h3>
                                 </div>
                                 <div class="col-9">
-                                    <span>Projects</span> <br>
-                                    <h4 class="dash-loader" id="counts-projects">0</h4>
+                                    <span>Properties</span> <br>
+                                    <h4 class="dash-loader" id="counts-properties">0</h4>
                                 </div>
                             </div>
                         </div>
