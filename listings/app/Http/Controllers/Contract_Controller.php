@@ -44,11 +44,17 @@ class Contract_Controller extends Controller
             'status' => 'required|numeric',
         ]);
 
-        $keys = ['client', 'property', 'building', 'unit', 'unit_type', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
+        $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
 
         $record = new model();
+
         foreach ($keys as $key) {
             $record->$key = $request->$key;
+        }
+
+        $upper_keys = ['client', 'property', 'building', 'coordinator', 'agent'];
+        foreach ($upper_keys as $key) {
+            $record->$key = strtoupper($request->$key);
         }
 
         $record->status = "$request->status $request->status_text";
@@ -91,13 +97,16 @@ class Contract_Controller extends Controller
             'status' => 'required|numeric',
         ]);
 
-
         $record = model::find($request->id);
-        $keys = ['client', 'property', 'building', 'unit', 'unit_type', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
-
+        $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
 
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
+        }
+
+        $upper_keys = ['client', 'property', 'building', 'coordinator', 'agent'];
+        foreach ($upper_keys as $key) {
+            $upd[$key] = strtoupper($request->$key);
         }
 
         $upd['status'] = "$request->status $request->status_text";

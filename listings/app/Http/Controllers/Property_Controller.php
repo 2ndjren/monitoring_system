@@ -42,7 +42,7 @@ class Property_Controller extends Controller
         $keys = ['property'];
 
         foreach ($keys as $key) {
-            $upd[$key] = $request->$key;
+            $upd[$key] = strtoupper($request->$key);
         }
 
         $record->update($upd);

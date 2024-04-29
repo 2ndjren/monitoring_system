@@ -42,7 +42,7 @@ class Client_Controller extends Controller
         $keys = ['client'];
 
         foreach ($keys as $key) {
-            $upd[$key] = $request->$key;
+            $upd[$key] = strtoupper($request->$key);
         }
 
         $record->update($upd);

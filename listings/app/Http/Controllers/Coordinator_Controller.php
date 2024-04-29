@@ -41,9 +41,9 @@ class Coordinator_Controller extends Controller
 
         $record = model::where($this->ent, $request->target);
         $keys = ['coordinator', 'contact'];
-
+        
         foreach ($keys as $key) {
-            $upd[$key] = $request->$key;
+            $upd[$key] = strtoupper($request->$key);
         }
 
         $record->update($upd);
