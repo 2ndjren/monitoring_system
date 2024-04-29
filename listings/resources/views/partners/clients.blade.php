@@ -60,7 +60,7 @@
                         <input type="hidden" name="target" class="form-control">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Yes</button>
-                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold">No</button>
+                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold" data-bs-dismiss="modal">No</button>
                         </div>
                     </form>
                 </div>
