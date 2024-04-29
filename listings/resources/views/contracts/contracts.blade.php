@@ -166,7 +166,7 @@
     </div>
 
     <div class="modal fade" id="updModal" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">

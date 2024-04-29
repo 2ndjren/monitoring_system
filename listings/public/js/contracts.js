@@ -256,9 +256,8 @@ function get_all() {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
 
-                    var td_status = $("<td>").addClass(td_class).html(record.status)
-                    record.status.split(' ').length == 3 ? td_status.addClass('text-success') : td_status.addClass('text-danger')
-                    tr.append(td_status)
+                    if (record.status.split(' ').length == 3) { tr.append($("<td>").addClass(`${td_class} text-success`).html(record.status)) }
+                    else { tr.append($("<td>").addClass(`${td_class} text-danger`).html(record.status)) }
 
                     tr.append(
                         $("<td>").addClass(td_class).html(`
