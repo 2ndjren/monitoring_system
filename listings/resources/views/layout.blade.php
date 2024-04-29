@@ -130,13 +130,13 @@
                                 <p>Assets<i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a href="{{ '/projects' }}"
                                         class="nav-link  {{ Request::url() == url('/projects') ? 'active menu-open' : '' }}   {{ Request::url() == url('/buildings') ? 'active menu-open' : '' }}{{ Request::url() == url('/units') ? 'active menu-open' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Projects</p>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ '/properties' }}"
                                         class="nav-link  {{ Request::url() == url('/properties') ? 'active menu-open' : '' }} ">
