@@ -155,22 +155,6 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <div class="input-group">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" name='status'>
-                                        <label for="">Status</label>
-                                    </div>
-                                    <select class="form-select" name='status_text'>
-                                        <option selected>Choose</option>
-                                        <option value="Days Remaining">Days Remaining</option>
-                                        <option value="Days Past Due">Days Past Due</option>
-                                      </select>
-                                  </div>
-                            </div>
-                        </div>
-
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Save</button>
                             <button type="button" class="btn btn-warning px-3 me-2 fw-semibold">Clear</button>
@@ -316,22 +300,6 @@
                                     <input type="date" name="due_date" class="form-control">
                                     <label for="">Due Date</label>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col">
-                                <div class="input-group">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" name='status'>
-                                        <label for="">Status</label>
-                                    </div>
-                                    <select class="form-select" name='status_text'>
-                                        <option selected>Choose</option>
-                                        <option value="Days Remaining">Days Remaining</option>
-                                        <option value="Days Past Due">Days Past Due</option>
-                                      </select>
-                                  </div>
                             </div>
                         </div>
 

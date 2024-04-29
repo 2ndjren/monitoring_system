@@ -147,12 +147,6 @@ $(document).ready(function () {
                 for (key of keys) {
                     $(`#updForm input[name=${key}], #updForm select[name=${key}]`).val(record[key]);
                 }
-
-                var status = record.status.split(' ')
-                var days = status[0]
-                var text = status.slice(1).join(' ')
-                $(`#updForm input[name=status]`).val(days);
-                $(`#updForm select[name=status_text]`).val(text);
             },
         });
     });

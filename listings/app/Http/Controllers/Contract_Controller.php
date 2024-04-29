@@ -14,7 +14,7 @@ class Contract_Controller extends Controller
     public function get_all()
     {
         $ids = model::select('con_id')->get();
-        
+
         foreach ($ids as $id) {
             $contract = model::find($id->con_id);
             
@@ -55,7 +55,6 @@ class Contract_Controller extends Controller
             'company_income' => 'required|numeric',
             'payment_date' => 'required',
             'due_date' => 'required',
-            'status' => 'required|numeric',
         ]);
 
         $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
@@ -71,7 +70,7 @@ class Contract_Controller extends Controller
             $record->$key = strtoupper($request->$key);
         }
 
-        $record->status = "$request->status $request->status_text";
+        $record->status = '';
 
         $record->save();
 
@@ -108,7 +107,6 @@ class Contract_Controller extends Controller
             'company_income' => 'required|numeric',
             'payment_date' => 'required',
             'due_date' => 'required',
-            'status' => 'required|numeric',
         ]);
 
         $record = model::find($request->id);
@@ -122,8 +120,6 @@ class Contract_Controller extends Controller
         foreach ($upper_keys as $key) {
             $upd[$key] = strtoupper($request->$key);
         }
-
-        $upd['status'] = "$request->status $request->status_text";
  
         $record->update($upd);
 
