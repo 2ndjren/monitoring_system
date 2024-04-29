@@ -34,7 +34,7 @@ class File_Import implements ToCollection, WithStartRow
             $contract_end = $row[6];
             $payment_term = $row[7];
             $tenant_price = $row[8];
-            $client_income = $row[9];
+            $owner_income = $row[9];
             $ccompany_income = $row[10];
             $payment_date = $row[11];
             $due_date = $row[12];
@@ -63,7 +63,7 @@ class File_Import implements ToCollection, WithStartRow
                 'contract_end' => $contract_end ?? '-',
                 'payment_term' => $payment_term ?? '-',
                 'tenant_price' => $tenant_price ?? '-',
-                'client_income' => $client_income ?? '-',
+                'owner_income' => $owner_income ?? '-',
                 'company_income' => $ccompany_income ?? '-',
                 'payment_date' => $payment_date ?? '-',
                 'due_date' => $due_date ?? '-',

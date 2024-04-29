@@ -128,7 +128,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="number" name="client_income" class="form-control">
+                                    <input type="number" name="owner_income" class="form-control">
                                     <label for="">Owner Income</label>
                                 </div>
                             </div>

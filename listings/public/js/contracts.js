@@ -210,7 +210,7 @@ function get_all() {
             if (records.length > 0) {
                 for (record of records) {
                     var property_details = `${record.property} - ${record.building} ${record.unit} (${record.unit_type})`
-                    
+
                     var contract_start = record.contract_start
                     contract_start = new Date(contract_start)
                     contract_start = contract_start.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
@@ -233,7 +233,7 @@ function get_all() {
                         contract_end,
                         record.payment_term,
                         record.tenant_price,
-                        record.client_income,
+                        record.owner_income,
                         record.company_income,
                         record.payment_date,
                         due_date,

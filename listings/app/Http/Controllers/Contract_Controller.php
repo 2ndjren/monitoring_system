@@ -2,21 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\agents;
-use App\Models\buildings;
-use App\Models\clients;
-use App\Models\contract as model;
-use App\Models\contract;
-use App\Models\coordinators;
-use App\Models\projects;
-use App\Models\units;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use App\Models\contract as model;
+
 class Contract_Controller extends Controller
 {
-    //
-    //
     public $ent = 'Contract';
 
     public function get_all()
@@ -34,19 +26,22 @@ class Contract_Controller extends Controller
     {
         $request->validate([
             'client' => 'required',
-            'projects_id' => 'required',
-            'coordinators_id' => 'required',
-            'agents_id' => 'required',
+            'property' => 'required',
+            'building' => 'required',
+            'unit' => 'required',
+            'unit_type' => 'required',
+            'coordinator' => 'required',
+            'contact' => 'required',
+            'agent' => 'required',
             'contract_start' => 'required',
             'contract_end' => 'required',
-            'advance' => 'required',
-            'deposit' => 'required',
-            'tenant_price' => 'required',
-            'client_income' => 'required',
-            'payment_day' => 'required',
-            'payment_interval' => 'required',
+            'payment_term' => 'required',
+            'tenant_price' => 'required|numeric',
+            'owner_income' => 'required|numeric',
+            'company_income' => 'required|numeric',
+            'payment_date' => 'required',
             'due_date' => 'required',
-            'status' => 'required',
+            'status' => 'required|numeric',
         ]);
 
         // $record = new model;

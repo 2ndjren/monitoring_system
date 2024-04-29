@@ -24,7 +24,7 @@
                 <th align="center" style="font-weight: bold; ">CONTRACT END</th>
                 <th align="center" style="font-weight: bold; ">PAYMENT TERM</th>
                 <th align="center" style="font-weight: bold; ">TENANT PRICE</th>
-                <th align="center" style="font-weight: bold; ">CLIENT INCOME</th>
+                <th align="center" style="font-weight: bold; ">OWNER INCOME</th>
                 <th align="center" style="font-weight: bold; ">ABIC INCOME</th>
                 <th align="center" style="font-weight: bold; ">PAYMENT DATE</th>
                 <th align="center" style="font-weight: bold; ">DUE DATE</th>
@@ -43,7 +43,7 @@
                     <td>{{ $con->contract_end }}</td>
                     <td>{{ $con->payment_term }}</td>
                     <td>{{ $con->tenant_price }}</td>
-                    <td>{{ $con->client_income }}</td>
+                    <td>{{ $con->owner_income }}</td>
                     <td>{{ $con->company_income }}</td>
                     <td>{{ $con->payment_date }}</td>
                     <td>{{ $con->due_date }}</td>

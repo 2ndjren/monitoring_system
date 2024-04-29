@@ -34,9 +34,9 @@ return new class extends Migration
             $table->date('contract_start');
             $table->date('contract_end');
             $table->string('payment_term');
-            $table->string('tenant_price');
-            $table->string('client_income');
-            $table->string('company_income')->nullable();
+            $table->double('tenant_price', 10, 2);
+            $table->double('owner_income', 10, 2);
+            $table->double('company_income', 10, 2)->nullable();
             $table->string('payment_date');
             $table->date('due_date');
             $table->string('status');

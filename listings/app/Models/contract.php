@@ -25,7 +25,7 @@ class contract extends Model
         'contract_end',
         'payment_term',
         'tenant_price',
-        'client_income',
+        'owner_income',
         'company_income',
         'payment_date',
         'due_date',
