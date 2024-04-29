@@ -31,95 +31,144 @@
                 <div class="modal-body">
                     <form id="addForm">
 
-                        <div class="form-floating mb-3">
-                            <select class="form-select" name='clients_c_id'></select>
-                            <label for="">Client</label>
-                        </div>
-
-                        <div class="d-flex mb-3">
-                            <div class="form-floating me-3 w-100">
-                                <select class="form-select" name='projects_id'></select>
-                                <label for="">Project</label>
-                            </div>
-                            <div class="form-floating me-3 w-100">
-                                <select class="form-select" name='buildings_b_id'></select>
-                                <label for="">Building</label>
-                            </div>
-                            <div class="form-floating w-100">
-                                <select class="form-select" name='units_u_id'></select>
-                                <label for="">Unit</label>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="client" class="form-control">
+                                    <label for="">Client</label>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <select class="form-select" name='coordinators_co_id'>
-                            </select>
-                            <label for="">Coordinator</label>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="property" class="form-control">
+                                    <label for="">Property</label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="building" class="form-control">
+                                    <label for="">Building</label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="unit" class="form-control">
+                                    <label for="">Unit</label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-floating">
+                                    <select class="form-select" name="unit_type">
+                                        <option selected>Choose Unit Type</option>
+                                        <option value="Studio">Studio</option>
+                                        <option value="PH">PH</option>
+                                        <option value="1BR">1BR</option>
+                                        <option value="2BR">2BR</option>
+                                        <option value="3BR">3BR</option>
+                                    </select>
+                                    <label for="">Unit Type</label>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-floating mb-3">
-                            <select class="form-select" name='agents_a_id'></select>
-                            <label for="">Agent</label>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="coordinator" class="form-control">
+                                    <label for="">Coordinator</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="contact" class="form-control">
+                                    <label for="">Contact Number</label>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="d-flex mb-3 ">
-
-                            <div class="form-floating me-3 w-100">
-                                <input type="date" name="contract_start" class="form-control">
-                                <label for="">Contract Start</label>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-floating mb-3">
+                                    <input type="text" name="agent" class="form-control">
+                                    <label for="">Agent</label>
+                                </div>
                             </div>
-                            <div class="form-floating  w-100">
-                                <input type="date" name="contract_end" class="form-control">
-                                <label for="">Contract End</label>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" name="contract_start" class="form-control">
+                                    <label for="">Contract Start</label>
+                                </div>
                             </div>
-
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" name="contract_end" class="form-control">
+                                    <label for="">Contract End</label>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="d-flex mb-3 ">
-
-                            <div class="form-floating me-3 w-100">
-                                <input type="number" name="advance" class="form-control">
-                                <label for="">Advance</label>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="payment_term" class="form-control">
+                                    <label for="">Payment Term</label>
+                                </div>
                             </div>
-                            <div class="form-floating me-3  w-100">
-                                <input type="number" name="deposit" class="form-control">
-                                <label for="">Deposit</label>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="number" name="tenant_price" class="form-control">
+                                    <label for="">Tenant Price</label>
+                                </div>
                             </div>
-                            <div class="form-floating  w-100">
-                                <input type="number" name="tenant_price" class="form-control">
-                                <label for="">Tenant Price</label>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="number" name="client_income" class="form-control">
+                                    <label for="">Owner Income</label>
+                                </div>
                             </div>
-
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="number" name="company_income" class="form-control">
+                                    <label for="">ABIC Income</label>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="d-flex mb-3 ">
-
-                            <div class="form-floating  w-100 me-3">
-                                <input type="number" name="client_income" class="form-control">
-                                <label for="">Owner Income</label>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="text" name="payment_date" class="form-control">
+                                    <label for="">Payment Date</label>
+                                </div>
                             </div>
-                            <div class="form-floating me-3 w-100">
-                                <input type="number" name="company_income" class="form-control">
-                                <label for="">Company Income</label>
+                            <div class="col">
+                                <div class="form-floating">
+                                    <input type="date" name="due_date" class="form-control">
+                                    <label for="">Due Date</label>
+                                </div>
                             </div>
-                            <div class="form-floating  w-100">
-                                <input type="date" class="form-control" name='due_date'>
-                                <label for="">Due Date</label>
-                            </div>
-
                         </div>
 
-                        <div class="d-flex mb-3">
-
-                            <div class="form-floating w-100 me-3">
-                                <input type="number" name="payment_day" class="form-control">
-                                <label for="">Payment Day</label>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="input-group">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" name='status'>
+                                        <label for="">Status</label>
+                                    </div>
+                                    <select class="form-select" name='status_text'>
+                                        <option selected>Choose</option>
+                                        <option value="Days Remaining">Days Remaining</option>
+                                        <option value="Days Past Due">Days Past Due</option>
+                                      </select>
+                                  </div>
                             </div>
-                            <div class="form-floating me-3 w-100">
-                                <input type="number" name="payment_interval" class="form-control">
-                                <label for="">Payment Interval</label>
-                            </div>
-
                         </div>
 
                         <div class="d-flex justify-content-end">

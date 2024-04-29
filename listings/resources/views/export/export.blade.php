@@ -25,7 +25,7 @@
                 <th align="center" style="font-weight: bold; ">PAYMENT TERM</th>
                 <th align="center" style="font-weight: bold; ">TENANT PRICE</th>
                 <th align="center" style="font-weight: bold; ">CLIENT INCOME</th>
-                <th align="center" style="font-weight: bold; ">COMPANY INCOME</th>
+                <th align="center" style="font-weight: bold; ">ABIC INCOME</th>
                 <th align="center" style="font-weight: bold; ">PAYMENT DATE</th>
                 <th align="center" style="font-weight: bold; ">DUE DATE</th>
                 <th align="center" style="font-weight: bold; ">STATUS</th>

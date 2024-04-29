@@ -113,27 +113,4 @@ class Contract_Controller extends Controller
 
         return response(['msg' => "Deleted $this->ent"]);
     }
-    public function selections()
-    {
-        $data['clients'] = clients::all();
-        $data['agents'] = agents::all();
-        $data['coordinators'] = coordinators::all();
-
-        return response()->json($data);
-    }
-    public function selectProjects()
-    {
-        $data['projects'] = projects::all();
-        return response()->json($data);
-    }
-    public function selectBuilding($projects_id)
-    {
-        $data['buildings'] = buildings::where('projects_id', $projects_id)->get();
-        return response()->json($data);
-    }
-    public function selectUnits($buildings_b_id)
-    {
-        $data['units'] = units::where('buildings_b_id', $buildings_b_id)->get();
-        return response()->json($data);
-    }
 }
