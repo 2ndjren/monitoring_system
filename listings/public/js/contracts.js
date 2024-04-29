@@ -126,24 +126,33 @@ $(document).ready(function () {
                 var record = res.record;
 
                 var keys = [
-                    "client",
-                    "property_details",
-                    "coordinator",
-                    "agent",
-                    "contract_start",
-                    "contract_end",
-                    "payment_term",
-                    "tenent_price",
-                    "client_income",
-                    "company_income",
-                    "payment_date",
-                    "due_date",
-                    "status",
+                    'client',
+                    'property',
+                    'building',
+                    'unit',
+                    'unit_type',
+                    'coordinator',
+                    'contact',
+                    'agent',
+                    'contract_start',
+                    'contract_end',
+                    'payment_term',
+                    'tenant_price',
+                    'owner_income',
+                    'company_income',
+                    'payment_date',
+                    'due_date',
                 ];
 
                 for (key of keys) {
-                    $(`#updForm input[name=${key}]`).val(record[key]);
+                    $(`#updForm input[name=${key}], #updForm select[name=${key}]`).val(record[key]);
                 }
+
+                var status = record.status.split(' ')
+                var days = status[0]
+                var text = status.slice(1).join(' ')
+                $(`#updForm input[name=status]`).val(days);
+                $(`#updForm select[name=status_text]`).val(text);
             },
         });
     });

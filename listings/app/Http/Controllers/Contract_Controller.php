@@ -44,23 +44,14 @@ class Contract_Controller extends Controller
             'status' => 'required|numeric',
         ]);
 
-        // $record = new model;
+        $keys = ['client', 'property', 'building', 'unit', 'unit_type', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
 
-        $keys = ['clients_id', 'projects_id', 'coordinators_id', 'agents_id,contract_start', 'contract_end', 'client_income', 'contract_start', 'contract_end', 'advance', 'deposit', 'tenant_price', 'client_income', 'due_date'];
-        $record = new contract();
+        $record = new model();
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
-        $today = Carbon::today();
-        $due = Carbon::parse($request->due_date);
 
-        if ($today > $request->due_date) {
-            $pass = $today->diffInDays($due);
-            $record->status = $pass . " Days Past Due";
-        } else {
-            $remaining = $today->diffInDays($due);
-            $record->status = $remaining . " Days Remaining";
-        }
+        $record->status = "$request->status $request->status_text";
 
         $record->save();
 
@@ -81,21 +72,36 @@ class Contract_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'agent_fname' => 'required',
-            'agent_lname' => 'required',
-            'agent_phone' => 'required',
-            'agent_email' => 'required|email',
+            'client' => 'required',
+            'property' => 'required',
+            'building' => 'required',
+            'unit' => 'required',
+            'unit_type' => 'required',
+            'coordinator' => 'required',
+            'contact' => 'required',
+            'agent' => 'required',
+            'contract_start' => 'required',
+            'contract_end' => 'required',
+            'payment_term' => 'required',
+            'tenant_price' => 'required|numeric',
+            'owner_income' => 'required|numeric',
+            'company_income' => 'required|numeric',
+            'payment_date' => 'required',
+            'due_date' => 'required',
+            'status' => 'required|numeric',
         ]);
 
+
         $record = model::find($request->id);
-        $keys = ['agent_fname', 'agent_lname', 'agent_phone', 'agent_email'];
+        $keys = ['client', 'property', 'building', 'unit', 'unit_type', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
 
 
-        $upd = [];
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }
 
+        $upd['status'] = "$request->status $request->status_text";
+ 
         $record->update($upd);
 
         return response(['msg' => "Updated $this->ent"]);
