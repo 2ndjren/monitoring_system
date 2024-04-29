@@ -3,12 +3,18 @@
 
 @section('clients')
     @php $ent = 'Client' @endphp
+    <div class="row">
+        <p class="h3">
+            <span class="text-primary">
+                <i class="fa-solid fa-file-contract me-4"></i>
+            </span>
+            <span class='ent'>{{ $ent }}s</span>
+        </p>
+    </div>
     <div class="card rounded-0">
         <div class="card-body ">
             <div class="row">
-                <div class="col">
-                    <h2 class='ent'>{{ $ent }}s</h2>
-                </div>
+
             </div>
             <div id="tbl_div">
 
@@ -60,7 +66,8 @@
                         <input type="hidden" name="target" class="form-control">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Yes</button>
-                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold"
+                                data-bs-dismiss="modal">No</button>
                         </div>
                     </form>
                 </div>

@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 class Route_Controller extends Controller
 {
     //
+    public function Signin()
+    {
+        return view('signin');
+    }
     public function Dashboard()
     {
         return view('dashboard.dashboard');

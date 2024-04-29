@@ -3,13 +3,27 @@
 @section('contracts')
     @php $ent = 'Contract' @endphp
     <div class="row">
+
         <div class="col">
-            <h2 class='ent'>{{ $ent }}s</h2>
+            <p class="h3">
+                <span class="text-primary">
+                    <i class="fa-solid fa-file-contract me-4"></i>
+                </span>
+                <span class='ent'>{{ $ent }}s</span>
+            </p>
         </div>
         <div class="col d-flex justify-content-end">
-            <button class="btn btn-primary mb-3 p-2" data-bs-target="#addModal" data-bs-toggle="modal">
+            <button class="btn btn-primary mb-3 p-2 me-3" data-bs-target="#addModal" data-bs-toggle="modal">
                 <i class="fa-solid fa-plus"></i>
                 Add {{ $ent }}
+            </button>
+            <button class="btn btn-primary mb-3 p-2 me-3" type="button" id="exportFile">
+                <i class="fa-solid fa-file-export"></i>
+                Export {{ $ent }}
+            </button>
+            <button class="btn btn-primary mb-3 p-2" data-bs-target="#importModal" data-bs-toggle="modal">
+                <i class="fa-solid fa-file-import"></i>
+                Import {{ $ent }}
             </button>
         </div>
         <div class="col-12 overflow-auto" id="tbl_div">
@@ -329,8 +343,32 @@
                         <input type="hidden" name="id" class="form-control">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Yes</button>
-                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger px-3 me-2 fw-semibold"
+                                data-bs-dismiss="modal">No</button>
                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="importModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-primary" id="staticBackdropLabel">
+                        <i class="fa-solid fa-file-import"></i>
+                        Import {{ $ent }}
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="file-import" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" accept=".xlsx, .xls, .ods" name="excel_file">
+                        <button class="btn btn-primary" type="submit">submit</button>
                     </form>
                 </div>
             </div>

@@ -19,46 +19,6 @@
             Import()
         });
 
-        function Import() {
-            $("#fileImport").submit(function(e) {
-                e.preventDefault();
-                $("#fileImport span").remove();
-
-                $.ajax({
-                    url: `/file/import`,
-                    method: "POST",
-                    data: new FormData(this),
-                    contentType: false,
-                    processData: false,
-                    success: function(res) {
-                        showtoastMessage("text-success", "Added Successful", res.msg);
-                        // get_all();
-                        $(`#fileImport`).trigger("reset");
-                        // $(`#addModal`).modal("hide");
-                    },
-                    error: function(res) {
-                        var errors = res.responseJSON.errors;
-                        // console.log(errors)
-
-                        var inputs = $(
-                            "#fileImport input, #fileImport select, #fileImport textarea"
-                        );
-                        for (input of inputs) {
-                            var name = $(input).attr("name");
-
-                            if (name in errors) {
-                                for (error of errors[name]) {
-                                    var error_msg = $(
-                                        `<span class='text-danger'>${error}</span>`
-                                    );
-                                    error_msg.insertAfter($(input));
-                                }
-                            }
-                        }
-                    },
-                });
-            });
-
-        }
+       
     </script>
 @endsection

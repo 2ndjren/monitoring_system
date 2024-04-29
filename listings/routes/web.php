@@ -24,7 +24,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', [Route_Controller::class, 'Dashboard']);
+Route::get('/', [Route_Controller::class, 'Signin']);
+Route::get('/dashboard', [Route_Controller::class, 'Dashboard']);
 Route::get('/contracts', [Route_Controller::class, 'Contracts']);
 Route::get('/agents', [Route_Controller::class, 'Agents']);
 Route::get('/clients', [Route_Controller::class, 'Clients']);
@@ -37,6 +38,9 @@ Route::get('/import', [Route_Controller::class, 'import']);
 Route::get('/export', [Route_Controller::class, 'export']);
 
 Route::get('/dashboard/get-data', [Dashboard_Controller::class, 'get_data']);
+Route::get('/dashboard/client-units', [Dashboard_Controller::class, 'Client_Properties']);
+Route::get('/dashboard/contracts', [Dashboard_Controller::class, 'Expiring_Contracts']);
+Route::get('/dashboard/contracts-dues', [Dashboard_Controller::class, 'Dues']);
 
 Route::prefix('/contracts')->group(function () {
     Route::post('/', [Contract_Controller::class, 'get_all']);

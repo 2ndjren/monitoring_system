@@ -10,6 +10,7 @@
     <script src="https://kit.fontawesome.com/a051b84b57.js" crossorigin="anonymous"></script>
 
     <title>@yield('title')</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('static/abic.png') }}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap CSS -->
@@ -42,7 +43,7 @@
 <body class="hold-transition sidebar-mini position-fixed w-100">
     <div class="wrapper ">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-light navbar-light">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -61,9 +62,10 @@
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/dashboard" class="brand-link">
+                <img src="{{ asset('static/abic.png') }}" height="150" alt="">
             </a>
 
             <!-- Sidebar -->
@@ -74,8 +76,8 @@
                         data-accordion="false">
                         <!-- Add your sidebar content here -->
                         <li class="nav-item">
-                            <a id="dashboard-link" href="{{ '/' }}"
-                                class="nav-link {{ Request::url() == url('/') ? 'active' : '' }}">
+                            <a id="dashboard-link" href="{{ '/dashboard' }}"
+                                class="nav-link {{ Request::url() == url('/dashboard') ? 'active' : '' }}">
                                 <i class="fa-solid fa-chart-simple nav-icon"></i>
                                 <p>Dashboard</p>
 
@@ -147,31 +149,7 @@
 
                             </ul>
                         </li>
-                        <li
-                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/import'), url('/export')]) ? 'menu-open' : '' }} ">
-                            <a href="#"
-                                class="nav-link       {{ in_array(Request::url(), [url('/import'), url('/export')]) ? 'active' : '' }}  ">
-                                <i class="fa-solid fa-file nav-icon"></i>
-                                <p>File<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ '/file/export' }}"
-                                        class="nav-link  {{ Request::url() == url('/export') ? 'active menu-open' : '' }} ">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Export</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ '/import' }}"
-                                        class="nav-link  {{ Request::url() == url('/import') ? 'active menu-open' : '' }} ">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Import</p>
-                                    </a>
-                                </li>
 
-                            </ul>
-                        </li>
 
 
                     </ul>

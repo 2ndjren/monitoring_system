@@ -5,10 +5,15 @@ $(document).ready(function () {
         },
     });
 
+    Import();
     get_all();
 
     $("#addModal").on("show.bs.modal", function (e) {
         $("#addForm span").remove();
+    });
+    $("#exportFile").click(function (e) {
+        e.preventDefault();
+        window.location.href = "/file/export";
     });
 
     $("#addForm").submit(function (e) {
@@ -28,7 +33,7 @@ $(document).ready(function () {
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res)
+                console.log(res);
                 var errors = res.responseJSON.errors;
                 // console.log(errors)
 
@@ -140,26 +145,28 @@ $(document).ready(function () {
                 var record = res.record;
 
                 var keys = [
-                    'client',
-                    'property',
-                    'building',
-                    'unit',
-                    'unit_type',
-                    'coordinator',
-                    'contact',
-                    'agent',
-                    'contract_start',
-                    'contract_end',
-                    'payment_term',
-                    'tenant_price',
-                    'owner_income',
-                    'company_income',
-                    'payment_date',
-                    'due_date',
+                    "client",
+                    "property",
+                    "building",
+                    "unit",
+                    "unit_type",
+                    "coordinator",
+                    "contact",
+                    "agent",
+                    "contract_start",
+                    "contract_end",
+                    "payment_term",
+                    "tenant_price",
+                    "owner_income",
+                    "company_income",
+                    "payment_date",
+                    "due_date",
                 ];
 
                 for (key of keys) {
-                    $(`#updForm input[name=${key}], #updForm select[name=${key}]`).val(record[key]);
+                    $(
+                        `#updForm input[name=${key}], #updForm select[name=${key}]`
+                    ).val(record[key]);
                 }
             },
         });
@@ -226,19 +233,31 @@ function get_all() {
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
-                    var property_details = `${record.property} - ${record.building} ${record.unit} (${record.unit_type})`
+                    var property_details = `${record.property} - ${record.building} ${record.unit} (${record.unit_type})`;
 
-                    var contract_start = record.contract_start
-                    contract_start = new Date(contract_start)
-                    contract_start = contract_start.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
+                    var contract_start = record.contract_start;
+                    contract_start = new Date(contract_start);
+                    contract_start = contract_start.toLocaleString("default", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                    });
 
-                    var contract_end = record.contract_end
-                    contract_end = new Date(contract_end)
-                    contract_end = contract_end.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
+                    var contract_end = record.contract_end;
+                    contract_end = new Date(contract_end);
+                    contract_end = contract_end.toLocaleString("default", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                    });
 
-                    var due_date = record.due_date
-                    due_date = new Date(due_date)
-                    due_date = due_date.toLocaleString('default', {month: 'long', day: 'numeric', year: 'numeric'});
+                    var due_date = record.due_date;
+                    due_date = new Date(due_date);
+                    due_date = due_date.toLocaleString("default", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                    });
 
                     var vals = [
                         record.client,
@@ -270,8 +289,19 @@ function get_all() {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
 
-                    if (record.status.split(' ').length == 3) { tr.append($("<td>").addClass(`${td_class} text-success`).html(record.status)) }
-                    else { tr.append($("<td>").addClass(`${td_class} text-danger`).html(record.status)) }
+                    if (record.status.split(" ").length == 3) {
+                        tr.append(
+                            $("<td>")
+                                .addClass(`${td_class} text-success`)
+                                .html(record.status)
+                        );
+                    } else {
+                        tr.append(
+                            $("<td>")
+                                .addClass(`${td_class} text-danger`)
+                                .html(record.status)
+                        );
+                    }
 
                     tr.append(
                         $("<td>").addClass(td_class).html(`
@@ -296,7 +326,46 @@ function get_all() {
             $("#tbl_div").append(tbl);
         },
         error: function (res) {
-            console.log(res)
+            console.log(res);
         },
+    });
+}
+
+function Import() {
+    $("#file-import").submit(function (e) {
+        e.preventDefault();
+        $("#file-import span").remove();
+
+        $.ajax({
+            url: `/file/import`,
+            method: "POST",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                showtoastMessage("text-success", "Added Successful", res.msg);
+                get_all();
+                $(`#file-import`).trigger("reset");
+            },
+            error: function (res) {
+                var errors = res.responseJSON.errors;
+
+                var inputs = $(
+                    "#file-import input, #file-import select, #file-import textarea"
+                );
+                for (input of inputs) {
+                    var name = $(input).attr("name");
+
+                    if (name in errors) {
+                        for (error of errors[name]) {
+                            var error_msg = $(
+                                `<span class='text-danger'>${error}</span>`
+                            );
+                            error_msg.insertAfter($(input));
+                        }
+                    }
+                }
+            },
+        });
     });
 }

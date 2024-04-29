@@ -5,6 +5,7 @@
     <div class="card rounded-0">
         <div class="card-body ">
             <div class="row">
+                
                 <div class="col">
                     <h2 class='ent'>{{ $ent }}s</h2>
                 </div>

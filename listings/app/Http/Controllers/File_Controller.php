@@ -18,9 +18,9 @@ class File_Controller extends Controller
             'excel_file' => 'required |file',
         ]);
         if (Excel::import(new File_Import, $request->file('excel_file'))) {
-            return redirect()->back()->with('msg', 'success');
+            return response()->json(['msg' => 'Import successfull']);
         } else {
-            return redirect()->back()->with('msg', 'failed');
+            return response()->json(['msg' => 'Import failed, Use proper format']);
         }
     }
     public function Export()
