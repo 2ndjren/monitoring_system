@@ -77,6 +77,20 @@ class Contract_Controller extends Controller
         return response(['msg' => "Added $this->ent"]);
     }
 
+    public function payment(Request $request) {
+        $record = model::find($request->id);
+
+        $term = explode(' ', $record->payment_date);
+        $day = preg_replace("/[^0-9]/", "", $term[0]);
+        count($term) == 3 ? $months = 1 : $months = $term[2];
+
+        $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
+        
+        $record->update(['due_date' => $due]);
+
+        return response(['msg' => "Payment Processed"]);
+    }
+
     public function edit(Request $request)
     {
         $record = model::find($request->id);

@@ -112,6 +112,20 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".i_payment", function () {
+        var id = $($(this).parents()[1]).data("id");
+
+        $.ajax({
+            method: "POST",
+            url: `/${ent}/payment/`,
+            data: { id: id },
+            success: function (res) {
+                showtoastMessage("text-success", "Payment Successful", res.msg);
+                get_all();
+            },
+        });
+    });
+
     $(document).on("click", ".i_edit", function () {
         var id = $($(this).parents()[1]).data("id");
 
@@ -261,9 +275,10 @@ function get_all() {
 
                     tr.append(
                         $("<td>").addClass(td_class).html(`
-          <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
-          <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
-        `)
+                            <i class='fa fa-thumbs-up mr-2 i_payment' title='Accept Payment' style='cursor:pointer;'></i>
+                            <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+                            <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
+                        `)
                     );
                     tbody.append(tr);
                 }

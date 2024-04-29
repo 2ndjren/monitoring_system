@@ -41,6 +41,7 @@ Route::get('/dashboard/get-data', [Dashboard_Controller::class, 'get_data']);
 Route::prefix('/contracts')->group(function () {
     Route::post('/', [Contract_Controller::class, 'get_all']);
     Route::post('/add', [Contract_Controller::class, 'add']);
+    Route::post('/payment', [Contract_Controller::class, 'payment']);
     Route::post('/edit', [Contract_Controller::class, 'edit']);
     Route::post('/upd', [Contract_Controller::class, 'upd']);
     Route::post('/del', [Contract_Controller::class, 'del']);
