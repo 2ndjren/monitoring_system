@@ -27,7 +27,7 @@ function get_data() {
             for (var key in counts) { $(`#counts-${key}`).text(counts[key]) }
         },
         error: function (res) {
-
+            console.log(res)
         },
     })
 }
