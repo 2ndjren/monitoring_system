@@ -13,6 +13,20 @@ class Contract_Controller extends Controller
 
     public function get_all()
     {
+        $ids = model::select('con_id')->get();
+        
+        foreach ($ids as $id) {
+            $contract = model::find($id->con_id);
+            
+            $today = Carbon::today();
+            $due = Carbon::parse($contract->due_date);
+            $days = $today->diffInDays($due);
+
+            $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
+
+            $contract->update(['status' => $status]);
+        }
+
         $records = model::all();
 
         $data = [
