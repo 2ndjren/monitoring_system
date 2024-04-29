@@ -13,7 +13,7 @@ class Agent_Controller extends Controller
     public function get_all()
     {
         $col = strtolower($this->ent);
-        $records = model::select($col)->distinct($col)->get();
+        $records = model::select($col)->distinct($col)->orderBy($col)->whereNot($col, '-')->get();
 
         $data = [
             'records' => $records,
@@ -53,7 +53,7 @@ class Agent_Controller extends Controller
     public function del(Request $request)
     {
         $record = model::where($this->ent, $request->target);
-        $record->delete();
+        $record->update([$this->ent => '-']);
 
         return response(['msg' => "Deleted $this->ent"]);
     }
