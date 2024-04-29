@@ -14,7 +14,10 @@ class contract extends Model
     protected $table = 'contract';
     protected $fillable = [
         'client',
-        'property_details',
+        'property',
+        'building',
+        'unit',
+        'unit_type',
         'coordinator',
         'contact',
         'agent',

@@ -40,13 +40,22 @@ class File_Import implements ToCollection, WithStartRow
             $due_date = $row[12];
             $status = $row[13];
 
+            $property_details = explode(' ', $property_details);
+            $property = $property_details[0];
+            $building = $property_details[2];
+            $unit = $property_details[3];
+            $unit_type = str_replace(['(', ')'], '', $property_details[4]);
+
             $contract_start = $this->format_date($contract_start);
             $contract_end = $this->format_date($contract_end);
             $due_date = $this->format_date($due_date);
 
             Contract::create([
                 'client' => $client ?? '-',
-                'property_details' => $property_details ?? '-',
+                'property' => $property ?? '-',
+                'building' => $building ?? '-',
+                'unit' => $unit ?? '-',
+                'unit_type' => $unit_type ?? '-',
                 'coordinator' => $coordinator ?? '-',
                 'contact' => $contact ?? '-',
                 'agent' => $agent ?? '-',

@@ -35,7 +35,7 @@
             @foreach ($contracts as $con)
                 <tr>
                     <td>{{ $con->client }}</td>
-                    <td align="center">{{ $con->property_details }}</td>
+                    <td align="center">{{ $con->property }} - {{ $con->building }} {{ $con->unit }} ({{ $con->unit_type }})</td>
                     <td>{{ $con->coordinator }}</td>
                     <td>{{ $con->contact }}</td>
                     <td>{{ $con->agent }}</td>
