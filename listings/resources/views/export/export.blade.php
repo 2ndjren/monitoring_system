@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
 </head>
 
 <body>
@@ -47,7 +46,15 @@
                     <td>{{ $con->company_income }}</td>
                     <td>{{ $con->payment_date }}</td>
                     <td>{{ $con->due_date }}</td>
-                    <td>{{ $con->status }}</td>
+
+                    @php $status = count(explode(' ', $con->status)); @endphp
+                    
+                    @if ($status == 3)
+                        <td style="color: #28a745;">{{ $con->status }}</td>
+                    @else 
+                        <td style="color: red;">{{ $con->status }}</td>
+                    @endif
+
                 </tr>
             @endforeach
         </tbody>
