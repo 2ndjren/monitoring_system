@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\coordinators as model;
+use App\Models\contract as model;
 
 class Coordinator_Controller extends Controller
 {
-    public $ent = 'Coordinators';
+    public $ent = 'Coordinator';
 
     public function get_all()
     {
-        $records = model::all();
+        $col = strtolower($this->ent);
+        $records = model::select($col, 'contact')->distinct($col)->get();
 
         $data = [
             'records' => $records,
@@ -21,29 +22,9 @@ class Coordinator_Controller extends Controller
         return response()->json($data);
     }
 
-    public function add(Request $request)
-    {
-        $request->validate([
-            'co_fname' => 'required',
-            'co_lname' => 'required',
-            'co_phone' => 'required',
-        ]);
-
-        $record = new model;
-
-        $keys = ['co_fname', 'co_lname', 'co_phone'];
-        foreach ($keys as $key) {
-            $record->$key = $request->$key;
-        }
-        $record->save();
-
-        return response(['msg' => "Added $this->ent"]);
-    }
-
     public function edit(Request $request)
     {
-        $record = model::find($request->id);
-
+        $record = model::where($this->ent, $request->target)->first();
         $data = [
             'record' => $record,
         ];
@@ -54,16 +35,13 @@ class Coordinator_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'co_fname' => 'required',
-            'co_lname' => 'required',
-            'co_phone' => 'required',
+            'coordinator' => 'required',
+            'contact' => 'required',
         ]);
 
+        $record = model::where($this->ent, $request->target);
+        $keys = ['coordinator', 'contact'];
 
-        $record = model::find($request->id);
-        $keys = ['co_fname', 'co_lname', 'co_phone'];
-
-        $upd = [];
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }
@@ -75,7 +53,7 @@ class Coordinator_Controller extends Controller
 
     public function del(Request $request)
     {
-        $record = model::find($request->id);
+        $record = model::where($this->ent, $request->target);
         $record->delete();
 
         return response(['msg' => "Deleted $this->ent"]);

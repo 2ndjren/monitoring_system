@@ -55,7 +55,6 @@ Route::prefix('/contracts')->group(function () {
 
 Route::prefix('/clients')->group(function () {
     Route::post('/', [Client_Controller::class, 'get_all']);
-    Route::post('/add', [Client_Controller::class, 'add']);
     Route::post('/edit', [Client_Controller::class, 'edit']);
     Route::post('/upd', [Client_Controller::class, 'upd']);
     Route::post('/del', [Client_Controller::class, 'del']);
@@ -63,14 +62,12 @@ Route::prefix('/clients')->group(function () {
 
 Route::prefix('/coordinators')->group(function () {
     Route::post('/', [Coordinator_Controller::class, 'get_all']);
-    Route::post('/add', [Coordinator_Controller::class, 'add']);
     Route::post('/edit', [Coordinator_Controller::class, 'edit']);
     Route::post('/upd', [Coordinator_Controller::class, 'upd']);
     Route::post('/del', [Coordinator_Controller::class, 'del']);
 });
 Route::prefix('/agents')->group(function () {
     Route::post('/', [Agent_Controller::class, 'get_all']);
-    Route::post('/add', [Agent_Controller::class, 'add']);
     Route::post('/edit', [Agent_Controller::class, 'edit']);
     Route::post('/upd', [Agent_Controller::class, 'upd']);
     Route::post('/del', [Agent_Controller::class, 'del']);

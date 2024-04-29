@@ -7,50 +7,6 @@ $(document).ready(function () {
 
     get_all();
 
-    $("#addModal").on("show.bs.modal", function (e) {
-        $("#addForm span").remove();
-    });
-
-    $("#addForm").submit(function (e) {
-        e.preventDefault();
-        $("#addForm span").remove();
-
-        $.ajax({
-            url: `/${ent}/add/`,
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            processData: false,
-            success: function (res) {
-                showtoastMessage("text-success", "Added Successful", res.msg);
-
-                get_all();
-                $(`#addForm`).trigger("reset");
-                $(`#addModal`).modal("hide");
-            },
-            error: function (res) {
-                var errors = res.responseJSON.errors;
-                // console.log(errors)
-
-                var inputs = $(
-                    "#addForm input, #addForm select, #addForm textarea"
-                );
-                for (input of inputs) {
-                    var name = $(input).attr("name");
-
-                    if (name in errors) {
-                        for (error of errors[name]) {
-                            var error_msg = $(
-                                `<span class='text-danger'>${error}</span>`
-                            );
-                            error_msg.insertAfter($(input));
-                        }
-                    }
-                }
-            },
-        });
-    });
-
     $("#updModal").on("show.bs.modal", function (e) {
         $("#updForm span").remove();
     });
@@ -67,6 +23,7 @@ $(document).ready(function () {
             processData: false,
             success: function (res) {
                 showtoastMessage("text-success", "Update Successful", res.msg);
+
                 get_all();
                 $(`#updForm`).trigger("reset");
                 $(`#updModal`).modal("hide");
@@ -112,19 +69,19 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_edit", function () {
-        var id = $($(this).parents()[1]).data("id");
+        var target = $($(this).parent().prev().prev()).text()
 
-        $("#updForm input[name=id]").val(id);
+        $("#updForm input[name=target]").val(target);
         $(`#updModal`).modal("show");
 
         $.ajax({
             method: "POST",
             url: `/${ent}/edit/`,
-            data: { id: id },
+            data: { target: target },
             success: function (res) {
                 var record = res.record;
 
-                var keys = ["co_fname", "co_lname", "co_phone"];
+                var keys = ["coordinator", "contact"];
 
                 for (key of keys) {
                     $(`#updForm input[name=${key}]`).val(record[key]);
@@ -134,9 +91,9 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_del", function () {
-        var id = $($(this).parents()[1]).data("id");
+        var target = $($(this).parent().prev().prev()).text()
 
-        $("#delForm input[name=id]").val(id);
+        $("#delForm input[name=target]").val(target);
         $(`#delModal`).modal("show");
     });
 });
@@ -160,8 +117,7 @@ function get_all() {
             var thr = $("<tr>");
             var cols = [
                 "#",
-                "First Name",
-                "Last Name",
+                "Full Name",
                 "Contact Number",
                 "Action",
             ];
@@ -174,6 +130,7 @@ function get_all() {
                         .text(col)
                 );
             }
+
             thead.append(thr);
             tbl.append(thead);
 
@@ -183,12 +140,11 @@ function get_all() {
             if (records.length > 0) {
                 for (record of records) {
                     var vals = [
-                        record.co_fname,
-                        record.co_lname,
-                        record.co_phone,
+                        record.coordinator,
+                        record.contact,
                     ];
 
-                    var tr = $("<tr>").data("id", record.co_id);
+                    var tr = $("<tr>")
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
@@ -201,9 +157,9 @@ function get_all() {
 
                     tr.append(
                         $("<td>").addClass(td_class).html(`
-            <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
-            <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
-            `)
+          <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+          <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
+        `)
                     );
                     tbody.append(tr);
                 }
@@ -220,6 +176,8 @@ function get_all() {
             tbl.append(tbody);
             $("#tbl_div").append(tbl);
         },
-        error: function (res) {},
+        error: function (res) {
+            console.log(res)
+        },
     });
 }
