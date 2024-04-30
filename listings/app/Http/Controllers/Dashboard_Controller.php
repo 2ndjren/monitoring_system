@@ -69,9 +69,9 @@ class Dashboard_Controller extends Controller
         foreach ($dates as $date) {
             $due = Carbon::parse($date->due_date)->endOfDay();
             if ($today->greaterThan($due)) {
-                $passdue[] = $due->toDateString(); // Adjust this if you want to include time
+                $passdue[] = $due->toDateString(); 
             } else if ($today->lessThan($due)) {
-                $remaining[] = $due->toDateString(); // Adjust this if you want to include time
+                $remaining[] = $due->toDateString();
             }
         }
 
@@ -83,7 +83,8 @@ class Dashboard_Controller extends Controller
             contract::select('client', DB::raw('count(unit) as unit_count'))
             ->distinct('client')
             ->groupBy('client')
-            ->orderBy('client')
+            ->orderBy('unit_count', 'desc')
+            ->limit(7)
             ->get();
 
 
