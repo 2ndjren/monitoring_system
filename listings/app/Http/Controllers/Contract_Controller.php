@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\contract as model;
+use App\Models\notification;
 
 class Contract_Controller extends Controller
 {
@@ -14,20 +15,35 @@ class Contract_Controller extends Controller
     public function get_all()
     {
         $ids = model::select('con_id')->get();
-
+        $today = Carbon::today();
         foreach ($ids as $id) {
             $contract = model::find($id->con_id);
-            
-            $today = Carbon::today();
+            // if ($id->contract_end <= $today) {
+            //     $contract->update(['status' => 'Completed']);
+            //     $notif = new notification();
+            //     $notif->target_id = $contract->con_id;
+            //     $notif->target_model = "contract";
+            //     $notif->heading = "Contract Completed";
+            //     $notif->content = "The property " . $contract->property . " - " . $contract->building . " " . $contract->unit . "(" . $contract->unit_type . ") contract has ended.";
+            //     $notif->notified = "0";
+            //     $notif->status = "Delivered";
+            //     $notif->save();
+            // } else {
+            //     $due = Carbon::parse($contract->due_date);
+            //     $days = $today->diffInDays($due);
+            //     $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
+
+            //     $contract->update(['status' => $status]);
+            // }
             $due = Carbon::parse($contract->due_date);
             $days = $today->diffInDays($due);
-
             $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
 
             $contract->update(['status' => $status]);
         }
 
-        $records = model::all();
+
+        $records = model::whereNot('status', ['Completed'])->get();
 
         $data = [
             'records' => $records,
@@ -77,7 +93,8 @@ class Contract_Controller extends Controller
         return response(['msg' => "Added $this->ent"]);
     }
 
-    public function payment(Request $request) {
+    public function payment(Request $request)
+    {
         $record = model::find($request->id);
 
         $term = explode(' ', $record->payment_date);
@@ -85,7 +102,7 @@ class Contract_Controller extends Controller
         count($term) == 3 ? $months = 1 : $months = $term[2];
 
         $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
-        
+
         $record->update(['due_date' => $due]);
 
         return response(['msg' => "Payment Processed"]);
@@ -134,7 +151,7 @@ class Contract_Controller extends Controller
         foreach ($upper_keys as $key) {
             $upd[$key] = strtoupper($request->$key);
         }
- 
+
         $record->update($upd);
 
         return response(['msg' => "Updated $this->ent"]);

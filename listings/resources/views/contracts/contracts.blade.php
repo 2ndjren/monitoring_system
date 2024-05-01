@@ -2,9 +2,9 @@
 @section('title', 'Contracts')
 @section('contracts')
     @php $ent = 'Contract' @endphp
-    <div class="row">
 
-        <div class="col">
+    <div class="row border-bottom mb-2 px-3">
+        <div class="col mb-2 ">
             <p class="h3">
                 <span class="text-primary">
                     <i class="fa-solid fa-file-contract me-4"></i>

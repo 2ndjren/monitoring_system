@@ -69,7 +69,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_edit", function () {
-        var target = $($(this).parent().prev()).text()
+        var target = $($(this).parent().prev()).text();
 
         $("#updForm input[name=target]").val(target);
         $(`#updModal`).modal("show");
@@ -91,7 +91,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".i_del", function () {
-        var target = $($(this).parent().prev()).text()
+        var target = $($(this).parent().prev()).text();
 
         $("#delForm input[name=target]").val(target);
         $(`#delModal`).modal("show");
@@ -115,11 +115,7 @@ function get_all() {
 
             var thead = $("<thead>");
             var thr = $("<tr>");
-            var cols = [
-                "#",
-                "Full Name",
-                "Action",
-            ];
+            var cols = ["#", "Full Name", "Action"];
             for (col of cols) {
                 thr.append(
                     $("<th>")
@@ -133,16 +129,14 @@ function get_all() {
             thead.append(thr);
             tbl.append(thead);
 
-            var td_class = "p-2 border border-dark border-5 text-center";
+            var td_class = "py-1 border border-dark border-5 text-center";
 
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
-                    var vals = [
-                        record.agent,
-                    ];
+                    var vals = [record.agent];
 
-                    var tr = $("<tr>")
+                    var tr = $("<tr>");
                     tr.append(
                         $("<td>")
                             .addClass("border border-dark border-5 text-center")
@@ -175,7 +169,7 @@ function get_all() {
             $("#tbl_div").append(tbl);
         },
         error: function (res) {
-            console.log(res)
+            console.log(res);
         },
     });
 }

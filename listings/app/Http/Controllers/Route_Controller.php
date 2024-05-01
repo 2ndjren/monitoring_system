@@ -9,50 +9,123 @@ class Route_Controller extends Controller
     //
     public function Signin()
     {
-        return view('signin');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return redirect()->back();
+        } else {
+            return view('signin');
+        }
     }
     public function Dashboard()
     {
-        return view('dashboard.dashboard');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('dashboard.dashboard');
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function Account()
+    {
+        if (session()->exists('admin')) {
+            return view('account.account');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Contracts()
     {
-        return view('contracts.contracts');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('contracts.contracts');
+        } else {
+            return redirect('/');
+        }
+    }
+    public function Notification()
+    {
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('notification.notification');
+        } else {
+            return redirect('/');
+        }
+    }
+    public function History()
+    {
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('contracts.history');
+        } else {
+            return redirect('/');
+        }
     }
     public function Clients()
     {
-        return view('partners.clients');
+        if (session()->exists('admin')) {
+            return view('partners.clients');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Agents()
     {
-        return view('partners.agents');
+        if (session()->exists('admin')) {
+            return view('partners.agents');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Coordinators()
     {
-        return view('partners.coordinators');
+        if (session()->exists('admin')) {
+            return view('partners.coordinators');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Projects()
     {
-        return view('assets.projects');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('assets.projects');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Buildings()
     {
-        return view('assets.buildings');
+        if (session()->exists('admin')) {
+            return view('assets.buildings');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Units()
     {
-        return view('assets.units');
+        if (session()->exists('admin')) {
+            return view('assets.units');
+        } else {
+            return view('mode.404');
+        }
     }
     public function Properties()
     {
-        return view('assets.properties');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('assets.properties');
+        } else {
+            return redirect('/');
+        }
     }
     public function Import()
     {
-        return view('file.import');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('file.import');
+        } else {
+            return redirect('/');
+        }
     }
     public function Export()
     {
-        return view('file.export');
+        if (session()->exists('user') || session()->exists('admin')) {
+            return view('file.export');
+        } else {
+            return redirect('/');
+        }
     }
 }

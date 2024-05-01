@@ -8,7 +8,7 @@ use App\Models\contract as model;
 
 class Agent_Controller extends Controller
 {
-    public $ent = 'Agent';
+    public $ent = 'Account';
 
     public function get_all()
     {
