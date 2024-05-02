@@ -191,6 +191,7 @@ function get_all() {
         type: "POST",
         url: `/${ent}`,
         success: function (res) {
+            console.log(res)
             var records = res.records;
 
             var tbl = $("<table class='bg-light'>")
@@ -270,24 +271,33 @@ function get_all() {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
 
-                    if (record.status.split(" ").length == 4) {
-                        tr.append(
-                            $("<td>")
-                                .addClass(`${td_class} text-danger`)
-                                .html(record.status)
-                        );
-                    } 
-                    else if (record.status.split(" ").length == 3) {
-                        tr.append(
-                            $("<td>")
-                                .addClass(`${td_class} text-success`)
-                                .html(record.status)
-                        );
+                    if (record.status != null) {
+                        if (record.status.split(" ").length == 4) {
+                            tr.append(
+                                $("<td>")
+                                    .addClass(`${td_class} text-danger`)
+                                    .html(record.status)
+                            );
+                        } 
+                        else if (record.status.split(" ").length == 3) {
+                            tr.append(
+                                $("<td>")
+                                    .addClass(`${td_class} text-success`)
+                                    .html(record.status)
+                            );
+                        }
+                        else {
+                            tr.append(
+                                $("<td>")
+                                    .addClass(`${td_class} text-primary`)
+                                    .html(record.status)
+                            );
+                        }
                     }
                     else {
                         tr.append(
                             $("<td>")
-                                .addClass(`${td_class} text-primary`)
+                                .addClass(`${td_class}`)
                                 .html(record.status)
                         );
                     }
