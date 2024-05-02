@@ -30,7 +30,7 @@ class Dashboard_Controller extends Controller
         $counts['agents'] = contract::select('agent')->distinct('agent')->count();
         $counts['properties'] = contract::select('propert')->distinct('property')->count();
         $counts['units'] = contract::select('unit')->count();
-        $counts['contracts'] = contract::select('con_id')->count();
+        $counts['contracts'] = contract::select('con_id')->whereNot('status', ['Completed'])->count();
 
         return $counts;
     }

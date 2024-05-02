@@ -18,11 +18,11 @@
     <!-- AdminLTE CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-
     </link>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
+        integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="{{ asset('js/layout.js') }}"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -49,13 +49,24 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                             class="fas fa-bars"></i></a>
+
                 </li>
             </ul>
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Add your navbar content here -->
                 <li class="nav-item">
-                    <i class="fa-solid fa-bell mr-3" id='notifs-btn'></i>
+                    <div class="dropdown dropstart">
+                        <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href=""><span class="text-primary"><i
+                                            class="fa-solid fa-gear"></i></span> Settings</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/logout') }}"><span class="text-danger"><i
+                                            class="fa-solid fa-right-from-bracket"></i></span> Logout</a></li>
+                        </ul>
+                    </div>
                 </li>
             </ul>
         </nav>
@@ -84,45 +95,44 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a id="contracts-link" href="{{ '/contracts' }}"
-                                class="nav-link {{ Request::url() == url('/contracts') ? 'active' : '' }}">
-                                <i class="fa-solid fa-file-contract nav-icon"></i>
-                                <p>Contracts</p>
+                            <a id="contracts-link" href="{{ '/notification' }}"
+                                class="nav-link {{ Request::url() == url('/notification') ? 'active' : '' }}">
+                                <i class="fa-solid fa-bell nav-icon"></i>
+                                <p>Notification</p>
 
                             </a>
                         </li>
-
                         <li
-                            class="nav-item has-treeview {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'menu-open' : '' }} ">
+                            class="nav-item has-treeview {{ in_array(Request::url(), [url('/history'), url('/agents'), url('/contracts')]) ? 'menu-open' : '' }} ">
                             <a href="#"
-                                class="nav-link       {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'active' : '' }}  ">
-                                <i class="fa-solid fa-users nav-icon"></i>
-                                <p>Partners<i class="right fas fa-angle-left"></i></p>
+                                class="nav-link       {{ in_array(Request::url(), [url('/contracts'), url('/history')]) ? 'active' : '' }}  ">
+                                <i class="fa-solid fa-file-contract nav-icon"></i>
+                                <p>Contracts<i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ '/clients' }}"
-                                        class="nav-link  {{ Request::url() == url('/clients') ? 'active menu-open' : '' }} ">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Clients</p>
+                                    <a id="contracts-link" href="{{ '/contracts' }}"
+                                        class="nav-link {{ Request::url() == url('/contracts') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-contract nav-icon"></i>
+                                        <p>Ongoing</p>
+
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="{{ '/coordinators' }}"
-                                        class="nav-link  {{ Request::url() == url('/coordinators') ? 'active menu-open' : '' }} ">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Coordinators</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ '/agents' }}"
-                                        class="nav-link  {{ Request::url() == url('/agents') ? 'active menu-open' : '' }} ">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Agents</p>
+                                    <a id="contracts-link" href="{{ '/history' }}"
+                                        class="nav-link {{ Request::url() == url('/history') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-clock-rotate-left nav-icon"></i>
+                                        <p>History</p>
+
                                     </a>
                                 </li>
                             </ul>
                         </li>
+
+
+
+
 
                         <li
                             class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'menu-open' : '' }} ">
@@ -132,13 +142,6 @@
                                 <p>Assets<i class="right fas fa-angle-left"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
-                                {{-- <li class="nav-item">
-                                    <a href="{{ '/projects' }}"
-                                        class="nav-link  {{ Request::url() == url('/projects') ? 'active menu-open' : '' }}   {{ Request::url() == url('/buildings') ? 'active menu-open' : '' }}{{ Request::url() == url('/units') ? 'active menu-open' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Projects</p>
-                                    </a>
-                                </li> --}}
                                 <li class="nav-item">
                                     <a href="{{ '/properties' }}"
                                         class="nav-link  {{ Request::url() == url('/properties') ? 'active menu-open' : '' }} ">
@@ -149,6 +152,57 @@
 
                             </ul>
                         </li>
+
+                        @if (session('admin'))
+                            <li
+                                class="nav-item has-treeview {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'menu-open' : '' }} ">
+                                <a href="#"
+                                    class="nav-link       {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'active' : '' }}  ">
+                                    <i class="fa-solid fa-users nav-icon"></i>
+                                    <p>Partners<i class="right fas fa-angle-left"></i></p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ '/clients' }}"
+                                            class="nav-link  {{ Request::url() == url('/clients') ? 'active menu-open' : '' }} ">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Clients</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ '/coordinators' }}"
+                                            class="nav-link  {{ Request::url() == url('/coordinators') ? 'active menu-open' : '' }} ">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Coordinators</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ '/agents' }}"
+                                            class="nav-link  {{ Request::url() == url('/agents') ? 'active menu-open' : '' }} ">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Agents</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a id="contracts-link" href="{{ '/activity' }}"
+                                    class="nav-link {{ Request::url() == url('/activity') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-arrow-pointer nav-icon"></i>
+                                    <p>Activity</p>
+
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a id="account-link" href="{{ '/accounts' }}"
+                                    class="nav-link {{ Request::url() == url('/accounts') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-user nav-icon"></i>
+                                    <p>Account</p>
+
+                                </a>
+                            </li>
+                        @endif
 
 
 
@@ -179,7 +233,11 @@
                 </div>
 
                 @yield('dashboard')
+                @yield('account')
+                @yield('404')
+                @yield('maintinance')
                 @yield('contracts')
+                @yield('history')
                 @yield('clients')
                 @yield('coordinators')
                 @yield('agents')
@@ -224,10 +282,11 @@
 
 
 
+
         <aside class="control-sidebar control-sidebar-dark">
         </aside>
         <footer class="main-footer">
-            <!-- Add footer content here -->
+
         </footer>
     </div>
     <!-- ./wrapper -->
