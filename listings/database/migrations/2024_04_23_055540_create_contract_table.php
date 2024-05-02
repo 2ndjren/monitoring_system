@@ -15,32 +15,25 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function startRow(): int
-    {
-        return 6; // Skip the first 5 rows
-    }
     public function up(): void
     {
         Schema::create('contract', function (Blueprint $table) {
             $table->id('con_id');
             $table->string('location');
-            $table->string('client');
-            $table->string('property');
-            $table->string('building');
-            $table->string('unit');
-            $table->string('unit_type');
-            $table->string('coordinator');
-            $table->string('contact');
-            $table->string('agent');
-            $table->date('contract_start');
-            $table->date('contract_end');
-            $table->string('payment_term');
-            $table->double('tenant_price', 10, 2);
-            $table->double('owner_income', 10, 2);
+            $table->string('client')->nullable();
+            $table->string('property_details')->nullable();
+            $table->string('coordinator')->nullable();
+            $table->string('contact')->nullable();
+            $table->string('agent')->nullable();
+            $table->date('contract_start')->nullable();
+            $table->date('contract_end')->nullable();
+            $table->string('payment_term')->nullable();
+            $table->double('tenant_price', 10, 2)->nullable();
+            $table->double('owner_income', 10, 2)->nullable();
             $table->double('company_income', 10, 2)->nullable();
-            $table->string('payment_date');
-            $table->date('due_date');
-            $table->string('status');
+            $table->string('payment_date')->nullable();
+            $table->date('due_date')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

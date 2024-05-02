@@ -15,10 +15,7 @@ class contract extends Model
     protected $fillable = [
         'location',
         'client',
-        'property',
-        'building',
-        'unit',
-        'unit_type',
+        'property_details',
         'coordinator',
         'contact',
         'agent',

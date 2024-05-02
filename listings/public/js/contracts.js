@@ -348,6 +348,7 @@ function Import() {
                 $(`#file-import`).trigger("reset");
             },
             error: function (res) {
+                console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(
