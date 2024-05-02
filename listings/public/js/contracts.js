@@ -33,7 +33,6 @@ $(document).ready(function () {
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res);
                 var errors = res.responseJSON.errors;
                 // console.log(errors)
 
@@ -128,6 +127,9 @@ $(document).ready(function () {
                 showtoastMessage("text-success", "Payment Successful", res.msg);
                 get_all();
             },
+            error: function (res) {
+
+            }
         });
     });
 

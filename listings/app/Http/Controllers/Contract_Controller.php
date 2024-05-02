@@ -97,9 +97,19 @@ class Contract_Controller extends Controller
     {
         $record = model::find($request->id);
 
-        $term = explode(' ', $record->payment_date);
+        $term = str_replace(' ', '', $record->payment_date);
+        $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
-        count($term) == 3 ? $months = 1 : $months = $term[2];
+        
+        if (str_starts_with($term[1], 'semi')) {
+            $months = 6;
+        }
+        else if (str_starts_with($term[1], 'quarter')) {
+            $months = 4;
+        }
+        else {
+            $months = 1;
+        }
 
         $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
 
