@@ -233,35 +233,14 @@ function get_all() {
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
-                    var property_details = `${record.property} - ${record.building} ${record.unit} (${record.unit_type})`;
 
-                    var contract_start = record.contract_start;
-                    contract_start = new Date(contract_start);
-                    contract_start = contract_start.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
-
-                    var contract_end = record.contract_end;
-                    contract_end = new Date(contract_end);
-                    contract_end = contract_end.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
-
-                    var due_date = record.due_date;
-                    due_date = new Date(due_date);
-                    due_date = due_date.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
+                    var contract_start = format_date(record.contract_start)
+                    var contract_end = format_date(record.contract_end)
+                    var due_date = format_date(record.due_date)
 
                     var vals = [
                         record.client,
-                        property_details,
+                        record.property_details,
                         record.coordinator,
                         record.contact,
                         record.agent,
@@ -329,6 +308,17 @@ function get_all() {
             console.log(res);
         },
     });
+}
+
+function format_date(date) {
+    if (date != null) {
+        date = new Date(date);
+        date = date.toLocaleString("default", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+        });
+    }
 }
 
 function Import() {

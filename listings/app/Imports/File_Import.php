@@ -19,7 +19,7 @@ class File_Import implements ToCollection, WithStartRow
      */
     public function startRow(): int
     {
-        return 2;
+        return 4;
     }
     public function collection(Collection $rows)
     {
@@ -40,9 +40,14 @@ class File_Import implements ToCollection, WithStartRow
             $due_date = $row[12];
             $status = $row[13];
 
+            $first = substr($contact, 0, 1);
+            if (ctype_digit($first) == 1 && $first != '0') { $contact = '0' . $contact; }
+
             $contract_start = $this->format_date($contract_start);
             $contract_end = $this->format_date($contract_end);
             $due_date = $this->format_date($due_date);
+
+            if ($status == '#VALUE!') { $status = null; }
 
             Contract::create([
                 'location' => $location ?? null,
@@ -67,11 +72,9 @@ class File_Import implements ToCollection, WithStartRow
     public function format_date($date_string) {
         if ($date_string == '') {
             $date = null;
-            return $date;
         }
         else if (ctype_digit($date_string) == 1) {
             $date = Date::excelToDateTimeObject($date_string)->format('Y-m-d');
-            return $date;
         }
         else {
             $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -88,7 +91,8 @@ class File_Import implements ToCollection, WithStartRow
             if (strlen($day) == 1) { $day = '0' . $day; }
 
             $date = "$year-$month-$day";
-            return $date;
         }
+
+        return $date;
     }
 }
