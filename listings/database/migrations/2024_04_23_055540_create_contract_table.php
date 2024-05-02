@@ -23,6 +23,7 @@ return new class extends Migration
     {
         Schema::create('contract', function (Blueprint $table) {
             $table->id('con_id');
+            $table->string('location');
             $table->string('client');
             $table->string('property');
             $table->string('building');

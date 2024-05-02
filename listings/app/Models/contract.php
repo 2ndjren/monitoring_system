@@ -13,6 +13,7 @@ class contract extends Model
     use HasFactory;
     protected $table = 'contract';
     protected $fillable = [
+        'location',
         'client',
         'property',
         'building',
