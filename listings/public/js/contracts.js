@@ -270,16 +270,24 @@ function get_all() {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
 
-                    if (record.status.split(" ").length == 3) {
+                    if (record.status.split(" ").length == 4) {
+                        tr.append(
+                            $("<td>")
+                                .addClass(`${td_class} text-danger`)
+                                .html(record.status)
+                        );
+                    } 
+                    else if (record.status.split(" ").length == 3) {
                         tr.append(
                             $("<td>")
                                 .addClass(`${td_class} text-success`)
                                 .html(record.status)
                         );
-                    } else {
+                    }
+                    else {
                         tr.append(
                             $("<td>")
-                                .addClass(`${td_class} text-danger`)
+                                .addClass(`${td_class} text-primary`)
                                 .html(record.status)
                         );
                     }
