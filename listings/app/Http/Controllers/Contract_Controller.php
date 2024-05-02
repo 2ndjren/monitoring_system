@@ -101,10 +101,11 @@ class Contract_Controller extends Controller
         $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
         
-        if (str_starts_with($term[1], 'semi')) {
+        $months = strtolower($term[1]);
+        if (str_starts_with($months, 'semi')) {
             $months = 6;
         }
-        else if (str_starts_with($term[1], 'quarter')) {
+        else if (str_starts_with($months, 'quarter')) {
             $months = 4;
         }
         else {
