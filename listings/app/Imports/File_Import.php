@@ -25,20 +25,20 @@ class File_Import implements ToCollection, WithStartRow
     {
         $location = 'Makati';
         foreach ($rows as $row) {
-            $client = $row[0];
-            $property_details = $row[1];
-            $coordinator = $row[2];
-            $contact = $row[3];
-            $agent = $row[4];
-            $contract_start = $row[5];
-            $contract_end = $row[6];
-            $payment_term = $row[7];
-            $tenant_price = $row[8];
-            $owner_income = $row[9];
-            $company_income = $row[10];
-            $payment_date = $row[11];
-            $due_date = $row[12];
-            $status = $row[13];
+            $client = $row[1];
+            $property_details = $row[2];
+            $coordinator = $row[3];
+            $contact = $row[4];
+            $agent = $row[5];
+            $contract_start = $row[6];
+            $contract_end = $row[7];
+            $payment_term = $row[8];
+            $tenant_price = $row[9];
+            $owner_income = $row[10];
+            $company_income = $row[11];
+            $payment_date = $row[12];
+            $due_date = $row[13];
+            $status = $row[14];
 
             $first = substr($contact, 0, 1);
             if (ctype_digit($first) == 1 && $first != '0') { $contact = '0' . $contact; }
