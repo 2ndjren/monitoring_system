@@ -2,16 +2,22 @@
 
 namespace App\Imports;
 
-use App\Models\agents;
 use App\Models\contract;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class File_Import implements ToCollection, WithStartRow
 {
+    public $locations = ['BACOOR', 'MAKATI', 'MANDALUYONG', 'PASAY', 'BGC', 'PASIG', 'PARANAQUE', 'QC'];
+    public $index;
+
+    public function __construct(){
+        $this->index = 1;
+    }
+
     /**
      * Get the start row for the import.
      *
@@ -23,7 +29,9 @@ class File_Import implements ToCollection, WithStartRow
     }
     public function collection(Collection $rows)
     {
-        $location = 'Makati';
+        $location = $this->locations[$this->index];
+        $this->index += 1;
+
         foreach ($rows as $row) {
             $client = $row[1];
             $property_details = $row[2];
@@ -77,11 +85,11 @@ class File_Import implements ToCollection, WithStartRow
             $date = Date::excelToDateTimeObject($date_string)->format('Y-m-d');
         }
         else {
-            $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            $months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
             
             $year = substr($date_string, strpos($date_string, ",") + 1);
             
-            $month = preg_replace('/[^a-z]/i', '', trim($date_string));
+            $month = preg_replace('/[^a-z]/i', '', trim(strtolower($date_string)));
             $index = array_search($month, $months);
             $month = $index + 1;
             if (strlen($month) == 1) { $month = '0' . $month; }
@@ -96,3 +104,4 @@ class File_Import implements ToCollection, WithStartRow
         return $date;
     }
 }
+

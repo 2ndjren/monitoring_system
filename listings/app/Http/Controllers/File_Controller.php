@@ -18,7 +18,6 @@ class File_Controller extends Controller
             'excel_file' => 'required |file',
         ]);
         if (Excel::import(new File_Import, $request->file('excel_file'))) {
-            dd($request->file('excel_file'));
             return response()->json(['msg' => 'Import successfull']);
         } else {
             return response()->json(['msg' => 'Import failed, Use proper format']);
