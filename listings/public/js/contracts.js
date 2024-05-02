@@ -319,6 +319,8 @@ function format_date(date) {
             year: "numeric",
         });
     }
+    
+    return date
 }
 
 function Import() {
