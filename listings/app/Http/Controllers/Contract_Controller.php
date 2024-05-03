@@ -148,22 +148,22 @@ class Contract_Controller extends Controller
         $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
         
-        $months = strtolower($term[1]);
-        if (str_starts_with($months, 'semi')) {
-            $months = 6;
+        $inter = strtolower($term[1]);
+        if (str_starts_with($inter, 'semi')) {
+            $inter = 6;
         }
-        else if (str_starts_with($months, 'quarter')) {
-            $months = 4;
+        else if (str_starts_with($inter, 'quarter')) {
+            $inter = 4;
         }
         else {
-            $months = 1;
+            $inter = 1;
         }
 
-        $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
+        $old_due = Carbon::parse($record->due_date)->subMonths($inter)->day($day);
+        $new_due = Carbon::parse($record->due_date)->day($day);
 
-        $record->update(['due_date' => $due]);
-
-        $months = CarbonPeriod::create($record->due_date, '1 month', $due->subMonths(1));
+        $months = CarbonPeriod::create($old_due, '1 month', $new_due->subMonths(1));
+        $record->update(['due_date' => $new_due->addMonths($inter)]);
         foreach($months as $month) { 
             $related = new related;
 
@@ -173,7 +173,14 @@ class Contract_Controller extends Controller
             $related->save();
         }
 
-        return response(['msg' => "Payment Processed"]);
+        // return response(['msg' => "Payment Processed"]);
+
+        $data = [
+            'old_due' => $old_due,
+            'new_due' => $new_due,
+            'months' => $months,
+        ];
+        return response()->json($data);
     }
 
     public function edit(Request $request)
