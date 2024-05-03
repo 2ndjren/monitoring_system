@@ -18,7 +18,7 @@ class File_Import implements ToCollection, WithStartRow
     public $index;
 
     public function __construct(){
-        $this->index = 1;
+        $this->index = 0;
     }
 
     /**
@@ -68,20 +68,22 @@ class File_Import implements ToCollection, WithStartRow
             }
             $record->save();
 
-            $term = str_replace(' ', '', $record->payment_date);
-            $term = explode('/', $term);
-
-            $day = preg_replace("/[^0-9]/", "", $term[0]);
-            $last_pay = Carbon::parse($record->due_date)->subMonths(1)->day($day);
-
-            $months = CarbonPeriod::create($record->contract_start, '1 month', $last_pay);
-            foreach($months as $month) { 
-                $related = new related;
-
-                $related->contract_con_id = $record->con_id;
-                $related->paid_at = $month->format('Y-m-d');
-                
-                $related->save();
+            if ($record->payment_date != null) {
+                $term = str_replace(' ', '', $record->payment_date);
+                $term = explode('/', $term);
+    
+                $day = preg_replace("/[^0-9]/", "", $term[0]);
+                $last_pay = Carbon::parse($record->due_date)->subMonths(1)->day($day);
+    
+                $months = CarbonPeriod::create($record->contract_start, '1 month', $last_pay);
+                foreach($months as $month) { 
+                    $related = new related;
+    
+                    $related->contract_con_id = $record->con_id;
+                    $related->paid_at = $month->format('Y-m-d');
+                    
+                    $related->save();
+                }
             }
         }
     }

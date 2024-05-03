@@ -191,7 +191,7 @@ function get_all() {
         type: "POST",
         url: `/${ent}`,
         success: function (res) {
-            console.log(res)
+            // console.log(res)
             var records = res.records;
 
             var tbl = $("<table class='bg-light'>")
