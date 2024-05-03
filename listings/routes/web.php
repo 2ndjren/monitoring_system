@@ -11,6 +11,7 @@ use App\Http\Controllers\Coordinator_Controller;
 use App\Http\Controllers\Dashboard_Controller;
 use App\Http\Controllers\File_Controller;
 use App\Http\Controllers\History_Controller;
+use App\Http\Controllers\Notification_Controller;
 use App\Http\Controllers\Project_Controller;
 use App\Http\Controllers\Property_Controller;
 use App\Http\Controllers\Unit_Controller;
@@ -143,4 +144,9 @@ Route::prefix('/account')->group(function () {
     Route::get('/edit/{id}', [Account_Controller::class, 'edit']);
     Route::post('/upd', [Account_Controller::class, 'upd']);
     Route::post('/del', [Account_Controller::class, 'del']);
+});
+Route::prefix('/notification')->group(function () {
+    Route::get('/data', [Notification_Controller::class, 'Notify']);
+    Route::get('/push', [Notification_Controller::class, 'Send_Push_Notification']);
+    Route::get('/delivered/{id}', [Notification_Controller::class, 'Update_Notification']);
 });

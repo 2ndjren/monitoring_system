@@ -22,7 +22,6 @@ function get_data() {
         url: `/dashboard/get-data/`,
         method: "GET",
         success: function (res) {
-            // console.log(res)
             $(".dash-loader").removeClass("d-none");
             $(".loading-spinner").addClass("d-none");
 
@@ -50,7 +49,6 @@ function Dash1() {
             var title = [];
             var count = [];
             for (c of res) {
-                console.log(c.client);
                 title.push(c.client);
                 count.push(c.unit_count);
             }
@@ -107,7 +105,6 @@ function Dash2() {
         type: "GET",
         url: "/dashboard/contracts-dues",
         success: function (res) {
-            console.log(res);
             var ctx = document.getElementById("dash2").getContext("2d");
 
             // Create the pie chart
@@ -154,7 +151,6 @@ function Dash3() {
         type: "GET",
         url: "/dashboard/contracts",
         success: function (res) {
-            console.log(res);
             // Get the canvas element
             var ctx = document.getElementById("dash3").getContext("2d");
 

@@ -5,6 +5,7 @@ $(document).ready(function () {
         localStorage.removeItem("msg");
     }
 });
+
 function showtoastMessage(toastColor, toastHeader, toastContent) {
     $("#toast-header").removeClass(toastColor);
     $("#toast-header").addClass(toastColor);
@@ -25,9 +26,3 @@ function getId(id_name) {
         return null;
     }
 }
-
-// function notification() {
-//     Notification.requestPermission().then((result) => {
-//         new Notification("Hello");
-//     });
-// }

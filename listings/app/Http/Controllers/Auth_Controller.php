@@ -15,17 +15,22 @@ class Auth_Controller extends Controller
             'password' => 'required',
         ]);
         if ($request->username == "admin" && $request->password == "1234") {
-            session()->put('admin', 'Super Admin');
+            session()->put('super_admin', 'Super Admin');
             return response()->json(['status' => 200, 'msg' => 'Welcome back Admin']);
         }
         $match = user::where('username', $request->username)->first();
         if ($match) {
             if ([password_verify($request->password, $match->password)]) {
-                session()->put('user', $match);
-                user::where('user_id', $match->user_id)->update(['status' => 'Online']);
-                return response()->json(['status' => 200, 'msg' => 'Welcome back ' . $match->user_fname . '', 'user' => $match]);
+                if ($match->role == "user") {
+                    session()->put('user', $match);
+                    user::where('user_id', $match->user_id)->update(['status' => 'Online']);
+                    return response()->json(['status' => 200, 'msg' => 'Welcome back ' . $match->user_fname . '', 'user' => $match]);
+                } else if ($match->role == "admin") {
+                    session()->put('admin', $match);
+                    user::where('user_id', $match->user_id)->update(['status' => 'Online']);
+                    return response()->json(['status' => 200, 'msg' => 'Welcome back ' . $match->user_fname . '', 'user' => $match]);
+                }
             } else {
-
                 return response()->json(['status' => 400, 'msg' => 'Username or Password wrong!']);
             }
         } else {

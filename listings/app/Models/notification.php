@@ -13,6 +13,7 @@ class notification extends Model
     protected $fillable = [
         'user_id',
         'target_id',
+        'user_id',
         'target_model',
         'heading',
         'content',

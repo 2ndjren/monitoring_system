@@ -9,7 +9,7 @@ class Route_Controller extends Controller
     //
     public function Signin()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return redirect()->back();
         } else {
             return view('signin');
@@ -17,7 +17,7 @@ class Route_Controller extends Controller
     }
     public function Dashboard()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('dashboard.dashboard');
         } else {
             return redirect('/');
@@ -34,7 +34,7 @@ class Route_Controller extends Controller
     }
     public function Contracts()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('contracts.contracts');
         } else {
             return redirect('/');
@@ -42,7 +42,7 @@ class Route_Controller extends Controller
     }
     public function Notification()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('notification.notification');
         } else {
             return redirect('/');
@@ -50,7 +50,7 @@ class Route_Controller extends Controller
     }
     public function History()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('contracts.history');
         } else {
             return redirect('/');
@@ -58,7 +58,7 @@ class Route_Controller extends Controller
     }
     public function Clients()
     {
-        if (session()->exists('admin')) {
+        if (session()->exists('admin') || session()->exists('super_admin')) {
             return view('partners.clients');
         } else {
             return view('mode.404');
@@ -66,7 +66,7 @@ class Route_Controller extends Controller
     }
     public function Agents()
     {
-        if (session()->exists('admin')) {
+        if (session()->exists('admin') || session()->exists('super_admin')) {
             return view('partners.agents');
         } else {
             return view('mode.404');
@@ -74,7 +74,7 @@ class Route_Controller extends Controller
     }
     public function Coordinators()
     {
-        if (session()->exists('admin')) {
+        if (session()->exists('admin') || session()->exists('super_admin')) {
             return view('partners.coordinators');
         } else {
             return view('mode.404');
@@ -82,7 +82,7 @@ class Route_Controller extends Controller
     }
     public function Projects()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('assets.projects');
         } else {
             return view('mode.404');
@@ -90,7 +90,7 @@ class Route_Controller extends Controller
     }
     public function Buildings()
     {
-        if (session()->exists('admin')) {
+        if (session()->exists('admin') || session()->exists('super_admin')) {
             return view('assets.buildings');
         } else {
             return view('mode.404');
@@ -98,7 +98,7 @@ class Route_Controller extends Controller
     }
     public function Units()
     {
-        if (session()->exists('admin')) {
+        if (session()->exists('admin') || session()->exists('super_admin')) {
             return view('assets.units');
         } else {
             return view('mode.404');
@@ -106,7 +106,7 @@ class Route_Controller extends Controller
     }
     public function Properties()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('assets.properties');
         } else {
             return redirect('/');
@@ -114,7 +114,7 @@ class Route_Controller extends Controller
     }
     public function Import()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('file.import');
         } else {
             return redirect('/');
@@ -122,7 +122,7 @@ class Route_Controller extends Controller
     }
     public function Export()
     {
-        if (session()->exists('user') || session()->exists('admin')) {
+        if (session()->exists('user') || session()->exists('admin') || session()->exists('super_admin')) {
             return view('file.export');
         } else {
             return redirect('/');

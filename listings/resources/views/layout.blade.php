@@ -236,6 +236,7 @@
                 @yield('account')
                 @yield('404')
                 @yield('maintinance')
+                @yield('notification')
                 @yield('contracts')
                 @yield('history')
                 @yield('clients')
@@ -298,6 +299,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="{{ asset('js/notification.js') }}"></script>
     <script src="{{ asset('js/layout.js') }}"></script>
 
 </body>

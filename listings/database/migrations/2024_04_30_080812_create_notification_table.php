@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('target_id');
             $table->integer('user_id');
             $table->string('target_model');
-            $table->text('Heading');
+            $table->text('heading');
             $table->text('content');
             $table->string('notified');
             $table->string('status');

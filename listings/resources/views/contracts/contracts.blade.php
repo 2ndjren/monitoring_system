@@ -29,8 +29,9 @@
         <div class="col-12 overflow-auto" id="tbl_div">
 
         </div>
-    </div>
 
+
+    </div>
 
     <div class="modal fade" id="addModal" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">

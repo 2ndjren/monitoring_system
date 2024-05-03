@@ -29,7 +29,6 @@ $(document).ready(function () {
                 $(`#updModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res);
                 var errors = res.responseJSON.errors;
                 // console.log(errors)
 
