@@ -1,50 +1,53 @@
-(async () => {
-    try {
-        const res = await $.ajax({
-            type: "GET",
-            url: "/notification/push",
-        });
+$(document).ready(function () {
+    Notify();
+    Notification_Events();
+});
 
-        if (Notification.permission !== "granted") {
-            const permission = await Notification.requestPermission();
-            if (permission !== "granted") {
-                throw new Error("Notification permission denied");
+function Notify() {
+    $("#notification-container").empty();
+    $.ajax({
+        type: "GET",
+        url: "/notification/data",
+        success: function (res) {
+            console.log(res);
+            if (res.length > 0) {
+                for (data of res) {
+                    var color = "";
+                    if (data.status == "Delivered") {
+                        color = "primary";
+                    } else if (data.status == "Viewed") {
+                        color = "secondary";
+                    }
+                    var notif = `  <div class="col-12  ps-3 pe-2 lh-1 my-1  " style="cursor: pointer;">
+                <div class="row bg-${color} py-2 rounded-start">
+                    <div class="col-8 notif-data-btn" data-id="${data.notif_id}">
+                        <span><span><i class="fa-solid fa-bell me-2"></i></span class="fw-semibold  ">${data.heading}</span> <br>
+                        <div class="w-100 text-truncate ">
+                            <small class="">${data.content}.</small>
+                        </div>
+                    </div>
+                    <div class="col-4 pe-4">
+                        <div class="d-flex justify-content-end align-content-center">
+                            <span class="btn btn-transparent text-light"><i class="fa-solid fa-trash"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+                    $("#notification-container").append(notif);
+                }
             }
-        }
-
-        for (const notify of res) {
-            const notification = new Notification(notify.heading, {
-                body: notify.content,
-                icon: "/static/abic.png",
-            });
-
-            notification.addEventListener("click", () => {
-                window.open("/contract", "_blank");
-            });
-
-            Update_Notif(notify.notif_id);
-        }
-    } catch (error) {
-        console.error("Error fetching or displaying notification:", error);
-        showError();
-    }
-
-    function Update_Notif(id) {
+        },
+    });
+}
+function Notification_Events() {
+    $(document).on("click", ".notif-data-btn", function () {
+        var id = $(this).data("id");
         $.ajax({
             type: "GET",
-            url: `/notification/delivered/${id}`,
+            url: `/notification/viewed/${id}`,
             success: function (res) {
-                console.log("Notification marked as delivered:", id);
-            },
-            error: function (err) {
-                console.error("Error marking notification as delivered:", err);
+                window.location.href = "/contracts";
             },
         });
-    }
-
-    function showError() {
-        const error = document.querySelector(".error");
-        error.style.display = "block";
-        error.textContent = "Failed to fetch or display notification";
-    }
-})();
+    });
+}

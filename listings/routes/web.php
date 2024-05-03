@@ -149,4 +149,6 @@ Route::prefix('/notification')->group(function () {
     Route::get('/data', [Notification_Controller::class, 'Notify']);
     Route::get('/push', [Notification_Controller::class, 'Send_Push_Notification']);
     Route::get('/delivered/{id}', [Notification_Controller::class, 'Update_Notification']);
+    Route::get('/viewed/{id}', [Notification_Controller::class, 'Update_Notification_Viewed']);
+    Route::get('/badge', [Notification_Controller::class, 'Badge']);
 });

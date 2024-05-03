@@ -98,7 +98,11 @@
                             <a id="contracts-link" href="{{ '/notification' }}"
                                 class="nav-link {{ Request::url() == url('/notification') ? 'active' : '' }}">
                                 <i class="fa-solid fa-bell nav-icon"></i>
-                                <p>Notification</p>
+
+                                <p>Notification <span id="badge-number"
+                                        class="position-absolute d-none top-50 end-0 translate-middle badge rounded-pill bg-danger">
+                                    </span>
+                                </p>
 
                             </a>
                         </li>
@@ -299,7 +303,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-    <script src="{{ asset('js/notification.js') }}"></script>
     <script src="{{ asset('js/layout.js') }}"></script>
 
 </body>
