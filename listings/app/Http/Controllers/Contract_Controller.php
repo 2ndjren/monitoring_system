@@ -105,7 +105,7 @@ class Contract_Controller extends Controller
         $day = preg_replace("/[^0-9]/", "", $term[0]);
 
         if (empty($record->due)) {
-            $record->due_date = Carbon::parse($request->due_date)->addMonths($adv-1)->day($day);
+            $record->due_date = Carbon::parse($request->due_date)->addMonths($adv)->day($day);
         }
         else {
             $record->due_date = $request->due_date;
@@ -115,7 +115,7 @@ class Contract_Controller extends Controller
 
         $record->save();
 
-        $months = CarbonPeriod::create($record->contract_start, '1 month', $record->due_date);
+        $months = CarbonPeriod::create($record->contract_start, '1 month', $record->due_date->subMonths(1));
         foreach($months as $month) { 
             $related = new related;
 
@@ -150,6 +150,16 @@ class Contract_Controller extends Controller
         $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
 
         $record->update(['due_date' => $due]);
+
+        $months = CarbonPeriod::create($record->due_date, '1 month', $due->subMonths(1));
+        foreach($months as $month) { 
+            $related = new related;
+
+            $related->contract_con_id = $record->con_id;
+            $related->paid_at = $month->day($day)->format('Y-m-d');
+            
+            $related->save();
+        }
 
         return response(['msg' => "Payment Processed"]);
     }
