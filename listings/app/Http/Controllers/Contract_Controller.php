@@ -104,18 +104,30 @@ class Contract_Controller extends Controller
         $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
 
+        $inter = strtolower($term[1]);
+        if (str_starts_with($inter, 'semi')) {
+            $inter = 6;
+        }
+        else if (str_starts_with($inter, 'quarter')) {
+            $inter = 4;
+        }
+        else {
+            $inter = 1;
+        }
+
         if (empty($record->due)) {
-            $record->due_date = Carbon::parse($request->due_date)->addMonths($adv)->day($day);
+            $due = Carbon::parse($request->due_date)->addMonths($adv)->day($day);
+            $record->due_date = Carbon::parse($request->due_date)->addMonths(intval($adv)+$inter)->day($day);
         }
         else {
             $record->due_date = $request->due_date;
         }
-
+        
         $record->status = '';
 
         $record->save();
 
-        $months = CarbonPeriod::create($record->contract_start, '1 month', $record->due_date->subMonths(1));
+        $months = CarbonPeriod::create($record->contract_start, '1 month', $due->subMonths(1));
         foreach($months as $month) { 
             $related = new related;
 

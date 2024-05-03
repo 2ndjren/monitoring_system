@@ -124,6 +124,7 @@ $(document).ready(function () {
             url: `/${ent}/payment/`,
             data: { id: id },
             success: function (res) {
+                console.log(res)
                 showtoastMessage("text-success", "Payment Successful", res.msg);
                 get_all();
             },
