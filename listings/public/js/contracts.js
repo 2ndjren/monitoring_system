@@ -191,7 +191,7 @@ function get_all() {
         type: "POST",
         url: `/${ent}`,
         success: function (res) {
-            // console.log(res)
+            console.log(res)
             var records = res.records;
 
             var tbl = $("<table class='bg-light'>")
@@ -216,6 +216,18 @@ function get_all() {
                 "Payment Date",
                 "Due Date",
                 "Status",
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'June',
+                'July',
+                'Aug',
+                'Sept',
+                'Oct',
+                'Nov',
+                'Dec',
                 "Action",
             ];
             for (col of cols) {
@@ -299,6 +311,16 @@ function get_all() {
                             $("<td>")
                                 .addClass(`${td_class}`)
                                 .html(record.status)
+                        );
+                    }
+
+                    var months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+
+                    for (var month of months) {
+                        tr.append(
+                            $("<td>")
+                                .addClass(`${td_class}`)
+                                .html(record[month])
                         );
                     }
 

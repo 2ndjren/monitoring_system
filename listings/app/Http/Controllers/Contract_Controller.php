@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use App\Models\contract as model;
+use App\Models\payments as related;
 
 class Contract_Controller extends Controller
 {
@@ -42,6 +43,19 @@ class Contract_Controller extends Controller
 
 
         $records = model::whereNot('status', 'Completed')->get();
+
+        $months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+
+        foreach ($records as $record) {
+            for ($index = 0; $index < count($months); $index++) {
+                $count = related::where('contract_con_id', $record['con_id'])
+                            ->whereMonth('paid_at', $index+1)
+                            ->whereYear('paid_at', Carbon::now()->year)
+                            ->count('contract_con_id');
+                $month = $months[$index];
+                $count == 0 ? $record[$month] = null : $record[$month] = 'PAID';
+            }
+        }
 
         $data = [
             'records' => $records,
