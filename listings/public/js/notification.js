@@ -20,7 +20,7 @@ function Notify() {
                     }
                     var notif = `  <div class="col-12  ps-3 pe-2 lh-1 my-1  " style="cursor: pointer;">
                 <div class="row bg-${color} py-2 rounded-start">
-                    <div class="col-8 notif-data-btn" data-id="${data.notif_id}">
+                    <div data-value="${data.event}" class="col-8 notif-data-btn" data-id="${data.notif_id}">
                         <span><span><i class="fa-solid fa-bell me-2"></i></span class="fw-semibold  ">${data.heading}</span> <br>
                         <div class="w-100 text-truncate ">
                             <small class="">${data.content}.</small>
@@ -28,7 +28,7 @@ function Notify() {
                     </div>
                     <div class="col-4 pe-4">
                         <div class="d-flex justify-content-end align-content-center">
-                            <span class="btn btn-transparent text-light"><i class="fa-solid fa-trash"></i></span>
+                            <span class="btn btn-transparent text-light recycle-btn" data-id="${data.notif_id}"><i class="fa-solid fa-trash"></i></span>
                         </div>
                     </div>
                 </div>
@@ -42,11 +42,26 @@ function Notify() {
 function Notification_Events() {
     $(document).on("click", ".notif-data-btn", function () {
         var id = $(this).data("id");
+        var val = $(this).data("value");
         $.ajax({
             type: "GET",
             url: `/notification/viewed/${id}`,
             success: function (res) {
-                window.location.href = "/contracts";
+                console.log(res);
+                if (val == "Contract Expired") {
+                    window.location.href = "/history";
+                } else if (val == "Paid") {
+                }
+            },
+        });
+    });
+    $(document).on("click", ".recycle-btn", function () {
+        var id = $(this).data("id");
+        $.ajax({
+            type: "GET",
+            url: `/notification/recycled/${id}`,
+            success: function (res) {
+                Notify();
             },
         });
     });

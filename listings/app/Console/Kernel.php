@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
                     foreach ($users as $user) {
                         $notification->target_id = $contract->con_id;
                         $notification->user_id = $user->user_id;
-                        $notification->target_model = "Contract";
+                        $notification->event = "Contract Expired";
                         $notification->heading = "Contract Completed";
                         $notification->content = "The property " . $contract->property . " - " . $contract->building . " " . $contract->unit . " (" . $contract->unit_type . ") contract has ended";
                         $notification->notified = "0";

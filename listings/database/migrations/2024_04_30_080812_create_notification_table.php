@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('notif_id');
             $table->integer('target_id');
             $table->integer('user_id');
-            $table->string('target_model');
+            $table->string('event');
             $table->text('heading');
             $table->text('content');
             $table->string('notified');

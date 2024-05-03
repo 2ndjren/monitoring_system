@@ -14,7 +14,7 @@ class notification extends Model
         'user_id',
         'target_id',
         'user_id',
-        'target_model',
+        'event',
         'heading',
         'content',
         'notified',

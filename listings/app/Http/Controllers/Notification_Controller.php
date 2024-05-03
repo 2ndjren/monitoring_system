@@ -16,7 +16,7 @@ class Notification_Controller extends Controller
         } else if (session('admin')) {
             $notif = notification::where('user_id', intval(session('admin')->user_id))->whereIn('status', ['Delivered', 'Viewed'])->orderBy('updated_at', 'asc')->get();
             return response()->json($notif);
-        } else {
+        } else if (session('super_admin')) {
             $notif = notification::distinct('content')->whereIn('status', ['Delivered', 'Viewed'])->orderBy('updated_at', 'asc')->get();
             return response()->json($notif);
         }
@@ -38,9 +38,14 @@ class Notification_Controller extends Controller
     }
     public function Update_Notification_Viewed($id)
     {
-        $check = notification::where('notif_id', $id)->first();
-        $contract = notification::where('con_id', $$check->target_id)->first();
+        // $check = notification::where('notif_id', $id)->first();
+        // $contract = notification::where('con_id', $$check->target_id)->first();
         $sending = notification::where('notif_id', $id)->update(['status' => 'Viewed']);
+        return response()->json($sending);
+    }
+    public function Update_Notification_Recycled($id)
+    {
+        $sending = notification::where('notif_id', $id)->update(['status' => 'Recycled']);
         return response()->json($sending);
     }
 }

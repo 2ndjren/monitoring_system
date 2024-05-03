@@ -26,7 +26,7 @@ class Route_Controller extends Controller
 
     public function Account()
     {
-        if (session()->exists('admin')) {
+        if (session()->exists('admin') || session()->exists('super_admin')) {
             return view('account.account');
         } else {
             return view('mode.404');

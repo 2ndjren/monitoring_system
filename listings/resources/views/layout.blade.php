@@ -157,7 +157,7 @@
                             </ul>
                         </li>
 
-                        @if (session('admin'))
+                        @if (session('super_admin'))
                             <li
                                 class="nav-item has-treeview {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'menu-open' : '' }} ">
                                 <a href="#"
@@ -188,14 +188,6 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a id="contracts-link" href="{{ '/activity' }}"
-                                    class="nav-link {{ Request::url() == url('/activity') ? 'active' : '' }}">
-                                    <i class="fa-solid fa-arrow-pointer nav-icon"></i>
-                                    <p>Activity</p>
-
-                                </a>
                             </li>
 
                             <li class="nav-item">

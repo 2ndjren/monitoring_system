@@ -5,6 +5,19 @@ $(document).ready(function () {
         localStorage.removeItem("msg");
     }
     NotifIcon();
+
+    $.ajax({
+        type: "GET",
+        url: "/notification/badge",
+        success: function (res) {
+            if (res.length > 0) {
+                $("#badge-number").removeClass("d-none");
+                $("#badge-number").text(res.length);
+            } else {
+                $("#badge-number").addClass("d-none");
+            }
+        },
+    });
 });
 
 function showtoastMessage(toastColor, toastHeader, toastContent) {
