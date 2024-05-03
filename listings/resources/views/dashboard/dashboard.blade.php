@@ -140,7 +140,7 @@
                 <div class="col-lg-4 col-sm-6">
                     <p class="text-primary fw-bold text-center"> <span class="me-2"><i
                                 class="fa-solid fa-users"></i></span>
-                        Contract Dues Indicator</p>
+                        Contract Dues</p>
                     <div class="card rounded-0 ">
                         <div class="card-body p-2 ">
                             <canvas id="dash2"></canvas>
@@ -150,7 +150,7 @@
                 <div class="col-lg-4 col-sm-6">
                     <p class="text-primary fw-bold text-center"> <span class="me-2"><i
                                 class="fa-solid fa-users"></i></span>
-                        Contract Expiration Indicator
+                        Contract Expiration
                     </p>
                     <div class="card rounded-0 ">
                         <div class="card-body p-2 ">

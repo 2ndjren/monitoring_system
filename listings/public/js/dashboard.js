@@ -111,10 +111,10 @@ function Dash2() {
             var myPieChart = new Chart(ctx, {
                 type: "pie",
                 data: {
-                    labels: ["Passed Due", "Remaining Dues"],
+                    labels: ["Past Dues", "Remaining Dues"],
                     datasets: [
                         {
-                            label: "My Pie Chart",
+                            label: "Contract Dues",
                             data: [res.passdue.length, res.remaining.length],
                             backgroundColor: [
                                 "rgb(255, 99, 132)",
@@ -155,13 +155,13 @@ function Dash3() {
             var ctx = document.getElementById("dash3").getContext("2d");
 
             // Create the donut chart
-            var myDonutChart = new Chart(ctx, {
-                type: "doughnut", // Use 'doughnut' type for a donut chart
+            var myPieChart = new Chart(ctx, {
+                type: "pie",
                 data: {
-                    labels: ["Week", "Lessthan a month", "Expired"],
+                    labels: ["Week", "Month", "Expired"],
                     datasets: [
                         {
-                            label: "My Donut Chart",
+                            label: "Contract Expiration",
                             data: [
                                 res.expiring.length,
                                 res.near.length,
@@ -190,7 +190,6 @@ function Dash3() {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: "70%", // Adjust the cutout percentage for the donut hole
                 },
             });
         },

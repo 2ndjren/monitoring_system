@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Mail\Send_Contract_Has_Ended_Message;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Carbon\CarbonPeriod;
 
 use App\Models\contract as model;
 use App\Models\notification;
-use App\Models\user;
-use Illuminate\Support\Facades\Mail;
 
 class Contract_Controller extends Controller
 {
@@ -17,7 +16,37 @@ class Contract_Controller extends Controller
 
     public function get_all()
     {
+        $ids = model::select('con_id')->get();
+        $today = Carbon::today();
+        foreach ($ids as $id) {
+            $contract = model::find($id->con_id);
+            // if ($id->contract_end <= $today) {
+            //     $contract->update(['status' => 'Completed']);
+            //     $notif = new notification();
+            //     $notif->target_id = $contract->con_id;
+            //     $notif->target_model = "contract";
+            //     $notif->heading = "Contract Completed";
+            //     $notif->content = "The property " . $contract->property . " - " . $contract->building . " " . $contract->unit . "(" . $contract->unit_type . ") contract has ended.";
+            //     $notif->notified = "0";
+            //     $notif->status = "Delivered";
+            //     $notif->save();
+            // } else {
+            //     $due = Carbon::parse($contract->due_date);
+            //     $days = $today->diffInDays($due);
+            //     $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
+
+            //     $contract->update(['status' => $status]);
+            // }
+            $due = Carbon::parse($contract->due_date);
+            $days = $today->diffInDays($due);
+            $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
+
+            $contract->update(['status' => $status]);
+        }
+
+
         $records = model::whereNot('status', ['Completed'])->get();
+
         $data = [
             'records' => $records,
         ];
@@ -28,11 +57,9 @@ class Contract_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
+            'location' => 'required',
             'client' => 'required',
-            'property' => 'required',
-            'building' => 'required',
-            'unit' => 'required',
-            'unit_type' => 'required',
+            'property_details' => 'required',
             'coordinator' => 'required',
             'contact' => 'required',
             'agent' => 'required',
@@ -43,10 +70,9 @@ class Contract_Controller extends Controller
             'owner_income' => 'required|numeric',
             'company_income' => 'required|numeric',
             'payment_date' => 'required',
-            'due_date' => 'required',
         ]);
 
-        $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
 
         $record = new model();
 
@@ -54,14 +80,39 @@ class Contract_Controller extends Controller
             $record->$key = $request->$key;
         }
 
-        $upper_keys = ['client', 'property', 'building', 'coordinator', 'agent'];
+        $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
         foreach ($upper_keys as $key) {
             $record->$key = strtoupper($request->$key);
+        }
+
+        $term = str_replace(' ', '', $request->payment_term);
+        $term = explode('+', $term);
+        $adv = preg_replace("/[^0-9]/", "", $term[0]);
+
+        $term = str_replace(' ', '', $request->payment_date);
+        $term = explode('/', $term);
+        $day = preg_replace("/[^0-9]/", "", $term[0]);
+
+        if (empty($record->due)) {
+            $record->due_date = Carbon::parse($request->due_date)->addMonths($adv-1)->day($day);
+        }
+        else {
+            $record->due_date = $request->due_date;
         }
 
         $record->status = '';
 
         $record->save();
+
+        $months = CarbonPeriod::create($record->contract_start, '1 month', $record->due_date);
+        foreach($months as $month) { 
+            $related = new related;
+
+            $related->contract_con_id = $record->con_id;
+            $related->paid_at = $month->day($day)->format('Y-m-d');
+            
+            $related->save();
+        }
 
         return response(['msg' => "Added $this->ent"]);
     }
@@ -70,9 +121,20 @@ class Contract_Controller extends Controller
     {
         $record = model::find($request->id);
 
-        $term = explode(' ', $record->payment_date);
+        $term = str_replace(' ', '', $record->payment_date);
+        $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
-        count($term) == 3 ? $months = 1 : $months = $term[2];
+        
+        $months = strtolower($term[1]);
+        if (str_starts_with($months, 'semi')) {
+            $months = 6;
+        }
+        else if (str_starts_with($months, 'quarter')) {
+            $months = 4;
+        }
+        else {
+            $months = 1;
+        }
 
         $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
 
@@ -95,11 +157,9 @@ class Contract_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
+            'location' => 'required',
             'client' => 'required',
-            'property' => 'required',
-            'building' => 'required',
-            'unit' => 'required',
-            'unit_type' => 'required',
+            'property_details' => 'required',
             'coordinator' => 'required',
             'contact' => 'required',
             'agent' => 'required',
@@ -114,13 +174,13 @@ class Contract_Controller extends Controller
         ]);
 
         $record = model::find($request->id);
-        $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
 
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }
 
-        $upper_keys = ['client', 'property', 'building', 'coordinator', 'agent'];
+        $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
         foreach ($upper_keys as $key) {
             $upd[$key] = strtoupper($request->$key);
         }

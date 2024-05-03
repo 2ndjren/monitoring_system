@@ -33,9 +33,8 @@ $(document).ready(function () {
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res);
+                console.log(res)
                 var errors = res.responseJSON.errors;
-                // console.log(errors)
 
                 var inputs = $(
                     "#addForm input, #addForm select, #addForm textarea"
@@ -128,6 +127,9 @@ $(document).ready(function () {
                 showtoastMessage("text-success", "Payment Successful", res.msg);
                 get_all();
             },
+            error: function (res) {
+
+            }
         });
     });
 
@@ -145,11 +147,9 @@ $(document).ready(function () {
                 var record = res.record;
 
                 var keys = [
+                    'location',
                     "client",
-                    "property",
-                    "building",
-                    "unit",
-                    "unit_type",
+                    "property_details",
                     "coordinator",
                     "contact",
                     "agent",
@@ -189,6 +189,7 @@ function get_all() {
         type: "POST",
         url: `/${ent}`,
         success: function (res) {
+            console.log(res)
             var records = res.records;
 
             var tbl = $("<table class='bg-light'>")
@@ -213,6 +214,18 @@ function get_all() {
                 "Payment Date",
                 "Due Date",
                 "Status",
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'June',
+                'July',
+                'Aug',
+                'Sept',
+                'Oct',
+                'Nov',
+                'Dec',
                 "Action",
             ];
             for (col of cols) {
@@ -233,35 +246,14 @@ function get_all() {
             var tbody = $("<tbody>");
             if (records.length > 0) {
                 for (record of records) {
-                    var property_details = `${record.property} - ${record.building} ${record.unit} (${record.unit_type})`;
 
-                    var contract_start = record.contract_start;
-                    contract_start = new Date(contract_start);
-                    contract_start = contract_start.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
-
-                    var contract_end = record.contract_end;
-                    contract_end = new Date(contract_end);
-                    contract_end = contract_end.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
-
-                    var due_date = record.due_date;
-                    due_date = new Date(due_date);
-                    due_date = due_date.toLocaleString("default", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                    });
+                    var contract_start = format_date(record.contract_start)
+                    var contract_end = format_date(record.contract_end)
+                    var due_date = format_date(record.due_date)
 
                     var vals = [
                         record.client,
-                        property_details,
+                        record.property_details,
                         record.coordinator,
                         record.contact,
                         record.agent,
@@ -289,17 +281,44 @@ function get_all() {
                         tr.append($("<td>").addClass(td_class).html(val));
                     }
 
-                    if (record.status.split(" ").length == 3) {
+                    if (record.status != null) {
+                        if (record.status.split(" ").length == 4) {
+                            tr.append(
+                                $("<td>")
+                                    .addClass(`${td_class} text-danger`)
+                                    .html(record.status)
+                            );
+                        } 
+                        else if (record.status.split(" ").length == 3) {
+                            tr.append(
+                                $("<td>")
+                                    .addClass(`${td_class} text-success`)
+                                    .html(record.status)
+                            );
+                        }
+                        else {
+                            tr.append(
+                                $("<td>")
+                                    .addClass(`${td_class} text-primary`)
+                                    .html(record.status)
+                            );
+                        }
+                    }
+                    else {
                         tr.append(
                             $("<td>")
-                                .addClass(`${td_class} text-success`)
+                                .addClass(`${td_class}`)
                                 .html(record.status)
                         );
-                    } else {
+                    }
+
+                    var months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+
+                    for (var month of months) {
                         tr.append(
                             $("<td>")
-                                .addClass(`${td_class} text-danger`)
-                                .html(record.status)
+                                .addClass(`${td_class}`)
+                                .html(record[month])
                         );
                     }
 
@@ -331,6 +350,19 @@ function get_all() {
     });
 }
 
+function format_date(date) {
+    if (date != null) {
+        date = new Date(date);
+        date = date.toLocaleString("default", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+        });
+    }
+    
+    return date
+}
+
 function Import() {
     $("#file-import").submit(function (e) {
         e.preventDefault();
@@ -348,6 +380,7 @@ function Import() {
                 $(`#file-import`).trigger("reset");
             },
             error: function (res) {
+                console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(
