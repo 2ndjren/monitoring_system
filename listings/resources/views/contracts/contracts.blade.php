@@ -48,6 +48,25 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-floating">
+                                    <select class="form-select" name="location">
+                                        <option selected>Choose Unit Type</option>
+                                        <option>BACOOR</option>
+                                        <option>MAKATI</option>
+                                        <option>MANDALUYONG</option>
+                                        <option>PASAY</option>
+                                        <option>BGC</option>
+                                        <option>PASIG</option>
+                                        <option>PARANAQUE</option>
+                                        <option>QC</option>
+                                    </select>
+                                    <label for="">Location</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
                                     <input type="text" name="client" class="form-control">
                                     <label for="">Client</label>
                                 </div>
@@ -57,36 +76,8 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="text" name="property" class="form-control">
-                                    <label for="">Property</label>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-floating">
-                                    <input type="text" name="building" class="form-control">
-                                    <label for="">Building</label>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-floating">
-                                    <input type="text" name="unit" class="form-control">
-                                    <label for="">Unit</label>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-floating">
-                                    <select class="form-select" name="unit_type">
-                                        <option selected>Choose Unit Type</option>
-                                        <option value="Studio">Studio</option>
-                                        <option value="PH">PH</option>
-                                        <option value="1BR">1BR</option>
-                                        <option value="2BR">2BR</option>
-                                        <option value="3BR">3BR</option>
-                                    </select>
-                                    <label for="">Unit Type</label>
+                                    <input type="text" name="property_details" class="form-control">
+                                    <label for="">Property Details</label>
                                 </div>
                             </div>
                         </div>
@@ -196,6 +187,25 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-floating">
+                                    <select class="form-select" name="location">
+                                        <option selected>Choose Unit Type</option>
+                                        <option>BACOOR</option>
+                                        <option>MAKATI</option>
+                                        <option>MANDALUYONG</option>
+                                        <option>PASAY</option>
+                                        <option>BGC</option>
+                                        <option>PASIG</option>
+                                        <option>PARANAQUE</option>
+                                        <option>QC</option>
+                                    </select>
+                                    <label for="">Location</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <div class="form-floating">
                                     <input type="text" name="client" class="form-control">
                                     <label for="">Client</label>
                                 </div>
@@ -205,36 +215,8 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-floating">
-                                    <input type="text" name="property" class="form-control">
-                                    <label for="">Property</label>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-floating">
-                                    <input type="text" name="building" class="form-control">
-                                    <label for="">Building</label>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-floating">
-                                    <input type="text" name="unit" class="form-control">
-                                    <label for="">Unit</label>
-                                </div>
-                            </div>
-
-                            <div class="col">
-                                <div class="form-floating">
-                                    <select class="form-select" name="unit_type">
-                                        <option selected>Choose Unit Type</option>
-                                        <option value="Studio">Studio</option>
-                                        <option value="PH">PH</option>
-                                        <option value="1BR">1BR</option>
-                                        <option value="2BR">2BR</option>
-                                        <option value="3BR">3BR</option>
-                                    </select>
-                                    <label for="">Unit Type</label>
+                                    <input type="text" name="property_details" class="form-control">
+                                    <label for="">Property Details</label>
                                 </div>
                             </div>
                         </div>

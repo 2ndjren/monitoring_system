@@ -33,8 +33,8 @@ $(document).ready(function () {
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
+                console.log(res)
                 var errors = res.responseJSON.errors;
-                // console.log(errors)
 
                 var inputs = $(
                     "#addForm input, #addForm select, #addForm textarea"
@@ -147,11 +147,9 @@ $(document).ready(function () {
                 var record = res.record;
 
                 var keys = [
+                    'location',
                     "client",
-                    "property",
-                    "building",
-                    "unit",
-                    "unit_type",
+                    "property_details",
                     "coordinator",
                     "contact",
                     "agent",

@@ -80,7 +80,7 @@ class File_Import implements ToCollection, WithStartRow
                     $related = new related;
     
                     $related->contract_con_id = $record->con_id;
-                    $related->paid_at = $month->format('Y-m-d');
+                    $related->paid_at = $month->day($day)->format('Y-m-d');
                     
                     $related->save();
                 }

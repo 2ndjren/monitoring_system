@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 use App\Models\contract as model;
 use App\Models\payments as related;
@@ -67,11 +68,9 @@ class Contract_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
+            'location' => 'required',
             'client' => 'required',
-            'property' => 'required',
-            'building' => 'required',
-            'unit' => 'required',
-            'unit_type' => 'required',
+            'property_details' => 'required',
             'coordinator' => 'required',
             'contact' => 'required',
             'agent' => 'required',
@@ -82,10 +81,9 @@ class Contract_Controller extends Controller
             'owner_income' => 'required|numeric',
             'company_income' => 'required|numeric',
             'payment_date' => 'required',
-            'due_date' => 'required',
         ]);
 
-        $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
 
         $record = new model();
 
@@ -93,14 +91,39 @@ class Contract_Controller extends Controller
             $record->$key = $request->$key;
         }
 
-        $upper_keys = ['client', 'property', 'building', 'coordinator', 'agent'];
+        $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
         foreach ($upper_keys as $key) {
             $record->$key = strtoupper($request->$key);
+        }
+
+        $term = str_replace(' ', '', $request->payment_term);
+        $term = explode('+', $term);
+        $adv = preg_replace("/[^0-9]/", "", $term[0]);
+
+        $term = str_replace(' ', '', $request->payment_date);
+        $term = explode('/', $term);
+        $day = preg_replace("/[^0-9]/", "", $term[0]);
+
+        if (empty($record->due)) {
+            $record->due_date = Carbon::parse($request->due_date)->addMonths($adv-1)->day($day);
+        }
+        else {
+            $record->due_date = $request->due_date;
         }
 
         $record->status = '';
 
         $record->save();
+
+        $months = CarbonPeriod::create($record->contract_start, '1 month', $record->due_date);
+        foreach($months as $month) { 
+            $related = new related;
+
+            $related->contract_con_id = $record->con_id;
+            $related->paid_at = $month->day($day)->format('Y-m-d');
+            
+            $related->save();
+        }
 
         return response(['msg' => "Added $this->ent"]);
     }
@@ -145,11 +168,9 @@ class Contract_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
+            'location' => 'required',
             'client' => 'required',
-            'property' => 'required',
-            'building' => 'required',
-            'unit' => 'required',
-            'unit_type' => 'required',
+            'property_details' => 'required',
             'coordinator' => 'required',
             'contact' => 'required',
             'agent' => 'required',
@@ -164,13 +185,13 @@ class Contract_Controller extends Controller
         ]);
 
         $record = model::find($request->id);
-        $keys = ['unit', 'unit_type', 'contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
 
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }
 
-        $upper_keys = ['client', 'property', 'building', 'coordinator', 'agent'];
+        $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
         foreach ($upper_keys as $key) {
             $upd[$key] = strtoupper($request->$key);
         }
