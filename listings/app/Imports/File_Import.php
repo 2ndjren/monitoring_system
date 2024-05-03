@@ -2,11 +2,10 @@
 
 namespace App\Imports;
 
-use App\Models\contract;
+use App\Models\contract As model;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
-use Maatwebsite\Excel\Events\BeforeSheet;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class File_Import implements ToCollection, WithStartRow
@@ -29,51 +28,41 @@ class File_Import implements ToCollection, WithStartRow
     }
     public function collection(Collection $rows)
     {
-        $location = $this->locations[$this->index];
+        $vals['location'] = $this->locations[$this->index];
         $this->index += 1;
 
         foreach ($rows as $row) {
-            $client = $row[1];
-            $property_details = $row[2];
-            $coordinator = $row[3];
-            $contact = $row[4];
-            $agent = $row[5];
-            $contract_start = $row[6];
-            $contract_end = $row[7];
-            $payment_term = $row[8];
-            $tenant_price = $row[9];
-            $owner_income = $row[10];
-            $company_income = $row[11];
-            $payment_date = $row[12];
-            $due_date = $row[13];
-            $status = $row[14];
+            $vals['client'] = $row[1];
+            $vals['property_details'] = $row[2];
+            $vals['coordinator'] = $row[3];
+            $vals['contact'] = $row[4];
+            $vals['agent'] = $row[5];
+            $vals['contract_start'] = $row[6];
+            $vals['contract_end'] = $row[7];
+            $vals['payment_term'] = $row[8];
+            $vals['tenant_price'] = $row[9];
+            $vals['owner_income'] = $row[10];
+            $vals['company_income'] = $row[11];
+            $vals['payment_date'] = $row[12];
+            $vals['due_date'] = $row[13];
+            $vals['status'] = $row[14];
 
-            $first = substr($contact, 0, 1);
-            if (ctype_digit($first) == 1 && $first != '0') { $contact = '0' . $contact; }
+            $first = substr($vals['contact'], 0, 1);
+            if (ctype_digit($first) == 1 && $first != '0') { $vals['contact'] = '0' . $vals['contact']; }
 
-            $contract_start = $this->format_date($contract_start);
-            $contract_end = $this->format_date($contract_end);
-            $due_date = $this->format_date($due_date);
+            $vals['contract_start'] = $this->format_date($vals['contract_start']);
+            $vals['contract_end'] = $this->format_date($vals['contract_end']);
+            $vals['due_date'] = $this->format_date($vals['due_date']);
 
-            if ($status == '#VALUE!') { $status = null; }
+            if ($vals['status'] == '#VALUE!') { $vals['status'] = null; }
+            
+            $keys = ['location', 'client', 'property_details', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date', 'status'];
 
-            Contract::create([
-                'location' => $location ?? null,
-                'client' => $client ?? null,
-                'property_details' => $property_details ?? null,
-                'coordinator' => $coordinator ?? null,
-                'contact' => $contact ?? null,
-                'agent' => $agent ?? null,
-                'contract_start' => $contract_start ?? null,
-                'contract_end' => $contract_end ?? null,
-                'payment_term' => $payment_term ?? null,
-                'tenant_price' => $tenant_price ?? null,
-                'owner_income' => $owner_income ?? null,
-                'company_income' => $company_income ?? null,
-                'payment_date' => $payment_date ?? null,
-                'due_date' => $due_date ?? null,
-                'status' => $status ?? null,
-            ]);
+            $record = new model;
+            foreach ($keys as $key) {
+                $record->$key = $vals[$key] ?? null;
+            }
+            $record->save();
         }
     }
 
@@ -92,11 +81,9 @@ class File_Import implements ToCollection, WithStartRow
             $month = preg_replace('/[^a-z]/i', '', trim(strtolower($date_string)));
             $index = array_search($month, $months);
             $month = $index + 1;
-            if (strlen($month) == 1) { $month = '0' . $month; }
             
             $day = preg_replace('/[a-z]/i', '', $date_string);
             $day = trim(explode(',', $day)[0]);
-            if (strlen($day) == 1) { $day = '0' . $day; }
 
             $date = "$year-$month-$day";
         }

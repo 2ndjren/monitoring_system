@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\contract as model;
-use App\Models\notification;
 
 class Contract_Controller extends Controller
 {
