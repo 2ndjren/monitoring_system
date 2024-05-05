@@ -98,7 +98,11 @@
                             <a id="contracts-link" href="{{ '/notification' }}"
                                 class="nav-link {{ Request::url() == url('/notification') ? 'active' : '' }}">
                                 <i class="fa-solid fa-bell nav-icon"></i>
-                                <p>Notification</p>
+
+                                <p>Notification <span id="badge-number"
+                                        class="position-absolute d-none top-50 end-0 translate-middle badge rounded-pill bg-danger">
+                                    </span>
+                                </p>
 
                             </a>
                         </li>
@@ -153,7 +157,7 @@
                             </ul>
                         </li>
 
-                        @if (session('admin'))
+                        @if (session('super_admin'))
                             <li
                                 class="nav-item has-treeview {{ in_array(Request::url(), [url('/clients'), url('/agents'), url('/coordinators')]) ? 'menu-open' : '' }} ">
                                 <a href="#"
@@ -184,14 +188,6 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a id="contracts-link" href="{{ '/activity' }}"
-                                    class="nav-link {{ Request::url() == url('/activity') ? 'active' : '' }}">
-                                    <i class="fa-solid fa-arrow-pointer nav-icon"></i>
-                                    <p>Activity</p>
-
-                                </a>
                             </li>
 
                             <li class="nav-item">
@@ -236,6 +232,7 @@
                 @yield('account')
                 @yield('404')
                 @yield('maintinance')
+                @yield('notification')
                 @yield('contracts')
                 @yield('history')
                 @yield('clients')

@@ -18,6 +18,7 @@ class user extends Model
         'contact',
         'username',
         'password',
+        'role',
         'status',
     ];
 }

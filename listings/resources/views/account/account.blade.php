@@ -71,6 +71,15 @@
                             <input type="text" name="password" class="form-control">
                             <label for="floatingInput">Password</label>
                         </div>
+                        <div class="form-floating">
+                            <select class="form-select" name="role" id="floatingSelect"
+                                aria-label="Floating label select example">
+                                <option selected>Role</option>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <label for="floatingSelect">Select Role</label>
+                        </div>
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary px-3 me-2 fw-semibold">Save</button>
@@ -96,8 +105,8 @@
                     <form id="updForm">
                         @csrf
                         <div class=" text-center">
-                            <img id="uppreviewImage" class="rounded-circle mb-3" src="{{ asset('static/userdefault.png') }}"
-                                height="200" alt="">
+                            <img id="uppreviewImage" class="rounded-circle mb-3"
+                                src="{{ asset('static/userdefault.png') }}" height="200" alt="">
                         </div>
                         <input type="hidden" name="user_id">
                         <div class="form-floating mb-3">

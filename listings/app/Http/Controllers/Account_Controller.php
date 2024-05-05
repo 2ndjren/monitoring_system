@@ -35,7 +35,7 @@ class Account_Controller extends Controller
         ]);
 
         $record = new model();
-        $keys = ['user_fname', 'user_lname', 'contact', 'email', 'username', 'password'];
+        $keys = ['user_fname', 'user_lname', 'contact', 'email', 'username', 'password', 'role'];
 
         foreach ($keys as $key) {
             $record->$key = $request->$key;
