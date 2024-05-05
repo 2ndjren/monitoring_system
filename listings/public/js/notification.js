@@ -35,6 +35,10 @@ function Notify() {
             </div>`;
                     $("#notification-container").append(notif);
                 }
+            } else {
+                $("#notification-container").append(
+                    `<p class="text-center">No results found</p>`
+                );
             }
         },
     });
