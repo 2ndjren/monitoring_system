@@ -115,9 +115,9 @@ class Contract_Controller extends Controller
             $inter = 1;
         }
 
-        if (empty($record->due)) {
-            $due = Carbon::parse($request->due_date)->addMonths($adv)->day($day);
-            $record->due_date = Carbon::parse($request->due_date)->addMonths(intval($adv)+$inter)->day($day);
+        if (empty($record->due_date)) {
+            $due = Carbon::parse($request->contract_start)->addMonths($adv)->day($day);
+            $record->due_date = Carbon::parse($request->contract_start)->addMonths(intval($adv)+$inter)->day($day);
         }
         else {
             $record->due_date = $request->due_date;
