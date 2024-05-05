@@ -49,7 +49,6 @@ class File_Import implements ToCollection, WithStartRow
             $vals['company_income'] = $row[11];
             $vals['payment_date'] = $row[12];
             $vals['due_date'] = $row[13];
-            $vals['status'] = $row[14];
 
             $first = substr($vals['contact'], 0, 1);
             if (ctype_digit($first) == 1 && $first != '0') { $vals['contact'] = '0' . $vals['contact']; }
@@ -57,32 +56,58 @@ class File_Import implements ToCollection, WithStartRow
             $vals['contract_start'] = $this->format_date($vals['contract_start']);
             $vals['contract_end'] = $this->format_date($vals['contract_end']);
             $vals['due_date'] = $this->format_date($vals['due_date']);
-
-            if ($vals['status'] == '#VALUE!') { $vals['status'] = null; }
             
-            $keys = ['location', 'client', 'property_details', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date', 'status'];
+            $record = new model();
 
-            $record = new model;
+            $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
             foreach ($keys as $key) {
                 $record->$key = $vals[$key] ?? null;
             }
-            $record->save();
-
-            if ($record->payment_date != null) {
-                $term = str_replace(' ', '', $record->payment_date);
-                $term = explode('/', $term);
-                $day = preg_replace("/[^0-9]/", "", $term[0]);
-
-                $last_pay = Carbon::parse($record->due_date)->subMonths(1)->day($day);
-                $months = CarbonPeriod::create($record->contract_start, '1 month', $last_pay);
-                foreach($months as $month) { 
-                    $related = new related;
     
-                    $related->contract_con_id = $record->con_id;
-                    $related->paid_at = $month->day($day)->format('Y-m-d');
-                    
-                    $related->save();
-                }
+            $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
+            foreach ($upper_keys as $key) {
+                $record->$key = strtoupper($vals[$key]) ?? null;
+            }
+    
+            $term = str_replace(' ', '', $vals['payment_term']);
+            $term = explode('+', $term);
+            $adv = intval(preg_replace("/[^0-9]/", "", $term[0]));
+    
+            $term = str_replace(' ', '', $vals['payment_date']);
+            $term = explode('/', $term);
+            $day = preg_replace("/[^0-9]/", "", $term[0]);
+    
+            $inter = strtolower($term[1]);
+            if (str_starts_with($inter, 'semi')) {
+                $inter = 6;
+            }
+            else if (str_starts_with($inter, 'quarter')) {
+                $inter = 4;
+            }
+            else {
+                $inter = 1;
+            }
+    
+            if (empty($vals['due_date'])) {
+                $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1)->day($day);
+                $record->due_date = Carbon::parse($vals['contract_start'])->addMonths($adv-1+$inter)->day($day);
+            }
+            else {
+                $paid = Carbon::parse($vals['due_date'])->subMonths($inter)->day($day);
+                $record->due_date = $vals['due_date'];
+            }
+            
+            $record->status = '';
+            $record->save();
+    
+            $months = CarbonPeriod::create($vals['contract_start'], '1 month', $paid);
+            foreach($months as $month) { 
+                $related = new related;
+    
+                $related->contract_con_id = $record->con_id;
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+    
+                $related->save();
             }
         }
     }

@@ -68,10 +68,9 @@ class Contract_Controller extends Controller
             'company_income' => 'numeric',
         ]);
 
-        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
-
         $record = new model();
 
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
@@ -184,7 +183,6 @@ class Contract_Controller extends Controller
         $records = related::where('contract_con_id', $request->id)->delete();
 
         $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
-
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }
