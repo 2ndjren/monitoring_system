@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="row mb-2 px-3">
-        <div class="col-xxl-12 locations">
+        <div class="col-xxl-12" id='locations'>
 
         </div>
     </div>

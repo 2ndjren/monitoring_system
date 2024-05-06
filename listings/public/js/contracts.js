@@ -47,7 +47,7 @@ $(document).ready(function () {
             processData: false,
             success: function (res) {
                 showtoastMessage("text-success", "Added Successful", res.msg);
-                get_all();
+                get_locations()
                 $(`#addForm`).trigger("reset");
                 $(`#addModal`).modal("hide");
             },
@@ -91,7 +91,7 @@ $(document).ready(function () {
             success: function (res) {
                 showtoastMessage("text-success", "Update Successful", res.msg);
 
-                get_all();
+                get_locations()
                 $(`#updForm`).trigger("reset");
                 $(`#updModal`).modal("hide");
             },
@@ -128,7 +128,7 @@ $(document).ready(function () {
             success: function (res) {
                 showtoastMessage("text-success", "Delete Successful", res.msg);
 
-                get_all();
+                get_locations()
                 $(`#delModal`).modal("hide");
             },
             error: function (xhr, status, error) {},
@@ -144,7 +144,7 @@ $(document).ready(function () {
             data: { id: id },
             success: function (res) {
                 showtoastMessage("text-success", "Payment Successful", res.msg);
-                get_all();
+                get_locations()
             },
             error: function (res) {
 
@@ -202,22 +202,30 @@ $(document).ready(function () {
 var ent = $(".ent").text().toLowerCase();
 
 function get_locations() {
-    $('.locations').empty()
+    $('#locations').empty()
 
     $.ajax({
         type: "POST",
         url: `/${ent}/get-locations`,
         success: function (res) {
             // console.log(res)
+            var records = res.records
 
-            for (var record of res.records) {
-                var btn =   `
-                                <button class="btn btn-primary text-center mr-1 location">${record.location} (${record.contracts})</button>
-                            `
-                $('.locations').append(btn)
+            if (records.length > 0) {
+                for (var record of records) {
+                    var btn =   `
+                                    <button class="btn btn-primary text-center mr-1 location">${record.location} (${record.contracts})</button>
+                                `
+                    $('#locations').append(btn)
+                }
+    
+                $('.location').first().click()
             }
-
-            $('.location').first().click()
+            else {
+                $("#tbl_div").append(
+                    `<p class="text-center">No results found</p>`
+                );
+            }
         }
     });
 }
@@ -407,7 +415,7 @@ function Import() {
             processData: false,
             success: function (res) {
                 showtoastMessage("text-success", "Added Successful", res.msg);
-                get_all();
+                get_locations()
                 $(`#file-import`).trigger("reset");
             },
             error: function (res) {
