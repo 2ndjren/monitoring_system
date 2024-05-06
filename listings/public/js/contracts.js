@@ -9,12 +9,18 @@ $(document).ready(function () {
     get_locations()
 
     $(document).on('click', '.location', function() {
+        $('.location').removeClass('active')
+        $(this).addClass('active')
+
         var location = $(this).text().split(' ')[0]
+        var data = {
+            location: location
+        }
 
         $.ajax({
             type: "POST",
             url: `/${ent}/get-location/`,
-            data: {location : location},
+            data: data,
             success: function (res) {
                 get_location(res)
             }, 
