@@ -13,8 +13,17 @@ class Contract_Controller extends Controller
 {
     public $ent = 'Contract';
 
-    public function get_all()
-    {
+    public function get_locations() {
+        $records = model::selectRaw('Distinct location, Count(con_id) As contracts')->whereNot('status', 'Completed')->groupBy('location')->get();
+
+        $data =[
+            'records' => $records,
+        ];
+
+        return response()->json($data);
+    }
+
+    public function get_location(Request $request) {
         $ids = model::select('con_id')->get();
         $today = Carbon::today();
         foreach ($ids as $id) {
@@ -38,16 +47,16 @@ class Contract_Controller extends Controller
             $contract->update(['status' => $status]);
         }
 
-        $records = model::whereNot('status', 'Completed')->get();
+        $records = model::whereNot('status', 'Completed')->where('location', $request->location)->get();
 
         $months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
         foreach ($records as $record) {
             for ($index = 0; $index < count($months); $index++) {
                 $count = related::where('contract_con_id', $record['con_id'])
-                    ->whereMonth('paid_at', $index + 1)
-                    ->whereYear('paid_at', Carbon::now()->year)
-                    ->count('contract_con_id');
+                            ->whereMonth('paid_at', $index + 1)
+                            ->whereYear('paid_at', $today->year)
+                            ->count('contract_con_id');
                 $month = $months[$index];
                 $count == 0 ? $record[$month] = null : $record[$month] = 'PAID';
             }

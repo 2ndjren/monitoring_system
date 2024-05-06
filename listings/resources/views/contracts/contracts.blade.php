@@ -3,7 +3,7 @@
 @section('contracts')
     @php $ent = 'Contract' @endphp
 
-    <div class="row border-bottom mb-2 px-3">
+    <div class="row border-bottom mb-3 px-3">
         <div class="col mb-2 ">
             <p class="h3">
                 <span class="text-primary">
@@ -29,8 +29,11 @@
         <div class="col-12 overflow-auto" id="tbl_div">
 
         </div>
+    </div>
+    <div class="row mb-2 px-3">
+        <div class="col-xxl-12 locations">
 
-
+        </div>
     </div>
 
     <div class="modal fade" id="addModal" data-bs-backdrop="static" tabindex="-1">
