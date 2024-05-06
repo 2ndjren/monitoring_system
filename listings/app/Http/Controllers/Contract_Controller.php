@@ -108,24 +108,31 @@ class Contract_Controller extends Controller
             $inter = 1;
         }
 
-        if (empty($request->due_date)) {
-            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1)->day($day);
-            $record->due_date = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
+        if (isset($request->due_date)) {
+            $paid = Carbon::parse($request->due_date)->subMonths($inter);
+            $record->due_date = $request->due_date;
         }
         else {
-            $paid = Carbon::parse($request->due_date)->subMonths($inter)->day($day);
-            $record->due_date = $request->due_date;
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1);
+            $record->due_date = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
         }
         
         $record->status = '';
         $record->save();
 
-        $months = CarbonPeriod::create($request->contract_start, '1 month', $paid);
+        $months = CarbonPeriod::create(Carbon::parse($request->contract_start)->day(1), '1 month', $paid->day(1));
         foreach($months as $month) { 
-            $related = new related;
+            $last_day = $month->endofMonth()->day;
 
-            $related->contract_con_id = $record->con_id;
-            $related->paid_at = $month->day($day)->format('Y-m-d');
+            $related = new related;
+            $related->contract_con_id = $record->con_id;   
+
+            if ($last_day == 28 || $last_day == 29) {        
+                $related->paid_at = $month->day($last_day)->format('Y-m-d');
+            }
+            else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+            }
 
             $related->save();
         }
@@ -220,25 +227,32 @@ class Contract_Controller extends Controller
             $inter = 1;
         }
 
-        if (empty($request->due_date)) {
-            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1)->day($day);
-            $upd['due_date'] = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
-        }
-        else {
+        if (isset($request->due_date)) {
             $paid = Carbon::parse($request->due_date)->subMonths($inter)->day($day);
             $upd['due_date'] = $request->due_date;
+        }
+        else {
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1)->day($day);
+            $upd['due_date'] = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
         }
         
         $upd['status'] = '';
 
         $record->update($upd);
 
-        $months = CarbonPeriod::create($request->contract_start, '1 month', $paid);
+        $months = CarbonPeriod::create(Carbon::parse($request->contract_start)->day(1), '1 month', $paid->day(1));
         foreach($months as $month) { 
-            $related = new related;
+            $last_day = $month->endofMonth()->day;
 
-            $related->contract_con_id = $record->con_id;
-            $related->paid_at = $month->day($day)->format('Y-m-d');
+            $related = new related;
+            $related->contract_con_id = $record->con_id;   
+
+            if ($last_day == 28 || $last_day == 29) {        
+                $related->paid_at = $month->day($last_day)->format('Y-m-d');
+            }
+            else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+            }
 
             $related->save();
         }

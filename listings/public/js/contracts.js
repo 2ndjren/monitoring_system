@@ -46,13 +46,14 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (res) {
+                // console.log(res)
                 showtoastMessage("text-success", "Added Successful", res.msg);
                 get_locations()
                 $(`#addForm`).trigger("reset");
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res)
+                // console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(
@@ -96,9 +97,8 @@ $(document).ready(function () {
                 $(`#updModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res);
+                // console.log(res);
                 var errors = res.responseJSON.errors;
-                // console.log(errors)
 
                 var inputs = $(
                     "#updForm input, #updForm select, #updForm textarea"
@@ -419,7 +419,7 @@ function Import() {
                 $(`#file-import`).trigger("reset");
             },
             error: function (res) {
-                console.log(res)
+                // console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(

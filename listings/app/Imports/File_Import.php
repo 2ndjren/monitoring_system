@@ -36,19 +36,19 @@ class File_Import implements ToCollection, WithStartRow
         $this->index += 1;
 
         foreach ($rows as $row) {
-            $vals['client'] = $row[1];
-            $vals['property_details'] = $row[2];
-            $vals['coordinator'] = $row[3];
-            $vals['contact'] = $row[4];
-            $vals['agent'] = $row[5];
-            $vals['contract_start'] = $row[6];
-            $vals['contract_end'] = $row[7];
-            $vals['payment_term'] = $row[8];
-            $vals['tenant_price'] = $row[9];
-            $vals['owner_income'] = $row[10];
-            $vals['company_income'] = $row[11];
-            $vals['payment_date'] = $row[12];
-            $vals['due_date'] = $row[13];
+            $vals['client'] = $row[0];
+            $vals['property_details'] = $row[1];
+            $vals['coordinator'] = $row[2];
+            $vals['contact'] = $row[3];
+            $vals['agent'] = $row[4];
+            $vals['contract_start'] = $row[5];
+            $vals['contract_end'] = $row[6];
+            $vals['payment_term'] = $row[7];
+            $vals['tenant_price'] = $row[8];
+            $vals['owner_income'] = $row[9];
+            $vals['company_income'] = $row[10];
+            $vals['payment_date'] = $row[11];
+            $vals['due_date'] = $row[12];
 
             $first = substr($vals['contact'], 0, 1);
             if (ctype_digit($first) == 1 && $first != '0') { $vals['contact'] = '0' . $vals['contact']; }
@@ -90,23 +90,30 @@ class File_Import implements ToCollection, WithStartRow
                 }
         
                 if (isset($vals['due_date'])) {
-                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1)->day($day);
-                    $record->due_date = Carbon::parse($vals['contract_start'])->addMonths($adv-1+$inter)->day($day);
-                }
-                else {
                     $paid = Carbon::parse($vals['due_date'])->subMonths($inter)->day($day);
                     $record->due_date = $vals['due_date'];
+                }
+                else {
+                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1)->day($day);
+                    $record->due_date = Carbon::parse($vals['contract_start'])->addMonths($adv-1+$inter)->day($day);
                 }
 
                 $record->status = '';
                 $record->save();
 
-                $months = CarbonPeriod::create($vals['contract_start'], '1 month', $paid);
+                $months = CarbonPeriod::create(Carbon::parse($vals['contract_start'])->day(1), '1 month', $paid->day(1));
                 foreach($months as $month) { 
-                    $related = new related;
+                    $last_day = $month->endofMonth()->day;
         
-                    $related->contract_con_id = $record->con_id;
-                    $related->paid_at = $month->day($day)->format('Y-m-d');
+                    $related = new related;
+                    $related->contract_con_id = $record->con_id;   
+        
+                    if ($last_day == 28 || $last_day == 29) {        
+                        $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                    }
+                    else {
+                        $related->paid_at = $month->day($day)->format('Y-m-d');
+                    }
         
                     $related->save();
                 }
