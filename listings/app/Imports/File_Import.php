@@ -118,23 +118,22 @@ class File_Import implements ToCollection, WithStartRow
         }
     }
 
-    public function format_date($date_string) {
-        if ($date_string == '') {
+    public function format_date($date) {
+        if ($date == '') {
             $date = null;
         }
-        else if (ctype_digit($date_string) == 1) {
-            $date = Date::excelToDateTimeObject($date_string)->format('Y-m-d');
+        else if (ctype_digit($date) == 1) {
+            $date = Date::excelToDateTimeObject($date)->format('Y-m-d');
         }
         else {
             $months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
             
-            $year = substr($date_string, strpos($date_string, ",") + 1);
+            $year = substr($date, strpos($date, ",") + 1);
             
-            $month = preg_replace('/[^a-z]/i', '', trim(strtolower($date_string)));
-            $index = array_search($month, $months);
-            $month = $index + 1;
+            $month = preg_replace('/[^a-z]/i', '', trim(strtolower($date)));
+            $month = array_search($month, $months) + 1;
             
-            $day = preg_replace('/[a-z]/i', '', $date_string);
+            $day = preg_replace('/[a-z]/i', '', $date);
             $day = trim(explode(',', $day)[0]);
 
             $date = "$year-$month-$day";
