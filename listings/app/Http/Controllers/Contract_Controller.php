@@ -127,8 +127,10 @@ class Contract_Controller extends Controller
             $related = new related;
             $related->contract_con_id = $record->con_id;   
 
-            if ($last_day == 28 || $last_day == 29) {        
-                $related->paid_at = $month->day($last_day)->format('Y-m-d');
+            if ($day > $last_day) {
+                if (($last_day == 28) || $last_day == 29) {        
+                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                }
             }
             else {
                 $related->paid_at = $month->day($day)->format('Y-m-d');
@@ -159,16 +161,25 @@ class Contract_Controller extends Controller
             $inter = 1;
         }
 
-        $last_pay = Carbon::parse($record->due_date)->subMonths($inter)->day($day);
+        $last_pay = Carbon::parse($record->due_date)->subMonths($inter);
         $new_due = Carbon::parse($record->due_date)->addMonths($inter)->day($day);
 
-        $months = CarbonPeriod::create($last_pay->addMonths(1), '1 month', $record->due_date);
+        $months = CarbonPeriod::create($last_pay->addMonths(1)->day(1), '1 month', Carbon::parse($record->due_date)->day(1));
         $record->update(['due_date' => $new_due]);
         foreach($months as $month) { 
-            $related = new related;
+            $last_day = $month->endofMonth()->day;
 
-            $related->contract_con_id = $record->con_id;
-            $related->paid_at = $month->day($day)->format('Y-m-d');
+            $related = new related;
+            $related->contract_con_id = $record->con_id;   
+
+            if ($day > $last_day) {
+                if (($last_day == 28) || $last_day == 29) {        
+                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                }
+            }
+            else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+            }
 
             $related->save();
         }
@@ -228,11 +239,11 @@ class Contract_Controller extends Controller
         }
 
         if (isset($request->due_date)) {
-            $paid = Carbon::parse($request->due_date)->subMonths($inter)->day($day);
+            $paid = Carbon::parse($request->due_date)->subMonths($inter);
             $upd['due_date'] = $request->due_date;
         }
         else {
-            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1)->day($day);
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1);
             $upd['due_date'] = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
         }
         
@@ -247,8 +258,10 @@ class Contract_Controller extends Controller
             $related = new related;
             $related->contract_con_id = $record->con_id;   
 
-            if ($last_day == 28 || $last_day == 29) {        
-                $related->paid_at = $month->day($last_day)->format('Y-m-d');
+            if ($day > $last_day) {
+                if (($last_day == 28) || $last_day == 29) {        
+                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                }
             }
             else {
                 $related->paid_at = $month->day($day)->format('Y-m-d');

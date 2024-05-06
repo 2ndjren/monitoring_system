@@ -90,11 +90,11 @@ class File_Import implements ToCollection, WithStartRow
                 }
         
                 if (isset($vals['due_date'])) {
-                    $paid = Carbon::parse($vals['due_date'])->subMonths($inter)->day($day);
+                    $paid = Carbon::parse($vals['due_date'])->subMonths($inter);
                     $record->due_date = $vals['due_date'];
                 }
                 else {
-                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1)->day($day);
+                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1);
                     $record->due_date = Carbon::parse($vals['contract_start'])->addMonths($adv-1+$inter)->day($day);
                 }
 
@@ -107,9 +107,11 @@ class File_Import implements ToCollection, WithStartRow
         
                     $related = new related;
                     $related->contract_con_id = $record->con_id;   
-        
-                    if ($last_day == 28 || $last_day == 29) {        
-                        $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                    
+                    if ($day > $last_day) {
+                        if (($last_day == 28) || $last_day == 29) {        
+                            $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                        }
                     }
                     else {
                         $related->paid_at = $month->day($day)->format('Y-m-d');
