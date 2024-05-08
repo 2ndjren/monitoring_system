@@ -45,12 +45,14 @@ Route::get('/import', [Route_Controller::class, 'import']);
 Route::get('/export', [Route_Controller::class, 'export']);
 
 Route::get('/dashboard/get-data', [Dashboard_Controller::class, 'get_data']);
-// Route::get('/dashboard/client-units', [Dashboard_Controller::class, 'Client_Properties']);
+Route::get('/dashboard/client-units', [Dashboard_Controller::class, 'Client_Properties']);
 Route::get('/dashboard/contracts', [Dashboard_Controller::class, 'Expiring_Contracts']);
 Route::get('/dashboard/contracts-dues', [Dashboard_Controller::class, 'Dues']);
 
 Route::prefix('/contracts')->group(function () {
     Route::post('/', [Contract_Controller::class, 'get_all']);
+    Route::post('/get-locations', [Contract_Controller::class, 'get_locations']);
+    Route::post('/get-location', [Contract_Controller::class, 'get_location']);
     Route::post('/add', [Contract_Controller::class, 'add']);
     Route::post('/payment', [Contract_Controller::class, 'payment']);
     Route::post('/edit', [Contract_Controller::class, 'edit']);

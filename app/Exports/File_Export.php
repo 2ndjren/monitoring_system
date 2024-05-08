@@ -24,18 +24,21 @@ class File_Export implements FromView, ShouldAutoSize
     }
 
     
-    public function format_date($date_string) {
-        $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    public function format_date($date) {
+        if (isset($date)) {
+            $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        $date_arr = explode('-', $date_string);
-        
-        $year = $date_arr[0];
-        
-        $month = $months[$date_arr[1] - 1];
-        
-        $day = (int)$date_arr[2];
-        
-        $date = "$month $day, $year";
+            $date_arr = explode('-', $date);
+            
+            $year = $date_arr[0];
+            
+            $month = $months[$date_arr[1] - 1];
+            
+            $day = intval($date_arr[2]);
+            
+            $date = "$month $day, $year";
+        }
+
         return $date;
     }
 }
