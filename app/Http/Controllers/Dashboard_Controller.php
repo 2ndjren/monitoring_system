@@ -28,7 +28,7 @@ class Dashboard_Controller extends Controller
         $counts['clients'] = contract::select('client')->distinct('client')->count();
         $counts['coordinators'] = contract::select('coordinator')->distinct('coordinator')->count();
         $counts['agents'] = contract::select('agent')->distinct('agent')->count();
-        $counts['properties'] = contract::select('propert')->distinct('property')->count();
+        $counts['properties'] = contract::select('property')->distinct('property')->count();
         $counts['units'] = contract::select('unit')->count();
         $counts['contracts'] = contract::select('con_id')->whereNot('status', ['Completed'])->count();
 
@@ -69,7 +69,7 @@ class Dashboard_Controller extends Controller
         foreach ($dates as $date) {
             $due = Carbon::parse($date->due_date)->endOfDay();
             if ($today->greaterThan($due)) {
-                $passdue[] = $due->toDateString(); 
+                $passdue[] = $due->toDateString();
             } else if ($today->lessThan($due)) {
                 $remaining[] = $due->toDateString();
             }
