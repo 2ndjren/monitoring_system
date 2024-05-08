@@ -36,20 +36,19 @@ class File_Import implements ToCollection, WithStartRow
         $this->index += 1;
 
         foreach ($rows as $row) {
-            $vals['client'] = $row[1];
-            $vals['property_details'] = $row[2];
-            $vals['coordinator'] = $row[3];
-            $vals['contact'] = $row[4];
-            $vals['agent'] = $row[5];
-            $vals['contract_start'] = $row[6];
-            $vals['contract_end'] = $row[7];
-            $vals['payment_term'] = $row[8];
-            $vals['tenant_price'] = $row[9];
-            $vals['owner_income'] = $row[10];
-            $vals['company_income'] = $row[11];
-            $vals['payment_date'] = $row[12];
-            $vals['due_date'] = $row[13];
-            $vals['status'] = $row[14];
+            $vals['client'] = $row[0];
+            $vals['property_details'] = $row[1];
+            $vals['coordinator'] = $row[2];
+            $vals['contact'] = $row[3];
+            $vals['agent'] = $row[4];
+            $vals['contract_start'] = $row[5];
+            $vals['contract_end'] = $row[6];
+            $vals['payment_term'] = $row[7];
+            $vals['tenant_price'] = $row[8];
+            $vals['owner_income'] = $row[9];
+            $vals['company_income'] = $row[10];
+            $vals['payment_date'] = $row[11];
+            $vals['due_date'] = $row[12];
 
             $first = substr($vals['contact'], 0, 1);
             if (ctype_digit($first) == 1 && $first != '0') { $vals['contact'] = '0' . $vals['contact']; }
@@ -57,53 +56,93 @@ class File_Import implements ToCollection, WithStartRow
             $vals['contract_start'] = $this->format_date($vals['contract_start']);
             $vals['contract_end'] = $this->format_date($vals['contract_end']);
             $vals['due_date'] = $this->format_date($vals['due_date']);
-
-            if ($vals['status'] == '#VALUE!') { $vals['status'] = null; }
             
-            $keys = ['location', 'client', 'property_details', 'coordinator', 'contact', 'agent', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date', 'status'];
+            $record = new model();
 
-            $record = new model;
+            $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
             foreach ($keys as $key) {
                 $record->$key = $vals[$key] ?? null;
             }
-            $record->save();
+    
+            $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
+            foreach ($upper_keys as $key) {
+                $record->$key = strtoupper($vals[$key]) ?? null;
+            }
 
-            if ($record->payment_date != null) {
-                $term = str_replace(' ', '', $record->payment_date);
+            if (isset($vals['payment_term'], $vals['payment_date'], $vals['contract_start'])) {
+                $term = str_replace(' ', '', $vals['payment_term']);
+                $term = explode('+', $term);
+                $adv = intval(preg_replace("/[^0-9]/", "", $term[0]));
+        
+                $term = str_replace(' ', '', $vals['payment_date']);
                 $term = explode('/', $term);
                 $day = preg_replace("/[^0-9]/", "", $term[0]);
+        
+                $inter = strtolower($term[1]);
+                if (str_starts_with($inter, 'semi')) {
+                    $inter = 6;
+                }
+                else if (str_starts_with($inter, 'quarter')) {
+                    $inter = 4;
+                }
+                else {
+                    $inter = 1;
+                }
+        
+                if (isset($vals['due_date'])) {
+                    $paid = Carbon::parse($vals['due_date'])->subMonths($inter);
+                    $record->due_date = $vals['due_date'];
+                }
+                else {
+                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1);
+                    $record->due_date = Carbon::parse($vals['contract_start'])->addMonths($adv-1+$inter)->day($day);
+                }
 
-                $last_pay = Carbon::parse($record->due_date)->subMonths(1)->day($day);
-                $months = CarbonPeriod::create($record->contract_start, '1 month', $last_pay);
+                $record->status = '';
+                $record->save();
+
+                $months = CarbonPeriod::create(Carbon::parse($vals['contract_start'])->day(1), '1 month', $paid->day(1));
                 foreach($months as $month) { 
+                    $last_day = $month->endofMonth()->day;
+        
                     $related = new related;
-    
-                    $related->contract_con_id = $record->con_id;
-                    $related->paid_at = $month->day($day)->format('Y-m-d');
+                    $related->contract_con_id = $record->con_id;   
                     
+                    if ($day > $last_day) {
+                        if (($last_day == 28) || $last_day == 29) {        
+                            $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                        }
+                    }
+                    else {
+                        $related->paid_at = $month->day($day)->format('Y-m-d');
+                    }
+        
                     $related->save();
                 }
+            }
+            else {
+                $record->status = '';
+                $record->save();
             }
         }
     }
 
-    public function format_date($date_string) {
-        if ($date_string == '') {
+    public function format_date($date) {
+        if ($date == '') {
             $date = null;
         }
-        else if (ctype_digit($date_string) == 1) {
-            $date = Date::excelToDateTimeObject($date_string)->format('Y-m-d');
+        else if (ctype_digit($date) == 1) {
+            $date = Date::excelToDateTimeObject($date)->format('Y-m-d');
         }
         else {
             $months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
             
-            $year = substr($date_string, strpos($date_string, ",") + 1);
+            $year = substr($date, strpos($date, ",") + 1);
             
-            $month = preg_replace('/[^a-z]/i', '', trim(strtolower($date_string)));
-            $index = array_search($month, $months);
-            $month = $index + 1;
+            $month = preg_replace('/[^a-z]/i', '', trim(strtolower($date)));
+            $month = array_search($month, $months) + 1;
             
-            $day = preg_replace('/[a-z]/i', '', $date_string);
+            $day = preg_replace('/[a-z]/i', '', $date);
             $day = trim(explode(',', $day)[0]);
 
             $date = "$year-$month-$day";

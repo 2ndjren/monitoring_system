@@ -34,7 +34,7 @@
             @foreach ($contracts as $con)
                 <tr>
                     <td>{{ $con->client }}</td>
-                    <td align="center">{{ $con->property }} - {{ $con->building }} {{ $con->unit }} ({{ $con->unit_type }})</td>
+                    <td align="center">{{ $con->property_details }}</td>
                     <td>{{ $con->coordinator }}</td>
                     <td>{{ $con->contact }}</td>
                     <td>{{ $con->agent }}</td>
@@ -50,10 +50,14 @@
                     @php $status = count(explode(' ', $con->status)); @endphp
                     
                     @if ($status == 3)
-                        <td style="color: #28a745;">{{ $con->status }}</td>
+                        <td style="color: #dc3545;">{{ $con->status }}</td>
+                    @elseif ($status == 4)
+                        <td style="color: #198754;">{{ $con->status }}</td>
                     @else 
-                        <td style="color: red;">{{ $con->status }}</td>
+                        <td style="color: #0d6efd;">{{ $con->status }}</td>
                     @endif
+
+                    
 
                 </tr>
             @endforeach

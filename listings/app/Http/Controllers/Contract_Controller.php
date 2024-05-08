@@ -13,42 +13,50 @@ class Contract_Controller extends Controller
 {
     public $ent = 'Contract';
 
-    public function get_all()
-    {
-        // $ids = model::select('con_id')->get();
-        // $today = Carbon::today();
-        // foreach ($ids as $id) {
-        //     $contract = model::find($id->con_id);
+    public function get_locations() {
+        $records = model::selectRaw('Distinct location, Count(con_id) As contracts')->whereNot('status', 'Completed')->groupBy('location')->get();
 
-        //     if ($contract->due_date != null) {
-        //         $due = Carbon::parse($contract->due_date);
-        //         $days = $today->diffInDays($due);
+        $data =[
+            'records' => $records,
+        ];
 
-        //         if ($today > $due) {
-        //             $status = "$days Days Past Due";
-        //         } else if ($today == $due) {
-        //             $status = "Today";
-        //         } else {
-        //             $status = "$days Days Remaining";
-        //         }
-        //     } else {
-        //         $status = null;
-        //     }
+        return response()->json($data);
+    }
 
-        //     $contract->update(['status' => $status]);
-        // }
+    public function get_location(Request $request) {
+        $ids = model::select('con_id')->get();
+        $today = Carbon::today();
+        foreach ($ids as $id) {
+            $contract = model::find($id->con_id);
 
+            if ($contract->due_date != null) {
+                $due = Carbon::parse($contract->due_date);
+                $days = $today->diffInDays($due);
 
-        $records = model::whereNot('status', 'Completed')->get();
+                if ($today > $due) {
+                    $status = "$days Days Past Due";
+                } else if ($today == $due) {
+                    $status = "Today";
+                } else {
+                    $status = "$days Days Remaining";
+                }
+            } else {
+                $status = null;
+            }
+
+            $contract->update(['status' => $status]);
+        }
+
+        $records = model::whereNot('status', 'Completed')->where('location', $request->location)->get();
 
         $months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
         foreach ($records as $record) {
             for ($index = 0; $index < count($months); $index++) {
                 $count = related::where('contract_con_id', $record['con_id'])
-                    ->whereMonth('paid_at', $index + 1)
-                    ->whereYear('paid_at', Carbon::now()->year)
-                    ->count('contract_con_id');
+                            ->whereMonth('paid_at', $index + 1)
+                            ->whereYear('paid_at', $today->year)
+                            ->count('contract_con_id');
                 $month = $months[$index];
                 $count == 0 ? $record[$month] = null : $record[$month] = 'PAID';
             }
@@ -64,25 +72,14 @@ class Contract_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'location' => 'required',
-            'client' => 'required',
-            'property_details' => 'required',
-            'coordinator' => 'required',
-            'contact' => 'required',
-            'agent' => 'required',
-            'contract_start' => 'required',
-            'contract_end' => 'required',
-            'payment_term' => 'required',
-            'tenant_price' => 'required|numeric',
-            'owner_income' => 'required|numeric',
-            'company_income' => 'required|numeric',
-            'payment_date' => 'required',
+            'tenant_price' => 'numeric',
+            'owner_income' => 'numeric',
+            'company_income' => 'numeric',
         ]);
-
-        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
 
         $record = new model();
 
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
         foreach ($keys as $key) {
             $record->$key = $request->$key;
         }
@@ -94,28 +91,50 @@ class Contract_Controller extends Controller
 
         $term = str_replace(' ', '', $request->payment_term);
         $term = explode('+', $term);
-        $adv = preg_replace("/[^0-9]/", "", $term[0]);
+        $adv = intval(preg_replace("/[^0-9]/", "", $term[0]));
 
         $term = str_replace(' ', '', $request->payment_date);
         $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
 
-        if (empty($record->due)) {
-            $record->due_date = Carbon::parse($request->due_date)->addMonths($adv)->day($day);
-        } else {
-            $record->due_date = $request->due_date;
+        $inter = strtolower($term[1]);
+        if (str_starts_with($inter, 'semi')) {
+            $inter = 6;
+        }
+        else if (str_starts_with($inter, 'quarter')) {
+            $inter = 4;
+        }
+        else {
+            $inter = 1;
         }
 
+        if (isset($request->due_date)) {
+            $paid = Carbon::parse($request->due_date)->subMonths($inter);
+            $record->due_date = $request->due_date;
+        }
+        else {
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1);
+            $record->due_date = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
+        }
+        
         $record->status = '';
-
         $record->save();
 
-        $months = CarbonPeriod::create($record->contract_start, '1 month', $record->due_date->subMonths(1));
-        foreach ($months as $month) {
-            $related = new related;
+        $months = CarbonPeriod::create(Carbon::parse($request->contract_start)->day(1), '1 month', $paid->day(1));
+        foreach($months as $month) { 
+            $last_day = $month->endofMonth()->day;
 
-            $related->contract_con_id = $record->con_id;
-            $related->paid_at = $month->day($day)->format('Y-m-d');
+            $related = new related;
+            $related->contract_con_id = $record->con_id;   
+
+            if ($day > $last_day) {
+                if (($last_day == 28) || $last_day == 29) {        
+                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                }
+            }
+            else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+            }
 
             $related->save();
         }
@@ -130,26 +149,37 @@ class Contract_Controller extends Controller
         $term = str_replace(' ', '', $record->payment_date);
         $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
-
-        $months = strtolower($term[1]);
-        if (str_starts_with($months, 'semi')) {
-            $months = 6;
-        } else if (str_starts_with($months, 'quarter')) {
-            $months = 4;
-        } else {
-            $months = 1;
+        
+        $inter = strtolower($term[1]);
+        if (str_starts_with($inter, 'semi')) {
+            $inter = 6;
+        }
+        else if (str_starts_with($inter, 'quarter')) {
+            $inter = 4;
+        }
+        else {
+            $inter = 1;
         }
 
-        $due = Carbon::parse($record->due_date)->addMonths($months)->day($day);
+        $last_pay = Carbon::parse($record->due_date)->subMonths($inter);
+        $new_due = Carbon::parse($record->due_date)->addMonths($inter)->day($day);
 
-        $record->update(['due_date' => $due]);
+        $months = CarbonPeriod::create($last_pay->addMonths(1)->day(1), '1 month', Carbon::parse($record->due_date)->day(1));
+        $record->update(['due_date' => $new_due]);
+        foreach($months as $month) { 
+            $last_day = $month->endofMonth()->day;
 
-        $months = CarbonPeriod::create($record->due_date, '1 month', $due->subMonths(1));
-        foreach ($months as $month) {
             $related = new related;
+            $related->contract_con_id = $record->con_id;   
 
-            $related->contract_con_id = $record->con_id;
-            $related->paid_at = $month->day($day)->format('Y-m-d');
+            if ($day > $last_day) {
+                if (($last_day == 28) || $last_day == 29) {        
+                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                }
+            }
+            else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+            }
 
             $related->save();
         }
@@ -171,25 +201,15 @@ class Contract_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'location' => 'required',
-            'client' => 'required',
-            'property_details' => 'required',
-            'coordinator' => 'required',
-            'contact' => 'required',
-            'agent' => 'required',
-            'contract_start' => 'required',
-            'contract_end' => 'required',
-            'payment_term' => 'required',
-            'tenant_price' => 'required|numeric',
-            'owner_income' => 'required|numeric',
-            'company_income' => 'required|numeric',
-            'payment_date' => 'required',
-            'due_date' => 'required',
+            'tenant_price' => 'numeric',
+            'owner_income' => 'numeric',
+            'company_income' => 'numeric',
         ]);
 
         $record = model::find($request->id);
-        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date', 'due_date'];
+        $records = related::where('contract_con_id', $request->id)->delete();
 
+        $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
         foreach ($keys as $key) {
             $upd[$key] = $request->$key;
         }
@@ -199,15 +219,64 @@ class Contract_Controller extends Controller
             $upd[$key] = strtoupper($request->$key);
         }
 
+        $term = str_replace(' ', '', $request->payment_term);
+        $term = explode('+', $term);
+        $adv = intval(preg_replace("/[^0-9]/", "", $term[0]));
+
+        $term = str_replace(' ', '', $request->payment_date);
+        $term = explode('/', $term);
+        $day = preg_replace("/[^0-9]/", "", $term[0]);
+
+        $inter = strtolower($term[1]);
+        if (str_starts_with($inter, 'semi')) {
+            $inter = 6;
+        }
+        else if (str_starts_with($inter, 'quarter')) {
+            $inter = 4;
+        }
+        else {
+            $inter = 1;
+        }
+
+        if (isset($request->due_date)) {
+            $paid = Carbon::parse($request->due_date)->subMonths($inter);
+            $upd['due_date'] = $request->due_date;
+        }
+        else {
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1);
+            $upd['due_date'] = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
+        }
+        
+        $upd['status'] = '';
+
         $record->update($upd);
+
+        $months = CarbonPeriod::create(Carbon::parse($request->contract_start)->day(1), '1 month', $paid->day(1));
+        foreach($months as $month) { 
+            $last_day = $month->endofMonth()->day;
+
+            $related = new related;
+            $related->contract_con_id = $record->con_id;   
+
+            if ($day > $last_day) {
+                if (($last_day == 28) || $last_day == 29) {        
+                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                }
+            }
+            else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+            }
+
+            $related->save();
+        }
 
         return response(['msg' => "Updated $this->ent"]);
     }
 
     public function del(Request $request)
     {
-        $record = model::find($request->id);
-        $record->delete();
+        $record = model::find($request->id)->delete();
+        $records = related::where('contract_con_id', $request->id)->delete();
 
         return response(['msg' => "Deleted $this->ent"]);
     }

@@ -6,7 +6,26 @@ $(document).ready(function () {
     });
 
     Import();
-    get_all();
+    get_locations()
+
+    $(document).on('click', '.location', function() {
+        $('.location').removeClass('active')
+        $(this).addClass('active')
+
+        var location = $(this).text().split(' ')[0]
+        var data = {
+            location: location
+        }
+
+        $.ajax({
+            type: "POST",
+            url: `/${ent}/get-location/`,
+            data: data,
+            success: function (res) {
+                get_location(res)
+            }, 
+        });
+    })
 
     $("#addModal").on("show.bs.modal", function (e) {
         $("#addForm span").remove();
@@ -27,13 +46,14 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (res) {
+                // console.log(res)
                 showtoastMessage("text-success", "Added Successful", res.msg);
-                get_all();
+                get_locations()
                 $(`#addForm`).trigger("reset");
                 $(`#addModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res)
+                // console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(
@@ -72,14 +92,13 @@ $(document).ready(function () {
             success: function (res) {
                 showtoastMessage("text-success", "Update Successful", res.msg);
 
-                get_all();
+                get_locations()
                 $(`#updForm`).trigger("reset");
                 $(`#updModal`).modal("hide");
             },
             error: function (res) {
-                console.log(res);
+                // console.log(res);
                 var errors = res.responseJSON.errors;
-                // console.log(errors)
 
                 var inputs = $(
                     "#updForm input, #updForm select, #updForm textarea"
@@ -109,7 +128,7 @@ $(document).ready(function () {
             success: function (res) {
                 showtoastMessage("text-success", "Delete Successful", res.msg);
 
-                get_all();
+                get_locations()
                 $(`#delModal`).modal("hide");
             },
             error: function (xhr, status, error) {},
@@ -125,7 +144,7 @@ $(document).ready(function () {
             data: { id: id },
             success: function (res) {
                 showtoastMessage("text-success", "Payment Successful", res.msg);
-                get_all();
+                get_locations()
             },
             error: function (res) {
 
@@ -182,172 +201,192 @@ $(document).ready(function () {
 
 var ent = $(".ent").text().toLowerCase();
 
-function get_all() {
-    $("#tbl_div").empty();
+function get_locations() {
+    $('#locations').empty()
 
     $.ajax({
         type: "POST",
-        url: `/${ent}`,
+        url: `/${ent}/get-locations`,
         success: function (res) {
-            console.log(res)
-            var records = res.records;
+            // console.log(res)
+            var records = res.records
 
-            var tbl = $("<table class='bg-light'>")
-                .addClass("overflow-auto")
-                .attr("id", "tbl_records");
+            if (records.length > 0) {
+                for (var record of records) {
+                    var btn =   `
+                                    <button class="btn btn-primary text-center mr-1 location">${record.location} (${record.contracts})</button>
+                                `
+                    $('#locations').append(btn)
+                }
+    
+                $('.location').first().click()
+            }
+            else {
+                $("#tbl_div").append(
+                    `<p class="text-center">No results found</p>`
+                );
+            }
+        }
+    });
+}
 
-            var thead = $("<thead>");
-            var thr = $("<tr text-nowrap>");
-            var cols = [
-                "#",
-                "Client",
-                "Property Details",
-                "Coordinator",
-                "Contact Number",
-                "Agent",
-                "Contract Start",
-                "Contract End",
-                "Payment Term",
-                "Tenant Price",
-                "Owner Income",
-                "ABIC Income",
-                "Payment Date",
-                "Due Date",
-                "Status",
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'June',
-                'July',
-                'Aug',
-                'Sept',
-                'Oct',
-                'Nov',
-                'Dec',
-                "Action",
+function get_location(res) {
+    $("#tbl_div").empty();
+
+    var records = res.records;
+
+    var tbl = $("<table class='bg-light'>")
+        .addClass("overflow-auto")
+        .attr("id", "tbl_records");
+
+    var thead = $("<thead>");
+    var thr = $("<tr text-nowrap>");
+    var cols = [
+        "#",
+        "Client",
+        "Property Details",
+        "Coordinator",
+        "Contact Number",
+        "Agent",
+        "Contract Start",
+        "Contract End",
+        "Payment Term",
+        "Tenant Price",
+        "Owner Income",
+        "ABIC Income",
+        "Payment Date",
+        "Due Date",
+        "Status",
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'July',
+        'Aug',
+        'Sept',
+        'Oct',
+        'Nov',
+        'Dec',
+        "Action",
+    ];
+
+    for (col of cols) {
+        thr.append(
+            $("<th>")
+                .addClass(
+                    "bg-success border border-dark border-5 m-1 text-center p-2 text-nowrap "
+                )
+                .text(col)
+        );
+    }
+
+    thead.append(thr);
+    tbl.append(thead);
+
+    var td_class = "py-1 px-3 border border-dark border-5 text-center";
+
+    var tbody = $("<tbody>");
+    if (records.length > 0) {
+        for (record of records) {
+
+            var contract_start = format_date(record.contract_start)
+            var contract_end = format_date(record.contract_end)
+            var due_date = format_date(record.due_date)
+
+            var vals = [
+                record.client,
+                record.property_details,
+                record.coordinator,
+                record.contact,
+                record.agent,
+                contract_start,
+                contract_end,
+                record.payment_term,
+                record.tenant_price,
+                record.owner_income,
+                record.company_income,
+                record.payment_date,
+                due_date,
             ];
-            for (col of cols) {
-                thr.append(
-                    $("<th>")
-                        .addClass(
-                            "bg-success border border-dark border-5 m-1 text-center p-2 text-nowrap "
-                        )
-                        .text(col)
+
+            var tr = $("<tr class='text-nowrap'>").data(
+                "id",
+                record.con_id
+            );
+            tr.append(
+                $("<td>")
+                    .addClass("border border-dark border-5 text-center")
+                    .html('<i class="fa-solid fa-file-contract"></i>')
+            );
+
+            for (val of vals) {
+                tr.append($("<td>").addClass(td_class).html(val));
+            }
+
+            if (record.status != null) {
+                if (record.status.split(" ").length == 4) {
+                    tr.append(
+                        $("<td>")
+                            .addClass(`${td_class} text-danger`)
+                            .html(record.status)
+                    );
+                } 
+                else if (record.status.split(" ").length == 3) {
+                    tr.append(
+                        $("<td>")
+                            .addClass(`${td_class} text-success`)
+                            .html(record.status)
+                    );
+                }
+                else {
+                    tr.append(
+                        $("<td>")
+                            .addClass(`${td_class} text-primary`)
+                            .html(record.status)
+                    );
+                }
+            }
+            else {
+                tr.append(
+                    $("<td>")
+                        .addClass(`${td_class}`)
+                        .html(record.status)
                 );
             }
 
-            thead.append(thr);
-            tbl.append(thead);
+            var months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
 
-            var td_class = "py-1 px-3 border border-dark border-5 text-center";
-
-            var tbody = $("<tbody>");
-            if (records.length > 0) {
-                for (record of records) {
-
-                    var contract_start = format_date(record.contract_start)
-                    var contract_end = format_date(record.contract_end)
-                    var due_date = format_date(record.due_date)
-
-                    var vals = [
-                        record.client,
-                        record.property_details,
-                        record.coordinator,
-                        record.contact,
-                        record.agent,
-                        contract_start,
-                        contract_end,
-                        record.payment_term,
-                        record.tenant_price,
-                        record.owner_income,
-                        record.company_income,
-                        record.payment_date,
-                        due_date,
-                    ];
-
-                    var tr = $("<tr class='text-nowrap'>").data(
-                        "id",
-                        record.con_id
-                    );
-                    tr.append(
-                        $("<td>")
-                            .addClass("border border-dark border-5 text-center")
-                            .html('<i class="fa-solid fa-file-contract"></i>')
-                    );
-
-                    for (val of vals) {
-                        tr.append($("<td>").addClass(td_class).html(val));
-                    }
-
-                    if (record.status != null) {
-                        if (record.status.split(" ").length == 4) {
-                            tr.append(
-                                $("<td>")
-                                    .addClass(`${td_class} text-danger`)
-                                    .html(record.status)
-                            );
-                        } 
-                        else if (record.status.split(" ").length == 3) {
-                            tr.append(
-                                $("<td>")
-                                    .addClass(`${td_class} text-success`)
-                                    .html(record.status)
-                            );
-                        }
-                        else {
-                            tr.append(
-                                $("<td>")
-                                    .addClass(`${td_class} text-primary`)
-                                    .html(record.status)
-                            );
-                        }
-                    }
-                    else {
-                        tr.append(
-                            $("<td>")
-                                .addClass(`${td_class}`)
-                                .html(record.status)
-                        );
-                    }
-
-                    var months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
-
-                    for (var month of months) {
-                        tr.append(
-                            $("<td>")
-                                .addClass(`${td_class}`)
-                                .html(record[month])
-                        );
-                    }
-
-                    tr.append(
-                        $("<td>").addClass(td_class).html(`
-                            <i class='fa fa-thumbs-up mr-2 i_payment' title='Accept Payment' style='cursor:pointer;'></i>
-                            <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
-                            <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
-                        `)
-                    );
-                    tbody.append(tr);
-                }
-            } else {
-                var tr = $("<tr>");
-                var td = $("<td>")
-                    .addClass(td_class)
-                    .attr({ colspan: cols.length })
-                    .text("No results found.");
-
-                tr.append(td);
-                tbody.append(tr);
+            for (var month of months) {
+                tr.append(
+                    $("<td>")
+                        .addClass(`${td_class}`)
+                        .html(record[month])
+                );
             }
-            tbl.append(tbody);
-            $("#tbl_div").append(tbl);
-        },
-        error: function (res) {
-            console.log(res);
-        },
-    });
+
+            tr.append(
+                $("<td>").addClass(td_class).html(`
+                    <i class='fa fa-thumbs-up mr-2 i_payment' title='Accept Payment' style='cursor:pointer;'></i>
+                    <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
+                    <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
+                `)
+            );
+            tbody.append(tr);
+        }
+    } else {
+        var tr = $("<tr>");
+        var td = $("<td>")
+            .addClass(td_class)
+            .attr({ colspan: cols.length })
+            .text("No results found.");
+
+        tr.append(td);
+        tbody.append(tr);
+    }
+    tbl.append(tbody);
+    $("#tbl_div").append(tbl);
 }
 
 function format_date(date) {
@@ -376,11 +415,11 @@ function Import() {
             processData: false,
             success: function (res) {
                 showtoastMessage("text-success", "Added Successful", res.msg);
-                get_all();
+                get_locations()
                 $(`#file-import`).trigger("reset");
             },
             error: function (res) {
-                console.log(res)
+                // console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(
