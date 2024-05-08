@@ -1,5 +1,0 @@
-TODO List
--Change Log
--Unit Rentals History
--Associate Monthly Dues History
--Email Notification
