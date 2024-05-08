@@ -45,7 +45,7 @@ Route::get('/import', [Route_Controller::class, 'import']);
 Route::get('/export', [Route_Controller::class, 'export']);
 
 Route::get('/dashboard/get-data', [Dashboard_Controller::class, 'get_data']);
-Route::get('/dashboard/client-units', [Dashboard_Controller::class, 'Client_Properties']);
+// Route::get('/dashboard/client-units', [Dashboard_Controller::class, 'Client_Properties']);
 Route::get('/dashboard/contracts', [Dashboard_Controller::class, 'Expiring_Contracts']);
 Route::get('/dashboard/contracts-dues', [Dashboard_Controller::class, 'Dues']);
 
