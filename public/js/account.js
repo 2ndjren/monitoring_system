@@ -48,7 +48,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: `/account/add/`,
+            url: `/account/add`,
             data: new FormData(this),
             contentType: false,
             processData: false,
@@ -93,7 +93,7 @@ $(document).ready(function () {
         var formdata = new FormData($(this)[0]);
         $.ajax({
             type: "POST",
-            url: `/account/upd/`,
+            url: `/account/upd`,
             data: formdata,
             contentType: false,
             processData: false,
@@ -132,7 +132,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: `/account/del/`,
+            url: `/account/del`,
             data: $(this).serialize(),
             success: function (res) {
                 showtoastMessage("text-success", "Delete Successful", res.msg);

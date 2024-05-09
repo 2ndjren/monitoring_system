@@ -19,7 +19,7 @@ function get_data() {
     $(loader).insertAfter(".dash-loader");
 
     $.ajax({
-        url: `/dashboard/get-data/`,
+        url: `/dashboard/get-data`,
         method: "GET",
         success: function (res) {
             $(".dash-loader").removeClass("d-none");

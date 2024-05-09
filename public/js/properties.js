@@ -17,7 +17,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: `/${ent}/upd/`,
+            url: `/${ent}/upd`,
             data: new FormData(this),
             contentType: false,
             processData: false,
@@ -55,7 +55,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: `/${ent}/del/`,
+            url: `/${ent}/del`,
             data: $(this).serialize(),
             success: function (res) {
                 showtoastMessage("text-success", "Delete Successful", res.msg);
@@ -75,7 +75,7 @@ $(document).ready(function () {
 
         $.ajax({
             method: "POST",
-            url: `/${ent}/edit/`,
+            url: `/${ent}/edit`,
             data: { target: target },
             success: function (res) {
                 var record = res.record;
