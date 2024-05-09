@@ -76,13 +76,6 @@ class Kernel extends ConsoleKernel
 
                             $contract->update(['status' => $status]);
                         }
-
-
-                        // $due = Carbon::parse($contract->due_date);
-                        // $days = $today->diffInDays($due);
-                        // $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
-
-                        // $contract->update(['status' => $status]);
                     }
                 }
             }
