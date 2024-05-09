@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
                                 $notification->user_id = $user->user_id;
                                 $notification->event = "Contract Expired";
                                 $notification->heading = "Contract Completed";
-                                $notification->content = "The property " . $contract->property_details . "contract has ended";
+                                $notification->content = "The property " . $contract->property_details . " contract has ended";
                                 $notification->notified = "0";
                                 $notification->status = "Sending";
                                 if ($notification->save()) {

@@ -50,8 +50,8 @@ Route::get('/dashboard/contracts-dues', [Dashboard_Controller::class, 'Dues']);
 
 Route::prefix('/contracts')->group(function () {
     Route::post('/', [Contract_Controller::class, 'get_all']);
-    Route::post('/get-locations', [Contract_Controller::class, 'get_locations']);
-    Route::post('/get-location', [Contract_Controller::class, 'get_location']);
+    Route::post('/get-history-locations', [History_Controller::class, 'get_locations']);
+    Route::post('/get-history-location', [History_Controller::class, 'get_location']);
     Route::post('/add', [Contract_Controller::class, 'add']);
     Route::post('/payment', [Contract_Controller::class, 'payment']);
     Route::post('/edit', [Contract_Controller::class, 'edit']);
