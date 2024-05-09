@@ -6,7 +6,6 @@ $(document).ready(function () {
     });
     Dash1();
     Dash2();
-    Dash3();
 
     get_data();
 });
@@ -36,76 +35,13 @@ function get_data() {
     });
 }
 
+
 function Dash1() {
-    // Get the canvas element
-    var ctx = document.getElementById("dash1").getContext("2d");
-
-    // Create the chart
-    $.ajax({
-        type: "GET",
-        url: `/dashboard/client-units`,
-        success: function (res) {
-            // console.log(res);
-            var title = [];
-            var count = [];
-            for (c of res) {
-                title.push(c.client);
-                count.push(c.unit_count);
-            }
-            var myChart = new Chart(ctx, {
-                type: "bar", // Type of chart (e.g., bar, line, pie, etc.)
-                data: {
-                    labels: title, // Labels for the data
-                    datasets: [
-                        {
-                            label: "",
-                            data: count, // Data values
-                            backgroundColor: [
-                                "rgb(255, 99, 132, )",
-                                "rgb(54, 162, 235, )",
-                                "rgb(255, 206, 86, )",
-                                "rgb(75, 192, 192, )",
-                                "rgb(153, 102, 255, )",
-                                "rgb(255, 159, 64, )",
-                            ],
-                            borderColor: [
-                                "rgba(255, 99, 132, 1)",
-                                "rgba(54, 162, 235, 1)",
-                                "rgba(255, 206, 86, 1)",
-                                "rgba(75, 192, 192, 1)",
-                                "rgba(153, 102, 255, 1)",
-                                "rgba(255, 159, 64, 1)",
-                            ],
-                            borderWidth: 1,
-                        },
-                    ],
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true, // Start y-axis at 0
-                        },
-                    },
-                    plugins: {
-                        legend: {
-                            display: false,
-                            labels: {
-                                color: "rgb(255, 99, 132)",
-                            },
-                        },
-                    },
-                },
-            });
-        },
-    });
-}
-
-function Dash2() {
     $.ajax({
         type: "GET",
         url: "/dashboard/contracts-dues",
         success: function (res) {
-            var ctx = document.getElementById("dash2").getContext("2d");
+            var ctx = document.getElementById("dash1").getContext("2d");
 
             // Create the pie chart
             var myPieChart = new Chart(ctx, {
@@ -146,13 +82,13 @@ function Dash2() {
     // Get the canvas element
 }
 
-function Dash3() {
+function Dash2() {
     $.ajax({
         type: "GET",
         url: "/dashboard/contracts",
         success: function (res) {
             // Get the canvas element
-            var ctx = document.getElementById("dash3").getContext("2d");
+            var ctx = document.getElementById("dash2").getContext("2d");
 
             // Create the donut chart
             var myPieChart = new Chart(ctx, {
