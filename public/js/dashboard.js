@@ -78,6 +78,9 @@ function Dash1() {
                 },
             });
         },
+        error: function (res) {
+            console.log(res)
+        }
     });
     // Get the canvas element
 }

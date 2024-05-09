@@ -28,8 +28,6 @@ class Dashboard_Controller extends Controller
         $counts['clients'] = contract::select('client')->distinct('client')->count();
         $counts['coordinators'] = contract::select('coordinator')->distinct('coordinator')->count();
         $counts['agents'] = contract::select('agent')->distinct('agent')->count();
-        $counts['properties'] = contract::select('propert')->distinct('property')->count();
-        $counts['units'] = contract::select('unit')->count();
         $counts['contracts'] = contract::select('con_id')->whereNot('status', ['Completed'])->count();
 
         return $counts;
@@ -76,19 +74,5 @@ class Dashboard_Controller extends Controller
         }
 
         return response()->json(['passdue' => $passdue, 'remaining' => $remaining]);
-    }
-    public function Client_Properties()
-    {
-        $data =
-            contract::select('client', DB::raw('count(unit) as unit_count'))
-            ->distinct('client')
-            ->groupBy('client')
-            ->orderBy('unit_count', 'desc')
-            ->limit(7)
-            ->get();
-
-
-
-        return response()->json($data);
     }
 }
