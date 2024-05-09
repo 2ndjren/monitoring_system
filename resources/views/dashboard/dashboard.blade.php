@@ -93,24 +93,6 @@
                             <div class="row">
                                 <div class="col-3 d-flex justify-content-center align-items-center border-dark border-end">
                                     <h3 class="text-primary">
-                                        <i class="fa-solid fa-house-user"></i>
-                                    </h3>
-                                </div>
-                                <div class="col-9">
-                                    <span>Units</span><br>
-                                    <h4 class="dash-loader" id="counts-units">0</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-sm-6">
-                    <div class="card rounded-0 ">
-                        <div class="card-body p-2 ">
-                            <div class="row">
-                                <div class="col-3 d-flex justify-content-center align-items-center border-dark border-end">
-                                    <h3 class="text-primary">
                                         <i class="fa-solid fa-file-contract"></i>
                                     </h3>
                                 </div>
@@ -152,6 +134,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/dashboard.js') }}"></script>
+    {{-- <script src="{{ asset('js/dashboard.js') }}"></script> --}}
 
 @endsection
