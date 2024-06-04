@@ -72,9 +72,9 @@ class Contract_Controller extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'tenant_price' => 'numeric',
-            'owner_income' => 'numeric',
-            'company_income' => 'numeric',
+            'tenant_price' => 'nullable|numeric',
+            'owner_income' => 'nullable|numeric',
+            'company_income' => 'nullable|numeric',
         ]);
 
         $record = new model();
@@ -201,9 +201,9 @@ class Contract_Controller extends Controller
     public function upd(Request $request)
     {
         $request->validate([
-            'tenant_price' => 'numeric',
-            'owner_income' => 'numeric',
-            'company_income' => 'numeric',
+            'tenant_price' => 'nullable|numeric',
+            'owner_income' => 'nullable|numeric',
+            'company_income' => 'nullable|numeric',
         ]);
 
         $record = model::find($request->id);

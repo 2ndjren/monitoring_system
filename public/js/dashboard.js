@@ -4,8 +4,8 @@ $(document).ready(function () {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
-    Dash1();
-    Dash2();
+    dues_dash()
+    expire_dash()
 
     get_data();
 });
@@ -18,7 +18,7 @@ function get_data() {
     $(loader).insertAfter(".dash-loader");
 
     $.ajax({
-        url: `/dashboard/get-data`,
+        url: `/dashboard/get-data/`,
         method: "GET",
         success: function (res) {
             $(".dash-loader").removeClass("d-none");
@@ -35,13 +35,12 @@ function get_data() {
     });
 }
 
-
-function Dash1() {
+function dues_dash() {
     $.ajax({
         type: "GET",
         url: "/dashboard/contracts-dues",
         success: function (res) {
-            var ctx = document.getElementById("dash1").getContext("2d");
+            var ctx = document.getElementById("dues_dash").getContext("2d");
 
             // Create the pie chart
             var myPieChart = new Chart(ctx, {
@@ -78,20 +77,17 @@ function Dash1() {
                 },
             });
         },
-        error: function (res) {
-            console.log(res)
-        }
     });
     // Get the canvas element
 }
 
-function Dash2() {
+function expire_dash() {
     $.ajax({
         type: "GET",
         url: "/dashboard/contracts",
         success: function (res) {
             // Get the canvas element
-            var ctx = document.getElementById("dash2").getContext("2d");
+            var ctx = document.getElementById("expire_dash").getContext("2d");
 
             // Create the donut chart
             var myPieChart = new Chart(ctx, {

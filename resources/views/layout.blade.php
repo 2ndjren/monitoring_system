@@ -23,6 +23,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
         integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css"/>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
     <script src="{{ asset('js/layout.js') }}"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -138,7 +142,7 @@
 
 
 
-                        <li
+                        {{-- <li
                             class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'menu-open' : '' }} ">
                             <a href="#"
                                 class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'active' : '' }}  ">
@@ -155,7 +159,7 @@
                                 </li>
 
                             </ul>
-                        </li>
+                        </li> --}}
 
                         @if (session('super_admin'))
                             <li

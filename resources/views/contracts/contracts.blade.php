@@ -354,7 +354,7 @@
                     <form id="file-import" enctype="multipart/form-data">
                         @csrf
                         <input type="file" accept=".xlsx, .xls, .ods" name="excel_file">
-                        <button class="btn btn-primary" type="submit">submit</button>
+                        <button class="btn btn-primary float-end" type="submit">Submit</button>
                     </form>
                 </div>
             </div>

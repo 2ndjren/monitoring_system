@@ -61,12 +61,22 @@ class File_Import implements ToCollection, WithStartRow
 
             $keys = ['contact', 'contract_start', 'contract_end', 'payment_term', 'tenant_price', 'owner_income', 'company_income', 'payment_date'];
             foreach ($keys as $key) {
-                $record->$key = $vals[$key] ?? null;
+                if ($vals[$key] == "" || !isset($vals[$key])) {
+                    $record->$key = null;
+                }
+                else {
+                    $record->$key = $vals[$key];
+                }
             }
     
             $upper_keys = ['location', 'client', 'property_details', 'coordinator', 'agent'];
             foreach ($upper_keys as $key) {
-                $record->$key = strtoupper($vals[$key]) ?? null;
+                if ($vals[$key] == "" || !isset($vals[$key])) {
+                    $record->$key = null;
+                }
+                else {
+                    $record->$key = strtoupper($vals[$key]);
+                }
             }
 
             if (isset($vals['payment_term'], $vals['payment_date'], $vals['contract_start'])) {

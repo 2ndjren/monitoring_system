@@ -368,7 +368,7 @@ function get_location(res) {
 
             tr.append(
                 $("<td>").addClass(td_class).html(`
-                    <i class='fa fa-thumbs-up mr-2 i_payment' title='Accept Payment' style='cursor:pointer;'></i>
+                    <i class='fa fa-check mr-2 i_payment' title='Accept Payment' style='cursor:pointer;'></i>
                     <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
                     <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
                 `)
@@ -387,6 +387,7 @@ function get_location(res) {
     }
     tbl.append(tbody);
     $("#tbl_div").append(tbl);
+    tbl.DataTable()
 }
 
 function format_date(date) {
@@ -419,7 +420,7 @@ function Import() {
                 $(`#file-import`).trigger("reset");
             },
             error: function (res) {
-                // console.log(res)
+                console.log(res)
                 var errors = res.responseJSON.errors;
 
                 var inputs = $(
