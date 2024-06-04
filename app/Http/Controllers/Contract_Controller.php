@@ -2,28 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Send_Payment_Notification_Success;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
 use App\Models\contract as model;
+use App\Models\notification;
 use App\Models\payments as related;
+use App\Models\user;
+use Illuminate\Support\Facades\Mail;
 
 class Contract_Controller extends Controller
 {
     public $ent = 'Contract';
 
-    public function get_locations() {
+    public function get_locations()
+    {
         $records = model::selectRaw('Distinct location, Count(con_id) As contracts')->whereNot('status', 'Completed')->groupBy('location')->get();
 
-        $data =[
+        $data = [
             'records' => $records,
         ];
 
         return response()->json($data);
     }
 
-    public function get_location(Request $request) {
+    public function get_location(Request $request)
+    {
         $ids = model::select('con_id')->get();
         $today = Carbon::today();
         foreach ($ids as $id) {
@@ -54,9 +60,9 @@ class Contract_Controller extends Controller
         foreach ($records as $record) {
             for ($index = 0; $index < count($months); $index++) {
                 $count = related::where('contract_con_id', $record['con_id'])
-                            ->whereMonth('paid_at', $index + 1)
-                            ->whereYear('paid_at', $today->year)
-                            ->count('contract_con_id');
+                    ->whereMonth('paid_at', $index + 1)
+                    ->whereYear('paid_at', $today->year)
+                    ->count('contract_con_id');
                 $month = $months[$index];
                 $count == 0 ? $record[$month] = null : $record[$month] = 'PAID';
             }
@@ -100,39 +106,35 @@ class Contract_Controller extends Controller
         $inter = strtolower($term[1]);
         if (str_starts_with($inter, 'semi')) {
             $inter = 6;
-        }
-        else if (str_starts_with($inter, 'quarter')) {
+        } else if (str_starts_with($inter, 'quarter')) {
             $inter = 4;
-        }
-        else {
+        } else {
             $inter = 1;
         }
 
         if (isset($request->due_date)) {
             $paid = Carbon::parse($request->due_date)->subMonths($inter);
             $record->due_date = $request->due_date;
+        } else {
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv - 1);
+            $record->due_date = Carbon::parse($request->contract_start)->addMonths($adv - 1 + $inter)->day($day);
         }
-        else {
-            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1);
-            $record->due_date = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
-        }
-        
+
         $record->status = '';
         $record->save();
 
         $months = CarbonPeriod::create(Carbon::parse($request->contract_start)->day(1), '1 month', $paid->day(1));
-        foreach($months as $month) { 
+        foreach ($months as $month) {
             $last_day = $month->endofMonth()->day;
 
             $related = new related;
-            $related->contract_con_id = $record->con_id;   
+            $related->contract_con_id = $record->con_id;
 
             if ($day > $last_day) {
-                if (($last_day == 28) || $last_day == 29) {        
+                if (($last_day == 28) || $last_day == 29) {
                     $related->paid_at = $month->day($last_day)->format('Y-m-d');
                 }
-            }
-            else {
+            } else {
                 $related->paid_at = $month->day($day)->format('Y-m-d');
             }
 
@@ -149,15 +151,13 @@ class Contract_Controller extends Controller
         $term = str_replace(' ', '', $record->payment_date);
         $term = explode('/', $term);
         $day = preg_replace("/[^0-9]/", "", $term[0]);
-        
+
         $inter = strtolower($term[1]);
         if (str_starts_with($inter, 'semi')) {
             $inter = 6;
-        }
-        else if (str_starts_with($inter, 'quarter')) {
+        } else if (str_starts_with($inter, 'quarter')) {
             $inter = 4;
-        }
-        else {
+        } else {
             $inter = 1;
         }
 
@@ -166,25 +166,53 @@ class Contract_Controller extends Controller
 
         $months = CarbonPeriod::create($last_pay->addMonths(1)->day(1), '1 month', Carbon::parse($record->due_date)->day(1));
         $record->update(['due_date' => $new_due]);
-        foreach($months as $month) { 
+        foreach ($months as $month) {
             $last_day = $month->endofMonth()->day;
 
             $related = new related;
-            $related->contract_con_id = $record->con_id;   
+            $related->contract_con_id = $record->con_id;
 
+            $month_paid = "";
+            $monthss = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
             if ($day > $last_day) {
-                if (($last_day == 28) || $last_day == 29) {        
+                if (($last_day == 28) || $last_day == 29) {
                     $related->paid_at = $month->day($last_day)->format('Y-m-d');
+                    $month_paid
+                        = strtoupper($monthss[$month->month + 1]) . "-" . $month->format('Y');
+                }
+            } else {
+                $related->paid_at = $month->day($day)->format('Y-m-d');
+                $month_paid
+                    = strtoupper($monthss[$month->month + 1]) . "-" . $month->format('Y');
+            }
+
+            if ($related->save()) {
+                $month_paid = Carbon::parse($record->due_date)->day($day);
+                $mail = [
+                    'property_details' => $record->property_details,
+                    'month' => ucwords($monthss[$month->month - 1]) . "-" . $month->format('Y'),
+                ];
+                $accounts = user::all();
+                if (count($accounts) > 0) {
+                    foreach ($accounts as $account) {
+                        $success = Mail::to($account->email)->send(new Send_Payment_Notification_Success($mail));
+                    }
+                    if ($success) {
+                        $notification = new notification();
+                        $notification->target_id = $record->con_id;
+                        $notification->user_id = $account->user_id;
+                        $notification->event = "";
+                        $notification->heading = "Payment Successful";
+                        $notification->content = "The payment for the month of " . ucwords($monthss[$month->month - 1]) . "-" . $month->format('Y') . " of property " . $record->property_details . " was successfully paid.";
+                        $notification->notified = "0";
+                        $notification->status = "Sending";
+                        if ($notification->save()) {
+                            return response(['msg' => "Payment Processed"]);
+                        }
+                    }
                 }
             }
-            else {
-                $related->paid_at = $month->day($day)->format('Y-m-d');
-            }
-
-            $related->save();
         }
-
-        return response(['msg' => "Payment Processed"]);
     }
 
     public function edit(Request $request)
@@ -230,40 +258,36 @@ class Contract_Controller extends Controller
         $inter = strtolower($term[1]);
         if (str_starts_with($inter, 'semi')) {
             $inter = 6;
-        }
-        else if (str_starts_with($inter, 'quarter')) {
+        } else if (str_starts_with($inter, 'quarter')) {
             $inter = 4;
-        }
-        else {
+        } else {
             $inter = 1;
         }
 
         if (isset($request->due_date)) {
             $paid = Carbon::parse($request->due_date)->subMonths($inter);
             $upd['due_date'] = $request->due_date;
+        } else {
+            $paid = Carbon::parse($request->contract_start)->addMonths($adv - 1);
+            $upd['due_date'] = Carbon::parse($request->contract_start)->addMonths($adv - 1 + $inter)->day($day);
         }
-        else {
-            $paid = Carbon::parse($request->contract_start)->addMonths($adv-1);
-            $upd['due_date'] = Carbon::parse($request->contract_start)->addMonths($adv-1+$inter)->day($day);
-        }
-        
+
         $upd['status'] = '';
 
         $record->update($upd);
 
         $months = CarbonPeriod::create(Carbon::parse($request->contract_start)->day(1), '1 month', $paid->day(1));
-        foreach($months as $month) { 
+        foreach ($months as $month) {
             $last_day = $month->endofMonth()->day;
 
             $related = new related;
-            $related->contract_con_id = $record->con_id;   
+            $related->contract_con_id = $record->con_id;
 
             if ($day > $last_day) {
-                if (($last_day == 28) || $last_day == 29) {        
+                if (($last_day == 28) || $last_day == 29) {
                     $related->paid_at = $month->day($last_day)->format('Y-m-d');
                 }
-            }
-            else {
+            } else {
                 $related->paid_at = $month->day($day)->format('Y-m-d');
             }
 

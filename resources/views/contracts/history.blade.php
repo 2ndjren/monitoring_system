@@ -364,5 +364,8 @@
         </div>
     </div>
 
+
+
+
     <script src="{{ asset('js/history.js') }}"></script>
 @endsection

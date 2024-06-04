@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
                                 $notification->user_id = $user->user_id;
                                 $notification->event = "Contract Expired";
                                 $notification->heading = "Contract Completed";
-                                $notification->content = "The property " . $contract->property_details . "contract has ended";
+                                $notification->content = "The property " . $contract->property_details . " contract has ended";
                                 $notification->notified = "0";
                                 $notification->status = "Sending";
                                 if ($notification->save()) {
@@ -76,13 +76,6 @@ class Kernel extends ConsoleKernel
 
                             $contract->update(['status' => $status]);
                         }
-
-
-                        // $due = Carbon::parse($contract->due_date);
-                        // $days = $today->diffInDays($due);
-                        // $today > $due ? $status = "$days Days Past Due" : $status = "$days Days Remaining";
-
-                        // $contract->update(['status' => $status]);
                     }
                 }
             }
