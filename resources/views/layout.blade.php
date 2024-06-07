@@ -37,6 +37,10 @@
             -ms-user-select: none;
             user-select: none;
         }
+
+        .counts {
+            cursor: pointer;
+        }
     </style>
 
 
@@ -98,18 +102,6 @@
 
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a id="contracts-link" href="{{ '/notification' }}"
-                                class="nav-link {{ Request::url() == url('/notification') ? 'active' : '' }}">
-                                <i class="fa-solid fa-bell nav-icon"></i>
-
-                                <p>Notification <span id="badge-number"
-                                        class="position-absolute d-none top-50 end-0 translate-middle badge rounded-pill bg-danger">
-                                    </span>
-                                </p>
-
-                            </a>
-                        </li>
                         <li
                             class="nav-item has-treeview {{ in_array(Request::url(), [url('/history'), url('/agents'), url('/contracts')]) ? 'menu-open' : '' }} ">
                             <a href="#"
@@ -137,29 +129,6 @@
                                 </li>
                             </ul>
                         </li>
-
-
-
-
-
-                        {{-- <li
-                            class="nav-item has-treeview         {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'menu-open' : '' }} ">
-                            <a href="#"
-                                class="nav-link       {{ in_array(Request::url(), [url('/projects'), url('/properties'), url('/buildings'), url('/units')]) ? 'active' : '' }}  ">
-                                <i class="fa-solid fa-building nav-icon"></i>
-                                <p>Assets<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ '/properties' }}"
-                                        class="nav-link  {{ Request::url() == url('/properties') ? 'active menu-open' : '' }} ">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Properties</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li> --}}
 
                         @if (session('super_admin'))
                             <li

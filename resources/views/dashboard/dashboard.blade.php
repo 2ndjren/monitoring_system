@@ -17,7 +17,7 @@
 
                 <div class="col-lg-2 col-sm-6">
                     <div class="card rounded-0 ">
-                        <div class="card-body p-2 ">
+                        <div class="card-body p-2 counts" onclick="window.location = '/clients';" title="View Clients">
                             <div class="row">
                                 <div class="col-3  d-flex justify-content-center align-items-center border-dark border-end">
                                     <h3 class="text-primary">
@@ -35,7 +35,7 @@
 
                 <div class="col-lg-2 col-sm-6">
                     <div class="card rounded-0 ">
-                        <div class="card-body p-2 ">
+                        <div class="card-body p-2 counts" onclick="window.location = '/coordinators';" title="View Coordinators">
                             <div class="row">
                                 <div class="col-3  d-flex justify-content-center align-items-center border-dark border-end">
                                     <h3 class="text-primary">
@@ -53,7 +53,7 @@
 
                 <div class="col-lg-2 col-sm-6">
                     <div class="card rounded-0 ">
-                        <div class="card-body p-2 ">
+                        <div class="card-body p-2 counts" onclick="window.location = '/agents';" title="View Agents">
                             <div class="row">
                                 <div class="col-3  d-flex justify-content-center align-items-center border-dark border-end">
                                     <h3 class="text-primary">
@@ -71,7 +71,7 @@
 
                 <div class="col-lg-2 col-sm-6">
                     <div class="card rounded-0 ">
-                        <div class="card-body p-2 ">
+                        <div class="card-body p-2 counts" onclick="window.location = '/contracts';" title="View Contracts">
                             <div class="row">
                                 <div class="col-3 d-flex justify-content-center align-items-center border-dark border-end">
                                     <h3 class="text-primary">

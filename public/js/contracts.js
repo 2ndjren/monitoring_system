@@ -27,6 +27,39 @@ $(document).ready(function () {
         });
     })
 
+    $(document).on('click', '.month', function() {
+        $(this).html('PAID').css({'color': 'grey'}).addClass('marked')
+    })
+
+    $(document).on("click", ".i_payment", function () {
+        var months = []
+
+        var marked_months = $('.marked')
+        for (var marked_month of marked_months) {
+            months.push($(marked_month).data('month'))
+        }
+
+        var id = $($(this).parents()[1]).data("id");
+
+        $.ajax({
+            method: "POST",
+            url: `/${ent}/payment`,
+            data: {id: id, months: months},
+            success: function (res) {
+                $('.marked').html(null).removeClass('marked')
+                showtoastMessage("text-success", "Payment Successful", res.msg);
+                get_locations()
+            },
+            error: function (res) {
+
+            }
+        });
+    });
+
+    $(document).on("click", ".i_cancel", function () {
+        $('.marked').html(null).removeClass('marked')
+    })
+
     $("#addModal").on("show.bs.modal", function (e) {
         $("#addForm span").remove();
     });
@@ -79,6 +112,45 @@ $(document).ready(function () {
         $("#updForm span").remove();
     });
 
+    $(document).on("click", ".i_edit", function () {
+        var id = $($(this).parents()[1]).data("id");
+
+        $("#updForm input[name=id]").val(id);
+        $(`#updModal`).modal("show");
+
+        $.ajax({
+            method: "POST",
+            url: `/${ent}/edit`,
+            data: { id: id },
+            success: function (res) {
+                var record = res.record;
+
+                var keys = [
+                    'location',
+                    "client",
+                    "property_details",
+                    "coordinator",
+                    "contact",
+                    "agent",
+                    "contract_start",
+                    "contract_end",
+                    "payment_term",
+                    "tenant_price",
+                    "owner_income",
+                    "company_income",
+                    "payment_date",
+                    "due_date",
+                ];
+
+                for (key of keys) {
+                    $(
+                        `#updForm input[name=${key}], #updForm select[name=${key}]`
+                    ).val(record[key]);
+                }
+            },
+        });
+    });
+
     $("#updForm").submit(function (e) {
         e.preventDefault();
         $("#updForm span").remove();
@@ -119,6 +191,13 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on("click", ".i_del", function () {
+        var id = $($(this).parents()[1]).data("id");
+
+        $("#delForm input[name=id]").val(id);
+        $(`#delModal`).modal("show");
+    });
+
     $("#delForm").submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -133,69 +212,6 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {},
         });
-    });
-
-    $(document).on("click", ".i_payment", function () {
-        var id = $($(this).parents()[1]).data("id");
-
-        $.ajax({
-            method: "POST",
-            url: `/${ent}/payment`,
-            data: { id: id },
-            success: function (res) {
-                showtoastMessage("text-success", "Payment Successful", res.msg);
-                get_locations()
-            },
-            error: function (res) {
-
-            }
-        });
-    });
-
-    $(document).on("click", ".i_edit", function () {
-        var id = $($(this).parents()[1]).data("id");
-
-        $("#updForm input[name=id]").val(id);
-        $(`#updModal`).modal("show");
-
-        $.ajax({
-            method: "POST",
-            url: `/${ent}/edit`,
-            data: { id: id },
-            success: function (res) {
-                var record = res.record;
-
-                var keys = [
-                    'location',
-                    "client",
-                    "property_details",
-                    "coordinator",
-                    "contact",
-                    "agent",
-                    "contract_start",
-                    "contract_end",
-                    "payment_term",
-                    "tenant_price",
-                    "owner_income",
-                    "company_income",
-                    "payment_date",
-                    "due_date",
-                ];
-
-                for (key of keys) {
-                    $(
-                        `#updForm input[name=${key}], #updForm select[name=${key}]`
-                    ).val(record[key]);
-                }
-            },
-        });
-    });
-
-    $(document).on("click", ".i_del", function () {
-        var id = $($(this).parents()[1]).data("id");
-
-        $("#delForm input[name=id]").val(id);
-        $(`#delModal`).modal("show");
     });
 });
 
@@ -234,6 +250,7 @@ function get_location(res) {
     $("#tbl_div").empty();
 
     var records = res.records;
+    // console.log(records)
 
     var tbl = $("<table class='bg-light'>")
         .addClass("overflow-auto")
@@ -361,14 +378,17 @@ function get_location(res) {
             for (var month of months) {
                 tr.append(
                     $("<td>")
-                        .addClass(`${td_class}`)
+                        .addClass(`${td_class} month`)
+                        .css({'cursor': 'pointer'})
                         .html(record[month])
+                        .data('month', month)
                 );
             }
 
             tr.append(
                 $("<td>").addClass(td_class).html(`
                     <i class='fa fa-check mr-2 i_payment' title='Accept Payment' style='cursor:pointer;'></i>
+                    <i class='fa fa-xmark mr-2 i_cancel' title='Cancel Payment' style='cursor:pointer;'></i>
                     <i class='fa fa-pen-to-square mr-2 i_edit' title='Edit' style='cursor:pointer;'></i>
                     <i class='fa-solid fa-trash i_del' title='Delete' style='cursor:pointer;'></i>
                 `)

@@ -32,15 +32,10 @@ Route::get('/', [Route_Controller::class, 'Signin']);
 Route::get('/dashboard', [Route_Controller::class, 'Dashboard']);
 Route::get('/accounts', [Route_Controller::class, 'Account']);
 Route::get('/contracts', [Route_Controller::class, 'Contracts']);
-Route::get('/notification', [Route_Controller::class, 'Notification']);
 Route::get('/history', [Route_Controller::class, 'History']);
 Route::get('/agents', [Route_Controller::class, 'Agents']);
 Route::get('/clients', [Route_Controller::class, 'Clients']);
 Route::get('/coordinators', [Route_Controller::class, 'Coordinators']);
-Route::get('/projects', [Route_Controller::class, 'Projects']);
-Route::get('/buildings', [Route_Controller::class, 'Buildings']);
-Route::get('/units', [Route_Controller::class, 'Units']);
-Route::get('/properties', [Route_Controller::class, 'properties']);
 Route::get('/import', [Route_Controller::class, 'import']);
 Route::get('/export', [Route_Controller::class, 'export']);
 
@@ -97,39 +92,6 @@ Route::prefix('/agents')->group(function () {
     Route::post('/del', [Agent_Controller::class, 'del']);
 });
 
-Route::prefix('/projects')->group(function () {
-    Route::post('/', [Project_Controller::class, 'get_all']);
-    Route::post('/add', [Project_Controller::class, 'add']);
-    Route::post('/edit', [Project_Controller::class, 'edit']);
-    Route::post('/upd', [Project_Controller::class, 'upd']);
-    Route::post('/del', [Project_Controller::class, 'del']);
-});
-
-Route::prefix('/properties')->group(function () {
-    Route::post('/', [Property_Controller::class, 'get_all']);
-    Route::post('/edit', [Property_Controller::class, 'edit']);
-    Route::post('/upd', [Property_Controller::class, 'upd']);
-    Route::post('/del', [Property_Controller::class, 'del']);
-});
-
-Route::prefix('/buildings')->group(function () {
-    Route::post('/', [Building_Controller::class, 'get_all']);
-    Route::get('/{id}', [Building_Controller::class, 'get_all_data']);
-    Route::post('/add', [Building_Controller::class, 'add']);
-    Route::post('/edit', [Building_Controller::class, 'edit']);
-    Route::post('/upd', [Building_Controller::class, 'upd']);
-    Route::post('/del', [Building_Controller::class, 'del']);
-});
-
-Route::prefix('/units')->group(function () {
-    // Route::post('/', [Unit_Controller::class, 'get_all']);
-    Route::get('/{id}', [Unit_Controller::class, 'get_all_data']);
-    Route::post('/add', [Unit_Controller::class, 'add']);
-    Route::post('/edit', [Unit_Controller::class, 'edit']);
-    Route::post('/upd', [Unit_Controller::class, 'upd']);
-    Route::post('/del', [Unit_Controller::class, 'del']);
-});
-
 Route::prefix('/file')->group(function () {
     Route::post('/import', [File_Controller::class, 'Import']);
     Route::get('/export', [File_Controller::class, 'Export']);
@@ -145,12 +107,4 @@ Route::prefix('/account')->group(function () {
     Route::get('/edit/{id}', [Account_Controller::class, 'edit']);
     Route::post('/upd', [Account_Controller::class, 'upd']);
     Route::post('/del', [Account_Controller::class, 'del']);
-});
-Route::prefix('/notification')->group(function () {
-    Route::get('/data', [Notification_Controller::class, 'Notify']);
-    Route::get('/push', [Notification_Controller::class, 'Send_Push_Notification']);
-    Route::get('/delivered/{id}', [Notification_Controller::class, 'Update_Notification']);
-    Route::get('/viewed/{id}', [Notification_Controller::class, 'Update_Notification_Viewed']);
-    Route::get('/recycled/{id}', [Notification_Controller::class, 'Update_Notification_Recycled']);
-    Route::get('/badge', [Notification_Controller::class, 'Badge']);
 });

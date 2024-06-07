@@ -144,75 +144,78 @@ class Contract_Controller extends Controller
         return response(['msg' => "Added $this->ent"]);
     }
 
-    public function payment(Request $request)
-    {
-        $record = model::find($request->id);
+    // public function payment(Request $request)
+    // {
+    //     $record = model::find($request->id);
 
+    //     $term = str_replace(' ', '', $record->payment_date);
+    //     $term = explode('/', $term);
+    //     $day = preg_replace("/[^0-9]/", "", $term[0]);
+
+    //     $inter = strtolower($term[1]);
+    //     if (str_starts_with($inter, 'semi')) {
+    //         $inter = 6;
+    //     } else if (str_starts_with($inter, 'quarter')) {
+    //         $inter = 4;
+    //     } else {
+    //         $inter = 1;
+    //     }
+
+    //     $last_pay = Carbon::parse($record->due_date)->subMonths($inter);
+    //     $new_due = Carbon::parse($record->due_date)->addMonths($inter)->day($day);
+
+    //     $months = CarbonPeriod::create($last_pay->addMonths(1)->day(1), '1 month', Carbon::parse($record->due_date)->day(1));
+    //     $record->update(['due_date' => $new_due]);
+    //     foreach ($months as $month) {
+    //         $last_day = $month->endofMonth()->day;
+
+    //         $related = new related;
+    //         $related->contract_con_id = $record->con_id;
+
+    //         $month_paid = "";
+    //         $monthss = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+    //         if ($day > $last_day) {
+    //             if (($last_day == 28) || $last_day == 29) {
+    //                 $related->paid_at = $month->day($last_day)->format('Y-m-d');
+    //                 $month_paid
+    //                     = strtoupper($monthss[$month->month + 1]) . "-" . $month->format('Y');
+    //             }
+    //         } else {
+    //             $related->paid_at = $month->day($day)->format('Y-m-d');
+    //             $month_paid
+    //                 = strtoupper($monthss[$month->month + 1]) . "-" . $month->format('Y');
+    //         }
+    //     }
+    // }
+
+    public function payment(Request $request) {
+        $record = model::find($request->id);
         $term = str_replace(' ', '', $record->payment_date);
         $term = explode('/', $term);
-        $day = preg_replace("/[^0-9]/", "", $term[0]);
+        $d = preg_replace("/[^0-9]/", "", $term[0]);
+        $y = Carbon::today()->year;
 
-        $inter = strtolower($term[1]);
-        if (str_starts_with($inter, 'semi')) {
-            $inter = 6;
-        } else if (str_starts_with($inter, 'quarter')) {
-            $inter = 4;
-        } else {
-            $inter = 1;
-        }
+        $full_months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+        $months = $request->months;
 
-        $last_pay = Carbon::parse($record->due_date)->subMonths($inter);
-        $new_due = Carbon::parse($record->due_date)->addMonths($inter)->day($day);
-
-        $months = CarbonPeriod::create($last_pay->addMonths(1)->day(1), '1 month', Carbon::parse($record->due_date)->day(1));
-        $record->update(['due_date' => $new_due]);
         foreach ($months as $month) {
-            $last_day = $month->endofMonth()->day;
+            $m = array_search($month, $full_months) + 1;
+            $paid_month = "$y-$m-$d";
 
             $related = new related;
             $related->contract_con_id = $record->con_id;
-
-            $month_paid = "";
-            $monthss = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-            if ($day > $last_day) {
-                if (($last_day == 28) || $last_day == 29) {
-                    $related->paid_at = $month->day($last_day)->format('Y-m-d');
-                    $month_paid
-                        = strtoupper($monthss[$month->month + 1]) . "-" . $month->format('Y');
-                }
-            } else {
-                $related->paid_at = $month->day($day)->format('Y-m-d');
-                $month_paid
-                    = strtoupper($monthss[$month->month + 1]) . "-" . $month->format('Y');
-            }
-
-            if ($related->save()) {
-                $month_paid = Carbon::parse($record->due_date)->day($day);
-                $mail = [
-                    'property_details' => $record->property_details,
-                    'month' => ucwords($monthss[$month->month - 1]) . "-" . $month->format('Y'),
-                ];
-                $accounts = user::all();
-                if (count($accounts) > 0) {
-                    foreach ($accounts as $account) {
-                        $success = Mail::to($account->email)->send(new Send_Payment_Notification_Success($mail));
-                    }
-                    if ($success) {
-                        $notification = new notification();
-                        $notification->target_id = $record->con_id;
-                        $notification->user_id = $account->user_id;
-                        $notification->event = "";
-                        $notification->heading = "Payment Successful";
-                        $notification->content = "The payment for the month of " . ucwords($monthss[$month->month - 1]) . "-" . $month->format('Y') . " of property " . $record->property_details . " was successfully paid.";
-                        $notification->notified = "0";
-                        $notification->status = "Sending";
-                        if ($notification->save()) {
-                            return response(['msg' => "Payment Processed"]);
-                        }
-                    }
-                }
-            }
+            $related->paid_at = $paid_month;
+            $related->save();
         }
+
+        $last_paid = end($months);
+        $m = array_search($month, $full_months) + 1;
+        $last_paid = "$y-$m-$d";
+
+        $record->due_date = Carbon::parse($last_paid)->addMonth();
+        $record->save();
+
+        return response(['msg' => "Payment Successful"]);
     }
 
     public function edit(Request $request)
