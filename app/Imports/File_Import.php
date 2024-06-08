@@ -104,8 +104,17 @@ class File_Import implements ToCollection, WithStartRow
                     $record->due_date = $vals['due_date'];
                 }
                 else {
-                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv-1);
-                    $record->due_date = Carbon::parse($vals['contract_start'])->addMonths($adv-1+$inter)->day($day);
+                    $paid = Carbon::parse($vals['contract_start'])->addMonths($adv - 1);
+                    $due = Carbon::parse($vals['contract_start'])->day(1)->addMonths($adv - 1 + $inter);
+                    $last_day = $due->endofMonth()->day;
+        
+                    if ($day > $last_day) {
+                        if (($last_day == 28) || $last_day == 29) {
+                            $record->due_date = $due->day($last_day)->format('Y-m-d');
+                        }
+                    } else {
+                        $record->due_date = $due->day($day)->format('Y-m-d');
+                    }
                 }
 
                 $record->status = '';

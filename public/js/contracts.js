@@ -28,7 +28,12 @@ $(document).ready(function () {
     })
 
     $(document).on('click', '.month', function() {
-        $(this).html('PAID').css({'color': 'grey'}).addClass('marked')
+        if ($(this).html() == "" && $(this).hasClass('marked') == false) {
+            $(this).html('PAID').css({'color': 'grey'}).addClass('marked')
+        }
+        else if ($(this).html() == "PAID" && $(this).hasClass('marked')) {
+            $(this).html(null).removeClass('marked')
+        }
     })
 
     $(document).on("click", ".i_payment", function () {
@@ -40,7 +45,6 @@ $(document).ready(function () {
         }
 
         var id = $($(this).parents()[1]).data("id");
-
         $.ajax({
             method: "POST",
             url: `/${ent}/payment`,
